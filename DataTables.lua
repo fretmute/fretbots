@@ -100,29 +100,29 @@ function DataTables:GenerateStatsTables(unit)
 	end
 	table.insert(AllUnits,unit);	
   -- PlayerID, Team, Role
-  if unit:GetPlayerID() ~= nil then
-	  thisId = unit:GetPlayerID()
-	  thisTeam=PlayerResource:GetTeam(thisId)
-	  thisRole = 0;
-	  -- If this is a bot, determine their role - This is by slot for BotXP 			
-	  -- Radiant
-	  if thisIsBot and (thisTeam == 2) then
-	  	if thisId == 0 then thisRole = 2
-	  	elseif thisId == 1 then thisRole = 3
-	  	elseif thisId == 2 then thisRole = 4
-	  	elseif thisId == 3 then thisRole = 5
-	  	elseif thisId == 4 then thisRole = 1
-	  	end
-	  end
-	  if thisIsBot and (thisTeam == 3) then
-	  	if thisId == 5 then thisRole = 2
-	  	elseif thisId == 6 then thisRole = 1
-	  	elseif thisId == 7 then thisRole = 5
-	  	elseif thisId == 8 then thisRole = 4
-	  	elseif thisId == 9 then thisRole = 3
-	    end
-	  end
- 	end
+	  if unit:GetPlayerID() ~= nil then
+		  thisId = unit:GetPlayerID()
+		  thisTeam=PlayerResource:GetTeam(thisId)
+		  thisRole = 0;
+		  -- If this is a bot, determine their role - This is by slot for BotXP 			
+		  -- Radiant
+		  if thisIsBot and (thisTeam == 2) then
+		  	if thisId == 0 then thisRole = 2
+		  	elseif thisId == 1 then thisRole = 3
+		  	elseif thisId == 2 then thisRole = 4
+		  	elseif thisId == 3 then thisRole = 5
+		  	elseif thisId == 4 then thisRole = 1
+		  	end
+		  end
+		  if thisIsBot and (thisTeam == 3) then
+		  	if thisId == 5 then thisRole = 2
+		  	elseif thisId == 6 then thisRole = 1
+		  	elseif thisId == 7 then thisRole = 5
+		  	elseif thisId == 8 then thisRole = 4
+		  	elseif thisId == 9 then thisRole = 3
+		    end
+		  end
+	 	end
  	-- name for debug purposes
  	local thisName = unit:GetName()
 
@@ -284,8 +284,16 @@ function DataTables:GetRoleXPM(bot)
 		print('XPM Table:')
 		DeepPrintTable(data)
 	end
-	if data[bot.stats.role] ~= nil then
-	  return data[bot.stats.role]
+	-- edge case: bot mid is pos2 but the human mid will probably be 1st in this chart
+	-- so swap these
+	local role = bot.stats.role
+	if role == 2 then 
+		role = 1
+	elseif role == 1 then
+		role = 2
+	end
+	if data[role] ~= nil then
+	  return data[role]
 	else
 		return 0	
 	end

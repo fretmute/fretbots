@@ -97,6 +97,16 @@ if Settings == nil then
 				neutral 			= false,
 				stats 				= false
 			},
+			-- Enabled for humans, or just bots?
+			isBotsOnly = 
+			{
+				gold 					= true,
+				armor 				= true,
+				magicResist 	= true,
+				levels 				= true,
+				neutral 			= true,
+				stats 				= true
+			},			
 			-- bonuses always given once this threshold is reached. 
 			-- if this number is negative, mandatory awards are never given.
 			deathStreakThreshold = -1,
@@ -310,12 +320,12 @@ function Settings:Initialize(difficulty)
 		Settings.gameStartBonus = 
     {
     	  gold 					= 0,
-				armor 				= 3,
-				magicResist 	= 3,
+				armor 				= 2,
+				magicResist 	= 2,
 				levels 				= 0,
 				neutral       = 0,
-				stats 				= 5   	
-    }
+				stats 				= 3   	
+    }    
 	end		
 end
 

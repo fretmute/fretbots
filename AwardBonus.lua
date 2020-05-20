@@ -92,7 +92,7 @@ function AwardBonus:armor(bot, bonus)
 end
 
 -- Magic Resist
-function AwardBonus:magicResist(bot, bonus)
+function AwardBonus:magicResist(bot, bonus)	
 	if bot.stats.awards.magicResist < Settings.awardCap.magicResist then
 	  local resistance
 	  resistance = bot:GetBaseMagicalResistanceValue()
@@ -104,7 +104,7 @@ function AwardBonus:magicResist(bot, bonus)
 end
 
 -- Levels
-function AwardBonus:levels(bot, levels)	
+function AwardBonus:levels(bot, levels)		
 	if bot.stats.awards.levels < Settings.awardCap.levels then
 	  -- get current level and XP
 	  local currentLevel = PlayerResource:GetLevel(bot.stats.id)
@@ -263,6 +263,13 @@ function AwardBonus:Death(bot)
 	local awards = 0
 	-- loop over bonuses in order
 	for _, award in pairs(Settings.deathBonus.order) do
+		-- this event gets fired for humans to, so drop out here if we don't want to give rewards to humans
+		if not bot.stats.isBot and Settings.deathBonus.isBotsOnly[award] then
+			if isDebug then 
+				print(bot.stats.name..' is a player and does not get death bonuses for '..award..'.') 
+				return
+			end
+		end		
 		-- check if enabled
 		if Settings.deathBonus.enabled[award] then
 			local isAward = AwardBonus:ShouldAward(bot,award)
