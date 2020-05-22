@@ -133,12 +133,12 @@ function PerMinuteTimer()
 	for _, bot in pairs(Bots) do
 		if bot ~= nil then
 			-- GPM bonus
-			local goldBonus = DataTables:GetGPMBonusGold(bot)
+			local goldBonus = DataTables:GetGPMBonus(bot)
 			if goldBonus > 0 then
 				AwardBonus:gold(bot, goldBonus)
 			end
 			-- XPM bonus
-			local xpBonus = DataTables:GetXPMBonusGold(bot)
+			local xpBonus = DataTables:GetXPMBonus(bot)
 			if xpBonus > 0 then
 				AwardBonus:Experience(bot, xpBonus)
 			end

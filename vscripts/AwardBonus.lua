@@ -151,7 +151,7 @@ function AwardBonus:RandomNeutralItem(unit, tier)
 	  end
 	end
 	-- select a new item from the list
-	local item = AwardBonus:SelectRandomNeutralItem(tier, role)	
+	local item = AwardBonus:SelectRandomNeutralItem(tier, unit)	
 	-- award the new item if one was available
 	if item ~= nil then
 	  -- determine if the unit already has one (neutrals always in slot 16)
@@ -194,26 +194,36 @@ function AwardBonus:NeutralItem(bot, itemName, tier)
 end
 
 -- Returns valid items for a given tier and role
-function AwardBonus:GetNeutralTableForTierAndRole(tier,role)
+function AwardBonus:GetNeutralTableForTierAndRole(tier,unit)
 	local items = {}
 	local count = 0
 	for _,item in ipairs(allNeutrals) do
-	  if item.tier == tier and item.roles[role] ~= 0 then
-	  	table.insert(items,item)
-	  	count = count + 1
-	  end
-	end
-	return items, count
+		-- Melee / Ranged
+		if item.ranged and not unit.stats.isMelee then
+		  if item.tier == tier and item.roles[unit.stats.role] ~= 0 then
+		  	table.insert(items,item)
+		  	count = count + 1
+		  end
+		elseif item.melee and unit.stats.isMelee then
+		  if item.tier == tier and item.roles[unit.stats.role] ~= 0 then
+		  	table.insert(items,item)
+		  	count = count + 1
+		  end
+		end
+	end		
+  return items, count
 end
 
 -- selects a random item from the list (by tier and role) and returns the internal item name
-function AwardBonus:SelectRandomNeutralItem(tier, role)
+function AwardBonus:SelectRandomNeutralItem(tier, unit)
 	-- Get items that qualify
-	local items,count = AwardBonus:GetNeutralTableForTierAndRole(tier,role)
+	local items,count = AwardBonus:GetNeutralTableForTierAndRole(tier,unit)
 	-- pick one at random
 	local item = items[math.random(count)]
 	-- print selection for debug
 	if isDebug and item ~= nil then
+		print('Valid Neutral Items:')
+		DeepPrintTable(items)
 		print('Random item selected: ' .. item.name)
 	end
 	-- if there was a valid item, remove it from the table (if settings tell us to)

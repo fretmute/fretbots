@@ -13,7 +13,12 @@ FIRECRACKER 		 = 'soundboard.new_year_firecrackers'
 MATCH_READY      = 'Stinger.MatchReady'
 ATTENTION        = 'soundboard.rimshot'
 BEAUTIFUL        = 'soundboard.krasavchik'
+BEEP             = 'DotaSOS.TestBeep'
+ROSHAN           = 'Roshan.Death'
+RUSSIAN_REKT     = 'soundboard.eto_prosto_netchto'
 
+BAD_LIST 									= {DISASTAH, RUSSIAN_REKT}
+PLAYER_DEATH_LIST 				= {}
 -- message colors
 local colors = 
 {
@@ -57,6 +62,11 @@ function Utilities:Print(msg, msgType, sound)
 	if sound == nil then return end
 	-- play sound
 	EmitGlobalSound(sound)
+end
+
+-- Gets a random sound from a table
+function Utilities:GetSound(list)
+	return list[math.random(1,table.getn(list))]
 end
 
 -- clamps a number between two values, returns clamp rounded to nearest integer

@@ -11,6 +11,8 @@ require 'BuffUnit'
 require 'Settings'
 -- Convenience Utilities
 require 'Utilities'
+local role = require('RoleUtility')
+
 
 -- local debug flag
 local thisDebug = true; 
@@ -92,12 +94,24 @@ function DataTables:GenerateStatsTables(unit)
   local thisTeam = 0
 	local thisId = 0
 	local steamId = PlayerResource:GetSteamID(unit:GetMainControllingPlayer())
-	if steamId == nil or tostring(steamId) == '0' then
-		thisIsBot = true;
-		table.insert(Bots,unit);
-	else 
-		table.insert(Players,unit);	
-	end
+--	if steamId == nil or tostring(steamId) == '0' then
+--		thisIsBot = true;
+--		table.insert(Bots,unit);
+--	else 
+--		table.insert(Players,unit);	
+--	end
+	
+	if unit:IsHero() and unit:IsRealHero() and not unit:IsIllusion() and not unit:IsClone() then
+    if PlayerResource:GetSteamID(unit:GetMainControllingPlayer())==PlayerResource:GetSteamID(100) then
+    	thisIsBot = true
+      table.insert(Bots, unit)
+    else
+      table.insert(Players, unit)
+    end
+  end
+	
+	
+	
 	table.insert(AllUnits,unit);	
   -- PlayerID, Team, Role
 	  if unit:GetPlayerID() ~= nil then
@@ -123,9 +137,10 @@ function DataTables:GenerateStatsTables(unit)
 		    end
 		  end
 	 	end
- 	-- name for debug purposes
+	-- name for debug purposes
  	local thisName = unit:GetName()
-
+  thisRole = DataTables:GetRole(thisName)
+ 	
 	-- create a stats table for the bot
 	local stats = 
 	  {
@@ -177,6 +192,8 @@ function DataTables:GenerateStatsTables(unit)
       },	
 	  	-- current level of neutral item
 	  	neutralTier = 0,
+	  	-- Hero isMelee
+	  	isMelee = role.IsMelee(unit:GetBaseAttackRange()),
 	  	-- player ID
 	  	id = thisId
 	  }
@@ -255,9 +272,11 @@ end
 -- or zero if there is no mathing human
 function DataTables:GetRoleGPM(bot)
 	local data = {}
+	local names = {}
 	for _,unit in pairs(Players) do
 		local num = PlayerResource:GetGoldPerMin(unit.stats.id)
 		table.insert(data,num)
+	  table.insert(names, unit.stats.name)
 	end
 	Utilities:SortHighToLow(data)
 	if isDebug then
@@ -265,7 +284,7 @@ function DataTables:GetRoleGPM(bot)
 		DeepPrintTable(data)
 	end
 	if data[bot.stats.role] ~= nil then
-	  return data[bot.stats.role]
+	  return data[bot.stats.role], names[bot.stats.role]
 	else
 		return 0	
 	end
@@ -275,9 +294,11 @@ end
 -- or zero if there is no mathing human
 function DataTables:GetRoleXPM(bot)
 	local data = {}
+	local names = {}
 	for _,unit in pairs(Players) do
 		local num = PlayerResource:GetXPPerMin(unit.stats.id)
 		table.insert(data,num)
+		table.insert(names, unit.stats.name)
 	end
 	Utilities:SortHighToLow(data)
 	if isDebug then
@@ -293,17 +314,18 @@ function DataTables:GetRoleXPM(bot)
 		role = 2
 	end
 	if data[role] ~= nil then
-	  return data[role]
+	  return data[role], names[role]
 	else
 		return 0	
 	end
 end
 
 -- Returns the bonus gold to award to the bot this interval to achieve target GPM
-function DataTables:GetGPMBonusGold(bot)
+function DataTables:GetGPMBonus(bot)
+	if isDebug then print('Bot GPM Bonus: '..bot.stats.name) end
   local botGPM = PlayerResource:GetGoldPerMin(bot.stats.id)
   local targetGPM = 0
-  local playerGPM = DataTables:GetRoleGPM(bot)
+  local playerGPM, playerName = DataTables:GetRoleGPM(bot)
   -- the above will return zero if the is no counterpart, if that is the case return
   if playerGPM ==0 then
   	if isDebug then print('No player for this bot.') end
@@ -329,7 +351,7 @@ function DataTables:GetGPMBonusGold(bot)
   targetGPM = targetGPM * multiplier
   -- if the bot is already better than this, do not give award
   if botGPM > targetGPM then 
-  	if isDebug then print('Bot GPM too high for bonus: '..botGPM..' vs '..targetGPM) end
+  	if isDebug then print('Bot GPM too high for bonus: '..botGPM..' vs '..targetGPM..' Hero Base GPM: '..playerGPM..' Player Hero: '..playerName) end
   	return 0 
   end
   -- get GPM difference
@@ -337,6 +359,13 @@ function DataTables:GetGPMBonusGold(bot)
   -- clamp?
   local clampedGPM = 0
   if not Settings.gpm.clampOverride then
+  	-- ##TODO: MAKE THIS A FUNCTION INSTEAD OF A HACK
+  	-- Adjust clamp per mintue
+  	local minutes = Utilities:GetTime()/60
+  	local adjustedClamp = Settings.gpm.clamp[2]
+  	if Settings.gpm.perMinuteScale ~= 0 then 
+  		adjustedClamp = adjustedClamp + Settings.gpm.perMinuteScale * minutes
+  	end
   	clampedGPM = Utilities:RoundedClamp(gpmDifference, Settings.gpm.clamp[1], Settings.gpm.clamp[2])
   else
   	clampedGPM = Utilities:Round(gpmDifference)
@@ -346,6 +375,8 @@ function DataTables:GetGPMBonusGold(bot)
   -- debug
   if isDebug then
   	local msg = ' '
+  	msg = msg..' Bot: '..bot.stats.name
+  	msg = msg..' Role: '..bot.stats.role
   	msg = msg..' Bot GPM: '..botGPM
   	msg = msg..' Player GPM: '..playerGPM
   	msg = msg..' Target GPM: '..targetGPM
@@ -358,10 +389,11 @@ function DataTables:GetGPMBonusGold(bot)
 end
 
 -- Returns the bonus gold to award to the bot this interval to achieve target XPM
-function DataTables:GetXPMBonusGold(bot)
+function DataTables:GetXPMBonus(bot)
+	if isDebug then print('Bot XPM Bonus: '..bot.stats.name) end
   local botXPM = PlayerResource:GetXPPerMin(bot.stats.id)
   local targetXPM = 0
-  local playerXPM = DataTables:GetRoleXPM(bot)
+  local playerXPM, playerName = DataTables:GetRoleXPM(bot)
   -- the above will return zero if the is no counterpart, if that is the case return
   if playerXPM ==0 then
   	if isDebug then print('No player for this bot.') end
@@ -387,7 +419,7 @@ function DataTables:GetXPMBonusGold(bot)
   targetXPM = targetXPM * multiplier
   -- if the bot is already better than this, do not give award
   if botXPM > targetXPM then 
-  	if isDebug then print('Bot XPM too high for bonus: '..botXPM..' vs '..targetXPM) end
+  	if isDebug then print('Bot XPM too high for bonus: '..botXPM..' vs '..targetXPM..' Player Base XPM: '..playerXPM..' Player Hero: '..playerName) end
   	return 0 
   end
   -- get XPM difference
@@ -395,6 +427,13 @@ function DataTables:GetXPMBonusGold(bot)
   -- clamp?
   local clampedXPM = 0
   if not Settings.xpm.clampOverride then
+  	-- ##TODO: MAKE THIS A FUNCTION INSTEAD OF A HACK
+  	-- Adjust clamp per mintue
+  	local minutes = Utilities:GetTime()/60
+  	local adjustedClamp = Settings.xpm.clamp[2]
+  	if Settings.xpm.perMinuteScale ~= 0 then 
+  		adjustedClamp = adjustedClamp + Settings.xpm.perMinuteScale * minutes
+  	end  	
   	clampedXPM = Utilities:RoundedClamp(xpmDifference, Settings.xpm.clamp[1], Settings.xpm.clamp[2])
   else
   	clampedXPM = Utilities:Round(xpmDifference)
@@ -404,6 +443,8 @@ function DataTables:GetXPMBonusGold(bot)
   -- debug
   if isDebug then
   	local msg = ' '
+  	msg = msg..' Bot: '..bot.stats.name
+  	msg = msg..' Role: '..bot.stats.role
   	msg = msg..' Bot XPM: '..botXPM
   	msg = msg..' Player XPM: '..playerXPM
   	msg = msg..' Target XPM: '..targetXPM
@@ -483,7 +524,33 @@ function DataTables:PurgeHumanSideBots()
 	end
 end
 	
+function DataTables:GetRole(hero)
+	-- Carry?
+	if role.CanBeSafeLaneCarry(hero) then
+		if isDebug then print(hero..': role: '..1) end
+		return 1
+	-- MidLane
+	elseif role.CanBeMidlaner(hero) then
+		if isDebug then print(hero..': role: '..2) end
+		return 2
+	-- Offlane
+	elseif role.CanBeOfflaner(hero) then
+		if isDebug then print(hero..': role: '..3) end
+		return 3
+	-- Support is slightly more tricky
+  elseif role.CanBeSupport(hero) then
+  	if isDebug then print(hero..': role: '..4) end
+    return 4
+  else 
+  	if isDebug then print(hero..': role: '..5) end
+  	return 5
+  end 	
+end	
+	
+	
 -- Run this
 DataTables:Initialize()
+
+print('DataTables Loaded')
 
 

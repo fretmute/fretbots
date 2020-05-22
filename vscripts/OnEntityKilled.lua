@@ -7,6 +7,8 @@ require 'Debug'
 require 'DataTables'
 -- Awards for bots
 require 'AwardBonus'
+-- Settings
+require 'Settings'
 
 
 -- local debug flag
