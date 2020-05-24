@@ -326,7 +326,7 @@ function AwardBonus:Death(bot)
 	if isAwarded and not isLoudWarning then
 		Utilities:Print(msg, MSG_WARNING, ATTENTION)
 	elseif isAwarded and isLoudWarning then
-				Utilities:Print(msg, MSG_BAD, DISASTAH)
+				Utilities:Print(msg, MSG_BAD, BAD_LIST)
 	end
 end
 
