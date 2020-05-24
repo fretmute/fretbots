@@ -16,8 +16,17 @@ BEAUTIFUL        = 'soundboard.krasavchik'
 BEEP             = 'DotaSOS.TestBeep'
 ROSHAN           = 'Roshan.Death'
 RUSSIAN_REKT     = 'soundboard.eto_prosto_netchto'
+SAD_TROMBONE     = 'soundboard.sad_bone'
+BRUTAL           = 'soundboard.brutal'
+GG               = 'soundboard.ehto_g_g'
+OH_MY_LORD       = 'soundboard.oh_my_lord'
+QUESTIONABLE     = 'soundboard.that_was_questionable'
+WHAT_HAPPENED    = 'soundboard.what_just_happened'
+NEXT_LEVEL       = 'soundboard.next_level'
+PERFECT          = 'absolutely_perfect'
+DISAPPOINTED     = 'soundboard.glados.disappointed'
 
-BAD_LIST 									= {DISASTAH, RUSSIAN_REKT}
+BAD_LIST 									= {DISASTAH, RUSSIAN_REKT, GG, OH_MY_LORD, BEAUTIFUL}
 PLAYER_DEATH_LIST 				= {}
 -- message colors
 local colors = 
@@ -61,7 +70,11 @@ function Utilities:Print(msg, msgType, sound)
 	-- no sound
 	if sound == nil then return end
 	-- play sound
-	EmitGlobalSound(sound)
+	if type(sound) == 'string' then
+	  EmitGlobalSound(sound)
+	else
+		EmitGlobalSound(sound[math.random(#sound)])
+	end
 end
 
 -- Gets a random sound from a table
