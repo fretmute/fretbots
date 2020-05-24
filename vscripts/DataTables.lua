@@ -355,12 +355,13 @@ function DataTables:GetGPMBonus(bot)
   if not Settings.gpm.clampOverride then
   	-- ##TODO: MAKE THIS A FUNCTION INSTEAD OF A HACK
   	-- Adjust clamp per mintue
-  	local minutes = Utilities:GetTime()/60
+  	local minutes =  Utilities:Round(Utilities:GetTime()/60)
   	local adjustedClamp = Settings.gpm.clamp[2]
   	if Settings.gpm.perMinuteScale ~= 0 then 
   		adjustedClamp = adjustedClamp + Settings.gpm.perMinuteScale * minutes
+  		Debug:Print('minutes: '..minutes..' Clamp bonus: '.. Settings.gpm.perMinuteScale * minutes.. ' adjusted clamp: '..adjustedClamp)
   	end
-  	clampedGPM = Utilities:RoundedClamp(gpmDifference, Settings.gpm.clamp[1], Settings.gpm.clamp[2])
+  	clampedGPM = Utilities:RoundedClamp(gpmDifference, Settings.gpm.clamp[1], adjustedClamp)
   else
   	clampedGPM = Utilities:Round(gpmDifference)
   end
