@@ -30,6 +30,10 @@ function EntityKilled:OnEntityKilled(event)
 	DataTables:DoDeathUpdate(victim, killer);	
 	-- Give Awards (maybe)
 	AwardBonus:Death(victim)
+	-- Sound if it is a player?
+	if Settings.isPlayerDeathSound then
+	  Utilities:RandomSound(PLAYER_DEATH_LIST)
+	end
 	-- Debug Print
 	if isDebug then
 		DeepPrintTable(victim)

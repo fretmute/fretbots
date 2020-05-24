@@ -7,27 +7,34 @@ end
 MSG_GOOD = 1
 MSG_WARNING = 2
 MSG_BAD = 3
--- sound constants
-DISASTAH				 = 'soundboard.disastah'
-FIRECRACKER 		 = 'soundboard.new_year_firecrackers'
-MATCH_READY      = 'Stinger.MatchReady'
-ATTENTION        = 'soundboard.rimshot'
-BEAUTIFUL        = 'soundboard.krasavchik'
-BEEP             = 'DotaSOS.TestBeep'
-ROSHAN           = 'Roshan.Death'
-RUSSIAN_REKT     = 'soundboard.eto_prosto_netchto'
-SAD_TROMBONE     = 'soundboard.sad_bone'
-BRUTAL           = 'soundboard.brutal'
-GG               = 'soundboard.ehto_g_g'
-OH_MY_LORD       = 'soundboard.oh_my_lord'
-QUESTIONABLE     = 'soundboard.that_was_questionable'
-WHAT_HAPPENED    = 'soundboard.what_just_happened'
-NEXT_LEVEL       = 'soundboard.next_level'
-PERFECT          = 'absolutely_perfect'
-DISAPPOINTED     = 'soundboard.glados.disappointed'
+-- sound constan		ts
+DISASTAH						 = 'soundboard.disastah'
+FIRECRACKER 				 = 'soundboard.new_year_firecrackers'
+MATCH_READY     		 = 'Stinger.MatchReady'
+ATTENTION       		 = 'soundboard.rimshot'
+BEAUTIFUL       		 = 'soundboard.krasavchik'
+BEEP            		 = 'DotaSOS.TestBeep'
+ROSHAN          		 = 'Roshan.Death'
+RUSSIAN_REKT    		 = 'soundboard.eto_prosto_netchto'
+SAD_TROMBONE    		 = 'soundboard.sad_bone'
+BRUTAL          		 = 'soundboard.brutal'
+GG              		 = 'soundboard.ehto_g_g'
+OH_MY_LORD      		 = 'soundboard.oh_my_lord'
+QUESTIONABLE    		 = 'soundboard.that_was_questionable'
+WHAT_HAPPENED   		 = 'soundboard.what_just_happened'
+NEXT_LEVEL      		 = 'soundboard.next_level'
+PERFECT         		 = 'absolutely_perfect'
+DISAPPOINTED    		 = 'soundboard.glados.disappointed'
+PATIENCE        		 = 'soundboard.patience'
+NORMALIN        		 = 'soundboard.eto_nenormalno'
+HERO            		 = 'soundboard.youre_a_hero'
+GROAN           		 = 'soundboard.ti9.crowd_groan'
+APPLAUSE             = 'soundboard.applause'
+                		
 
-BAD_LIST 									= {DISASTAH, RUSSIAN_REKT, GG, OH_MY_LORD, BEAUTIFUL}
-PLAYER_DEATH_LIST 				= {}
+BAD_LIST					   = {DISASTAH, RUSSIAN_REKT, GG, OH_MY_LORD, BEAUTIFUL}
+PLAYER_DEATH_LIST 	 = {PATIENCE, DISAPPOINTED, APPLAUSE, PERFECT, QUESTIONABLE, SAD_TROMBONE, WHAT_HAPPENED}
+
 -- message colors
 local colors = 
 {
@@ -87,6 +94,11 @@ function Utilities:RoundedClamp(number, minimum, maximum)
 	local num = Utilities:Clamp(number, minimum, maximum)
 	return Utilities:Round(num)
 end 
+
+-- Emits a random sound from a table
+function Utilities:RandomSound(sound)
+	EmitGlobalSound(sound[math.random(#sound)])
+end
 
 -- clamps a number
 function Utilities:Clamp(number, minimum, maximum)
