@@ -20,3 +20,14 @@ function Debug:IsFret(id)
 		return false;
 	end
 end
+
+-- shorthand for debug printing
+function Debug:Print(msg)
+	if isDebug then print(msg) end
+end
+
+-- shorthand for debug table printing
+function Debug:DeepPrint(o)
+	if isDebug then DeepPrintTable(o) end
+end
+

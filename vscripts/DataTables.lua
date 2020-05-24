@@ -65,6 +65,8 @@ function DataTables:Initialize()
 	end
 	-- Purge human side bots 
 	DataTables:PurgeHumanSideBots()
+	-- Assign a support Pos 5
+	DataTables:SetBotPositionFive()
   -- Set Initialized Flag
   Flags.isStatsInitialized = true;
 	
@@ -94,13 +96,6 @@ function DataTables:GenerateStatsTables(unit)
   local thisTeam = 0
 	local thisId = 0
 	local steamId = PlayerResource:GetSteamID(unit:GetMainControllingPlayer())
---	if steamId == nil or tostring(steamId) == '0' then
---		thisIsBot = true;
---		table.insert(Bots,unit);
---	else 
---		table.insert(Players,unit);	
---	end
-	
 	if unit:IsHero() and unit:IsRealHero() and not unit:IsIllusion() and not unit:IsClone() then
     if PlayerResource:GetSteamID(unit:GetMainControllingPlayer())==PlayerResource:GetSteamID(100) then
     	thisIsBot = true
@@ -109,34 +104,31 @@ function DataTables:GenerateStatsTables(unit)
       table.insert(Players, unit)
     end
   end
-	
-	
-	
 	table.insert(AllUnits,unit);	
-  -- PlayerID, Team, Role
-	  if unit:GetPlayerID() ~= nil then
-		  thisId = unit:GetPlayerID()
-		  thisTeam=PlayerResource:GetTeam(thisId)
-		  thisRole = 0;
-		  -- If this is a bot, determine their role - This is by slot for BotXP 			
-		  -- Radiant
-		  if thisIsBot and (thisTeam == 2) then
-		  	if thisId == 0 then thisRole = 2
-		  	elseif thisId == 1 then thisRole = 3
-		  	elseif thisId == 2 then thisRole = 4
-		  	elseif thisId == 3 then thisRole = 5
-		  	elseif thisId == 4 then thisRole = 1
-		  	end
-		  end
-		  if thisIsBot and (thisTeam == 3) then
-		  	if thisId == 5 then thisRole = 2
-		  	elseif thisId == 6 then thisRole = 1
-		  	elseif thisId == 7 then thisRole = 5
-		  	elseif thisId == 8 then thisRole = 4
-		  	elseif thisId == 9 then thisRole = 3
-		    end
-		  end
-	 	end
+-- PlayerID, Team, Role
+  if unit:GetPlayerID() ~= nil then
+	  thisId = unit:GetPlayerID()
+	  thisTeam=PlayerResource:GetTeam(thisId)
+	  thisRole = 0;
+	  -- If this is a bot, determine their role - This is by slot for BotXP 			
+	  -- Radiant
+	  if thisIsBot and (thisTeam == 2) then
+	  	if thisId == 0 then thisRole = 2
+	  	elseif thisId == 1 then thisRole = 3
+	  	elseif thisId == 2 then thisRole = 4
+	  	elseif thisId == 3 then thisRole = 5
+	  	elseif thisId == 4 then thisRole = 1
+	  	end
+	  end
+	  if thisIsBot and (thisTeam == 3) then
+	  	if thisId == 5 then thisRole = 2
+	  	elseif thisId == 6 then thisRole = 1
+	  	elseif thisId == 7 then thisRole = 5
+	  	elseif thisId == 8 then thisRole = 4
+	  	elseif thisId == 9 then thisRole = 3
+	    end
+	  end
+ 	end
 	-- name for debug purposes
  	local thisName = unit:GetName()
   thisRole = DataTables:GetRole(thisName)
@@ -197,6 +189,8 @@ function DataTables:GenerateStatsTables(unit)
 	  	-- player ID
 	  	id = thisId
 	  }
+	  -- Reduce human skill
+	  if not thisIsBot then stats.skill = stats.skill * 0.5 end
 	  -- Insert the stats object to the bot
 	  unit.stats = stats;
 	  -- update non-accruing deathBonus chances since they will never change
@@ -523,6 +517,18 @@ function DataTables:PurgeHumanSideBots()
 	  end 
 	end
 end
+	
+-- Both support bots will initially be set to position four.  
+-- Make one bot support 5 (at random)
+function DataTables:SetBotPositionFive()
+  for _, bot in pairs(Bots) do
+  	-- The first position four selected is the unlucky one
+  	if bot.stats.role == 4 then 
+  		bot.stats.role = 5
+  		break
+  	end
+  end
+end	
 	
 function DataTables:GetRole(hero)
 	-- Carry?
