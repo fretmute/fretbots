@@ -1,6 +1,6 @@
 local X = {}
 
-- Handy Global Constants
+-- Handy Global Constants
 X.ROLE_CARRY							= 1
 X.ROLE_MID								= 2
 X.ROLE_OFFLANE						= 3
