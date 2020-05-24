@@ -19,7 +19,7 @@ if Settings == nil then
   	-- are multipliers multiplicative, or additive (multiplicative is harder)
   	isMultiplicative = true,
   	-- Taunt humans when they die with chatwheel sounds?
-  	isPlayerDeathSound = true,
+  	isPlayerDeathSound = false,
 		-- this represents a multiplier to all bonuses.  This allows each game to be slightly different
 		skill = 
 		{
@@ -335,9 +335,7 @@ function Settings:Initialize(difficulty)
 end
 
 -- Initialize here to default.  Can be recalled from other scripts to overwrite
--- (or change forever by changing this number)
+-- (or change forever by changing this string)
 Settings:Initialize('debug')
-if isDebug then
-  DeepPrintTable(Settings)
-end
+Debug:DeepPrint(Settings)
 
