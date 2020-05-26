@@ -309,8 +309,8 @@ function Settings:Initialize(difficulty)
 	-- Replicate and add more if statements for custom difficulties
 	-- Debug diffculty - speeds timings
 	if difficulty == 'debug' then
-  	-- override neutral timings for speed (this puts bots 1 full tier ahead starting at game start)
-  	Settings.neutralItems.timings = {0, 420, 1020, 1620, 2220}
+  	-- override neutral timings for speed (this puts bots ~ 1/2 a full tier ahead)
+  	Settings.neutralItems.timings = {200, 620, 1220, 1820, 2420}
   	-- Also override deathbonus settings for test
   	Settings.deathBonus.enabled = 
   	{
