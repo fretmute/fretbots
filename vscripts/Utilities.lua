@@ -133,7 +133,9 @@ end
 
 -- Gets game time
 function Utilities:GetTime()
-  return GameRules:GetDOTATime(false, false)
+  local dotaTime = GameRules:GetDOTATime(false, false)
+  if dotaTime == nil or dotaTime < 0 then return 0 end
+  return dotaTime
 end
 
 function Utilities:SortHighToLow(data)

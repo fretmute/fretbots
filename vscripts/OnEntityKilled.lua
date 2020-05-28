@@ -10,7 +10,6 @@ require 'AwardBonus'
 -- Settings
 require 'Settings'
 
-
 -- local debug flag
 local thisDebug = false; 
 local isDebug = Debug.IsDebug() and thisDebug;

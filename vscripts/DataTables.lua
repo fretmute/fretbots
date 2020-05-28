@@ -14,10 +14,11 @@ require 'Utilities'
 local role = require('RoleUtility')
 
 
--- local debug flag
-local thisDebug = true; 
-local isDebug = Debug.IsDebug() and thisDebug;
-local isChatDebug = Debug.IsDebug() and true;
+-- local debug flags
+local thisDebug = true
+local isDebug = Debug.IsDebug() and thisDebug
+local isChatDebug = Debug.IsDebug() and false
+local isVerboseDebug = Debug.IsDebug() and false
 local isBuff = false
 
 -- Globals 
@@ -52,6 +53,7 @@ function DataTables:Initialize()
 	Players={};
 	AllUnits = {};
 	for i,unit in pairs(Units) do
+		  Debug:Print(unit:GetName())
   		local id = PlayerResource:GetSteamID(unit:GetMainControllingPlayer());	
   		local isFret = Debug:IsFret(id);
   		-- Buff Fret for Debug purposes
@@ -96,15 +98,16 @@ function DataTables:GenerateStatsTables(unit)
   local thisTeam = 0
 	local thisId = 0
 	local steamId = PlayerResource:GetSteamID(unit:GetMainControllingPlayer())
-	if unit:IsHero() and unit:IsRealHero() and not unit:IsIllusion() and not unit:IsClone() then
-    if PlayerResource:GetSteamID(unit:GetMainControllingPlayer())==PlayerResource:GetSteamID(100) then
-    	thisIsBot = true
-      table.insert(Bots, unit)
-    else
-      table.insert(Players, unit)
-    end
+	-- Drop out for non-real hero units
+	if not DataTables:IsRealHero(unit) then return end
+	-- Is bot?
+  if PlayerResource:GetSteamID(unit:GetMainControllingPlayer())==PlayerResource:GetSteamID(100) then
+  	thisIsBot = true
+    table.insert(Bots, unit)
+  else
+    table.insert(Players, unit)
   end
-	table.insert(AllUnits,unit);	
+  table.insert(AllUnits,unit)	
 -- PlayerID, Team, Role
   if unit:GetPlayerID() ~= nil then
 	  thisId = unit:GetPlayerID()
@@ -230,7 +233,7 @@ function DataTables:DoDeathUpdate(victim, killer)
 	victim.stats.enemyTeamNetWorth = DataTables:GetTeamNetWorth(killer.stats.team)
 	if isDebug then
 		print('Updated stats table for ' .. victim.stats.name)
-		DeepPrintTable(victim.stats)
+		if isVerboseDebug then DeepPrintTable(victim.stats) end
 	end
 end
 
@@ -273,12 +276,15 @@ function DataTables:GetRoleGPM(bot)
 	  table.insert(names, unit.stats.name)
 	end
 	Utilities:SortHighToLow(data)
-	if isDebug then
+	if isVerboseDebug then
 		print('GPM Table:')
 		DeepPrintTable(data)
 	end
 	if data[bot.stats.role] ~= nil then
 	  return data[bot.stats.role], names[bot.stats.role]
+	-- specific debug case, pretend we have more players than we do
+	elseif isDebug and #Players == 1 then
+		return data[1] / bot.stats.role, names[1]	  
 	else
 		return 0	
 	end
@@ -295,7 +301,7 @@ function DataTables:GetRoleXPM(bot)
 		table.insert(names, unit.stats.name)
 	end
 	Utilities:SortHighToLow(data)
-	if isDebug then
+	if isVerboseDebug then
 		print('XPM Table:')
 		DeepPrintTable(data)
 	end
@@ -309,157 +315,12 @@ function DataTables:GetRoleXPM(bot)
 	end
 	if data[role] ~= nil then
 	  return data[role], names[role]
+	-- specific debug case, pretend we have more players than we do
+	elseif isDebug and #Players == 1 then
+		return data[1] / role, names[1]	  
 	else
 		return 0	
 	end
-end
-
--- Returns the bonus gold to award to the bot this interval to achieve target GPM
-function DataTables:GetGPMBonus(bot)
-	if isDebug then print('Bot GPM Bonus: '..bot.stats.name) end
-  local botGPM = PlayerResource:GetGoldPerMin(bot.stats.id)
-  local targetGPM = 0
-  local playerGPM, playerName = DataTables:GetRoleGPM(bot)
-  -- the above will return zero if the is no counterpart, if that is the case return
-  if playerGPM ==0 then
-  	if isDebug then print('No player for this bot.') end
-  	return 0 
-  end
-  -- add offset to the target
-  targetGPM = targetGPM + playerGPM + Settings.gpm.offset
-  -- Get individual multipliers
-  local skill = bot.stats.skill
-  local scale = Settings.gpm.scale[bot.stats.role]
-  local variance = Utilities:GetVariance(Settings.gpm.variance)
-  -- Get total multiplier
-  local multiplier = DataTables:GetPerMinuteMultiplier(skill, scale, variance)
-  if isDebug then
-  	local msg = ' '
-  	msg = msg..' skill: '..skill
-  	msg = msg..' scale: '..scale
-  	msg = msg..' variance: '..variance
-  	msg = msg..' multiplier: '..multiplier
-  	print(msg)
-  end
-  -- multiply
-  targetGPM = targetGPM * multiplier
-  -- if the bot is already better than this, do not give award
-  if botGPM > targetGPM then 
-  	if isDebug then print('Bot GPM too high for bonus: '..botGPM..' vs '..targetGPM..' Hero Base GPM: '..playerGPM..' Player Hero: '..playerName) end
-  	return 0 
-  end
-  -- get GPM difference
-  gpmDifference = targetGPM - botGPM
-  -- clamp?
-  local clampedGPM = 0
-  if not Settings.gpm.clampOverride then
-  	-- ##TODO: MAKE THIS A FUNCTION INSTEAD OF A HACK
-  	-- Adjust clamp per mintue
-  	local minutes =  Utilities:Round(Utilities:GetTime()/60)
-  	local adjustedClamp = Settings.gpm.clamp[2]
-  	if Settings.gpm.perMinuteScale ~= 0 then 
-  		adjustedClamp = adjustedClamp + Settings.gpm.perMinuteScale * minutes
-  		Debug:Print('minutes: '..minutes..' Clamp bonus: '.. Settings.gpm.perMinuteScale * minutes.. ' adjusted clamp: '..adjustedClamp)
-  	end
-  	clampedGPM = Utilities:RoundedClamp(gpmDifference, Settings.gpm.clamp[1], adjustedClamp)
-  else
-  	clampedGPM = Utilities:Round(gpmDifference)
-  end
-  -- Figure out how much gold this is to provide the bump
-  local bonus = Utilities:Round(clampedGPM * (Utilities:GetTime() / 60))
-  -- debug
-  if isDebug then
-  	local msg = ' '
-  	msg = msg..' Bot: '..bot.stats.name
-  	msg = msg..' Role: '..bot.stats.role
-  	msg = msg..' Bot GPM: '..botGPM
-  	msg = msg..' Player GPM: '..playerGPM
-  	msg = msg..' Target GPM: '..targetGPM
-  	msg = msg..' GPM Difference: '..gpmDifference
-  	msg = msg..' Clamped GPM: '..clampedGPM
-  	msg = msg..' Bonus Gold: '..bonus	
-  	print(msg)
-  end
-  return bonus
-end
-
--- Returns the bonus gold to award to the bot this interval to achieve target XPM
-function DataTables:GetXPMBonus(bot)
-	if isDebug then print('Bot XPM Bonus: '..bot.stats.name) end
-  local botXPM = PlayerResource:GetXPPerMin(bot.stats.id)
-  local targetXPM = 0
-  local playerXPM, playerName = DataTables:GetRoleXPM(bot)
-  -- the above will return zero if the is no counterpart, if that is the case return
-  if playerXPM ==0 then
-  	if isDebug then print('No player for this bot.') end
-  	return 0 
-  end
-  -- add offset to the target
-  targetXPM = targetXPM + playerXPM + Settings.xpm.offset
-  -- Get individual multipliers
-  local skill = bot.stats.skill
-  local scale = Settings.xpm.scale[bot.stats.role]
-  local variance = Utilities:GetVariance(Settings.xpm.variance)
-  -- Get total multiplier
-  local multiplier = DataTables:GetPerMinuteMultiplier(skill, scale, variance)
-  if isDebug then
-  	local msg = ' '
-  	msg = msg..' skill: '..skill
-  	msg = msg..' scale: '..scale
-  	msg = msg..' variance: '..variance
-  	msg = msg..' multiplier: '..multiplier
-  	print(msg)
-  end
-  -- multiply
-  targetXPM = targetXPM * multiplier
-  -- if the bot is already better than this, do not give award
-  if botXPM > targetXPM then 
-  	if isDebug then print('Bot XPM too high for bonus: '..botXPM..' vs '..targetXPM..' Player Base XPM: '..playerXPM..' Player Hero: '..playerName) end
-  	return 0 
-  end
-  -- get XPM difference
-  xpmDifference = targetXPM - botXPM
-  -- clamp?
-  local clampedXPM = 0
-  if not Settings.xpm.clampOverride then
-  	-- ##TODO: MAKE THIS A FUNCTION INSTEAD OF A HACK
-  	-- Adjust clamp per mintue
-  	local minutes = Utilities:GetTime()/60
-  	local adjustedClamp = Settings.xpm.clamp[2]
-  	if Settings.xpm.perMinuteScale ~= 0 then 
-  		adjustedClamp = adjustedClamp + Settings.xpm.perMinuteScale * minutes
-  	end  	
-  	clampedXPM = Utilities:RoundedClamp(xpmDifference, Settings.xpm.clamp[1], Settings.xpm.clamp[2])
-  else
-  	clampedXPM = Utilities:Round(xpmDifference)
-  end
-  -- Figure out how much gold this is to provide the bump
-  local bonus = Utilities:Round(clampedXPM * (Utilities:GetTime() / 60))
-  -- debug
-  if isDebug then
-  	local msg = ' '
-  	msg = msg..' Bot: '..bot.stats.name
-  	msg = msg..' Role: '..bot.stats.role
-  	msg = msg..' Bot XPM: '..botXPM
-  	msg = msg..' Player XPM: '..playerXPM
-  	msg = msg..' Target XPM: '..targetXPM
-  	msg = msg..' XPM Difference: '..xpmDifference
-  	msg = msg..' Clamped XPM: '..clampedXPM
-  	msg = msg..' Bonus XP: '..bonus	
-  	print(msg)
-  end
-  return bonus
-end
-
-
--- Returns total multiplier for the bonus
--- this is either strictly multiplicative, or the average of the three
-function DataTables:GetPerMinuteMultiplier(skill, scale, variance)
-  if Settings.isMultiplicative then
-    return skill * scale * variance
-  else
-  	return skill + scale + variance - 3
-  end
 end
 
 -- returns a flat multiplier to represent the skill of the bot, combined with their role.
@@ -554,6 +415,10 @@ function DataTables:GetRole(hero)
   end 	
 end	
 	
+-- Returns true if the unit is an actual hero and not a hero-like unit
+function DataTables:IsRealHero(unit)
+	return unit:IsHero() and unit:IsRealHero() and not unit:IsIllusion() and not unit:IsClone()	
+end
 	
 -- Run this
 DataTables:Initialize()

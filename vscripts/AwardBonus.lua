@@ -218,12 +218,15 @@ end
 function AwardBonus:SelectRandomNeutralItem(tier, unit)
 	-- Get items that qualify
 	local items,count = AwardBonus:GetNeutralTableForTierAndRole(tier,unit)
+	if items == nil then return nil end
 	-- pick one at random
 	local item = items[math.random(count)]
 	-- print selection for debug
 	if isDebug and item ~= nil then
-		print('Valid Neutral Items:')
-		DeepPrintTable(items)
+		print('Valid Neutral Items, Tier '..tier..':')
+		for _, it in pairs(items) do
+			print('  '..it.name)
+		end
 		print('Random item selected: ' .. item.name)
 	end
 	-- if there was a valid item, remove it from the table (if settings tell us to)
@@ -232,6 +235,7 @@ function AwardBonus:SelectRandomNeutralItem(tier, unit)
 		for i,_ in ipairs(allNeutrals) do
 			if item == allNeutrals[i] then
 		  	table.remove(allNeutrals,i)
+		  	break
 			end
 		end
   end
@@ -263,6 +267,11 @@ end
 
 -- Gives the bot his death awrds, if there are any
 function AwardBonus:Death(bot)
+	-- Drop out for edge cases (LD bear, AW clone)
+	if not DataTables:IsRealHero(bot) then
+		Debug:Print(bot:GetName()..' is not a real hero unit.  No Death Award given.')
+		return
+	end	
 	-- to be printed to players
 	local msg = bot.stats.name .. ' Death Bonus Awarded:'
 	local isAwarded = false
@@ -323,10 +332,12 @@ function AwardBonus:Death(bot)
 			end
 		end
 	end
-	if isAwarded and not isLoudWarning then
-		Utilities:Print(msg, MSG_WARNING, ATTENTION)
-	elseif isAwarded and isLoudWarning then
-				Utilities:Print(msg, MSG_BAD, BAD_LIST)
+	if Settings.deathBonus.announce then
+		if isAwarded and not isLoudWarning then
+			Utilities:Print(msg, MSG_WARNING, ATTENTION)
+		elseif isAwarded and isLoudWarning then
+			Utilities:Print(msg, MSG_BAD, BAD_LIST)
+		end
 	end
 end
 
@@ -344,23 +355,43 @@ end
 -- Returns a numerical value to award
 function AwardBonus:GetValue(bot, award)
 	local isLoud = false
+	local dotaTime
+  -- base bonus is always the same
 	local base = math.random(Settings.deathBonus.range[award][1], Settings.deathBonus.range[award][2])
+	-- if range scaling is enabled, then scale
+	if Settings.deathBonus.isRangeTimeScaleEnable then	
+  	base = base * Utilities:GetTime() / Settings.deathBonus.rangeTimeScale[award]
+	end	
 	--scale base by skill and variance
 	local scaled = base * bot.stats.skill * Utilities:GetVariance(Settings.deathBonus.variance[award])
+	-- scale by role if enabled
+	if Settings.deathBonus.scaleEnabled[award] then
+		scaled = scaled * Settings.deathBonus.scale[award][bot.stats.role]
+		--Debug:Print(award..': Scaling by Role '..bot.stats.role..': Scale: '..Settings.deathBonus.scale[award][bot.stats.role])
+	end
 	-- Round and maybe clamp
 	local clamped = 0
 	if Settings.deathBonus.clampOverride[award] then
 		clamped = Utilities.Round(scaled)
 	else
-		clamped = Utilities:RoundedClamp(scaled, Settings.deathBonus.clamp[award][1], Settings.deathBonus.clamp[award][2])
+		-- base clamp
+		local upperClamp = Settings.deathBonus.clamp[award][2]
+		-- Perhaps scale upper clamp, if enabled
+		if Settings.deathBonus.isClampTimeScaleEnable then 
+			dotaTime =  Utilities:GetTime()
+		  upperClamp = upperClamp * Utilities:GetTime() / Settings.deathBonus.clampTimeScale[award]	
+		end
+		clamped = Utilities:RoundedClamp(scaled, Settings.deathBonus.clamp[award][1], upperClamp)
 	end
 	-- set isLoud
 	isLoud = (Settings.deathBonus.isClampLoud[award] and clamped == Settings.deathBonus.clamp[award][2])
 	         or
 	         Settings.deathBonus.isLoud[award]
-	if isDebug then print(award..': Base Award: '..base..' Scaled: '..scaled..' Clamped:'..clamped) end
-	if isDebug then print(award..': Is Clamp Loud: '..tostring(Settings.deathBonus.isClampLoud[award])..
-		                           ' isLoud: '..tostring(Settings.deathBonus.isLoud[award])) end
+	if isDebug then print(award..': Base Award: '..base..' Scaled: '..scaled..' Clamped: '..clamped) end
+	if isDebug then 
+		--print(award..': Is Clamp Loud: '..tostring(Settings.deathBonus.isClampLoud[award])..
+		--                           ' isLoud: '..tostring(Settings.deathBonus.isLoud[award])) 
+  end
 	return clamped, isLoud
 end
 
@@ -374,5 +405,155 @@ function AwardBonus:ShouldAward(bot,award)
 	-- otherwise roll for it
 	local roll = math.random()
 	local isAward = roll < bot.stats.chance[award]
+	--Debug:Print('Death Award: '..award..': roll: '..roll..' chance: '..bot.stats.chance[award])
 	return isAward
+end
+
+
+-- Returns the bonus gold to award to the bot this interval to achieve target GPM
+function AwardBonus:GetGPMBonus(bot)
+	if isDebug then print('Bot GPM Bonus: '..bot.stats.name) end
+  local botGPM = PlayerResource:GetGoldPerMin(bot.stats.id)
+  local targetGPM = 0
+  local playerGPM, playerName = DataTables:GetRoleGPM(bot)
+  -- the above will return zero if the is no counterpart, if that is the case return
+  if playerGPM ==0 then
+  	if isDebug then print('No player for this bot.') end
+  	return 0 
+  end
+  -- add offset to the target
+  targetGPM = targetGPM + playerGPM + Settings.gpm.offset
+  -- Get individual multipliers
+  local skill = bot.stats.skill
+  local scale = Settings.gpm.scale[bot.stats.role]
+  local variance = Utilities:GetVariance(Settings.gpm.variance)
+  -- Get total multiplier
+  local multiplier = AwardBonus:GetPerMinuteMultiplier(skill, scale, variance)
+  if isDebug then
+  	local msg = ' '
+  	msg = msg..' skill: '..skill
+  	msg = msg..' scale: '..scale
+  	msg = msg..' variance: '..variance
+  	msg = msg..' multiplier: '..multiplier
+  	print(msg)
+  end
+  -- multiply
+  targetGPM = targetGPM * multiplier
+  -- if the bot is already better than this, do not give award
+  if botGPM > targetGPM then 
+  	if isDebug then print('Bot GPM too high for bonus: '..botGPM..' vs '..targetGPM..' Hero Base GPM: '..playerGPM..' Player Hero: '..playerName) end
+  	return 0 
+  end
+  -- get GPM difference
+  gpmDifference = targetGPM - botGPM
+  -- clamp?
+  local clampedGPM = 0
+  if not Settings.gpm.clampOverride then
+  	-- ##TODO: MAKE THIS A FUNCTION INSTEAD OF A HACK
+  	-- Adjust clamp per mintue
+  	local minutes =  Utilities:Round(Utilities:GetTime()/60)
+  	local adjustedClamp = Settings.gpm.clamp[2]
+  	if Settings.gpm.perMinuteScale ~= 0 then 
+  		adjustedClamp = adjustedClamp + Settings.gpm.perMinuteScale * minutes
+  		Debug:Print('minutes: '..minutes..' Clamp bonus: '.. Settings.gpm.perMinuteScale * minutes.. ' adjusted clamp: '..adjustedClamp)
+  	end
+  	clampedGPM = Utilities:RoundedClamp(gpmDifference, Settings.gpm.clamp[1], adjustedClamp)
+  else
+  	clampedGPM = Utilities:Round(gpmDifference)
+  end
+  -- Figure out how much gold this is to provide the bump
+  local bonus = Utilities:Round(clampedGPM * (Utilities:GetTime() / 60))
+  -- debug
+  if isDebug then
+  	local msg = ' '
+  	msg = msg..' Bot: '..bot.stats.name
+  	msg = msg..' Role: '..bot.stats.role
+  	msg = msg..' Bot GPM: '..botGPM
+  	msg = msg..' Player GPM: '..playerGPM
+  	msg = msg..' Target GPM: '..targetGPM
+  	msg = msg..' GPM Difference: '..gpmDifference
+  	msg = msg..' Clamped GPM: '..clampedGPM
+  	msg = msg..' Bonus Gold: '..bonus	
+  	print(msg)
+  end
+  return bonus
+end
+
+-- Returns the bonus gold to award to the bot this interval to achieve target XPM
+function AwardBonus:GetXPMBonus(bot)
+	if isDebug then print('Bot XPM Bonus: '..bot.stats.name) end
+  local botXPM = PlayerResource:GetXPPerMin(bot.stats.id)
+  local targetXPM = 0
+  local playerXPM, playerName = DataTables:GetRoleXPM(bot)
+  -- the above will return zero if the is no counterpart, if that is the case return
+  if playerXPM == 0 then
+  	if isDebug then print('No player for this bot.') end
+  	return 0  	   
+  end
+  -- add offset to the target
+  targetXPM = targetXPM + playerXPM + Settings.xpm.offset
+  -- Get individual multipliers
+  local skill = bot.stats.skill
+  local scale = Settings.xpm.scale[bot.stats.role]
+  local variance = Utilities:GetVariance(Settings.xpm.variance)
+  -- Get total multiplier
+  local multiplier = AwardBonus:GetPerMinuteMultiplier(skill, scale, variance)
+  if isDebug then
+  	local msg = ' '
+  	msg = msg..' skill: '..skill
+  	msg = msg..' scale: '..scale
+  	msg = msg..' variance: '..variance
+  	msg = msg..' multiplier: '..multiplier
+  	print(msg)
+  end
+  -- multiply
+  targetXPM = targetXPM * multiplier
+  -- if the bot is already better than this, do not give award
+  if botXPM > targetXPM then 
+  	if isDebug then print('Bot XPM too high for bonus: '..botXPM..' vs '..targetXPM..' Player Base XPM: '..playerXPM..' Player Hero: '..playerName) end
+  	return 0 
+  end
+  -- get XPM difference
+  xpmDifference = targetXPM - botXPM
+  -- clamp?
+  local clampedXPM = 0
+  if not Settings.xpm.clampOverride then
+  	-- ##TODO: MAKE THIS A FUNCTION INSTEAD OF A HACK
+  	-- Adjust clamp per mintue
+  	local minutes = Utilities:GetTime()/60
+  	local adjustedClamp = Settings.xpm.clamp[2]
+  	if Settings.xpm.perMinuteScale ~= 0 then 
+  		adjustedClamp = adjustedClamp + Settings.xpm.perMinuteScale * minutes
+  	end  	
+  	clampedXPM = Utilities:RoundedClamp(xpmDifference, Settings.xpm.clamp[1], Settings.xpm.clamp[2])
+  else
+  	clampedXPM = Utilities:Round(xpmDifference)
+  end
+  -- Figure out how much gold this is to provide the bump
+  local bonus = Utilities:Round(clampedXPM * (Utilities:GetTime() / 60))
+  -- debug
+  if isDebug then
+  	local msg = ' '
+  	msg = msg..' Bot: '..bot.stats.name
+  	msg = msg..' Role: '..bot.stats.role
+  	msg = msg..' Bot XPM: '..botXPM
+  	msg = msg..' Player XPM: '..playerXPM
+  	msg = msg..' Target XPM: '..targetXPM
+  	msg = msg..' XPM Difference: '..xpmDifference
+  	msg = msg..' Clamped XPM: '..clampedXPM
+  	msg = msg..' Bonus XP: '..bonus	
+  	print(msg)
+  end
+  return bonus
+end
+
+
+-- Returns total multiplier for the bonus
+-- this is either strictly multiplicative, or the average of the three
+function AwardBonus:GetPerMinuteMultiplier(skill, scale, variance)
+  if Settings.isMultiplicative then
+    return skill * scale * variance
+  else
+  	return skill + scale + variance - 3
+  end
 end

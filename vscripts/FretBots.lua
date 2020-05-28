@@ -34,7 +34,6 @@ function Initialize()
 	print(versionString);
 	print('Version: ' .. version);
 	Utilities:Print('Fret Bots! Version: ' .. version, MSG_GOOD, MATCH_READY)
-	
 end
 
 -- Execute
