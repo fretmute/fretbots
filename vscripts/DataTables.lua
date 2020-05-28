@@ -53,6 +53,7 @@ function DataTables:Initialize()
 	Players={};
 	AllUnits = {};
 	for i,unit in pairs(Units) do
+		  Debug:Print(unit:GetName())
   		local id = PlayerResource:GetSteamID(unit:GetMainControllingPlayer());	
   		local isFret = Debug:IsFret(id);
   		-- Buff Fret for Debug purposes
@@ -97,15 +98,16 @@ function DataTables:GenerateStatsTables(unit)
   local thisTeam = 0
 	local thisId = 0
 	local steamId = PlayerResource:GetSteamID(unit:GetMainControllingPlayer())
-	if unit:IsHero() and unit:IsRealHero() and not unit:IsIllusion() and not unit:IsClone() then
-    if PlayerResource:GetSteamID(unit:GetMainControllingPlayer())==PlayerResource:GetSteamID(100) then
-    	thisIsBot = true
-      table.insert(Bots, unit)
-    else
-      table.insert(Players, unit)
-    end
+	-- Drop out for non-real hero units
+	if not DataTables:IsRealHero(unit) then return end
+	-- Is bot?
+  if PlayerResource:GetSteamID(unit:GetMainControllingPlayer())==PlayerResource:GetSteamID(100) then
+  	thisIsBot = true
+    table.insert(Bots, unit)
+  else
+    table.insert(Players, unit)
   end
-	table.insert(AllUnits,unit);	
+  table.insert(AllUnits,unit)	
 -- PlayerID, Team, Role
   if unit:GetPlayerID() ~= nil then
 	  thisId = unit:GetPlayerID()
@@ -231,7 +233,7 @@ function DataTables:DoDeathUpdate(victim, killer)
 	victim.stats.enemyTeamNetWorth = DataTables:GetTeamNetWorth(killer.stats.team)
 	if isDebug then
 		print('Updated stats table for ' .. victim.stats.name)
-		DeepPrintTable(victim.stats)
+		if isVerboseDebug then DeepPrintTable(victim.stats) end
 	end
 end
 
@@ -280,6 +282,9 @@ function DataTables:GetRoleGPM(bot)
 	end
 	if data[bot.stats.role] ~= nil then
 	  return data[bot.stats.role], names[bot.stats.role]
+	-- specific debug case, pretend we have more players than we do
+	elseif isDebug and #Players == 1 then
+		return data[1] / bot.stats.role, names[1]	  
 	else
 		return 0	
 	end
@@ -310,6 +315,9 @@ function DataTables:GetRoleXPM(bot)
 	end
 	if data[role] ~= nil then
 	  return data[role], names[role]
+	-- specific debug case, pretend we have more players than we do
+	elseif isDebug and #Players == 1 then
+		return data[1] / role, names[1]	  
 	else
 		return 0	
 	end
@@ -407,6 +415,10 @@ function DataTables:GetRole(hero)
   end 	
 end	
 	
+-- Returns true if the unit is an actual hero and not a hero-like unit
+function DataTables:IsRealHero(unit)
+	return unit:IsHero() and unit:IsRealHero() and not unit:IsIllusion() and not unit:IsClone()	
+end
 	
 -- Run this
 DataTables:Initialize()

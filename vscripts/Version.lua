@@ -1,2 +1,2 @@
-version = '0.1.4.0'
-versionString = 'Dynamic Bots, Fret Style.  Props to Anarchy for a bunch of lifted code.'
+version = '0.1.4.1'
+versionString = '0.1.4.X are balance passes (with occasional bug fixes).'

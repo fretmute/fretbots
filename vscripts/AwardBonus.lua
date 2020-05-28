@@ -218,12 +218,15 @@ end
 function AwardBonus:SelectRandomNeutralItem(tier, unit)
 	-- Get items that qualify
 	local items,count = AwardBonus:GetNeutralTableForTierAndRole(tier,unit)
+	if items == nil then return nil end
 	-- pick one at random
 	local item = items[math.random(count)]
 	-- print selection for debug
 	if isDebug and item ~= nil then
-		print('Valid Neutral Items:')
-		DeepPrintTable(items)
+		print('Valid Neutral Items, Tier '..tier..':')
+		for _, it in pairs(items) do
+			print('  '..it.name)
+		end
 		print('Random item selected: ' .. item.name)
 	end
 	-- if there was a valid item, remove it from the table (if settings tell us to)
@@ -232,6 +235,7 @@ function AwardBonus:SelectRandomNeutralItem(tier, unit)
 		for i,_ in ipairs(allNeutrals) do
 			if item == allNeutrals[i] then
 		  	table.remove(allNeutrals,i)
+		  	break
 			end
 		end
   end
@@ -263,6 +267,11 @@ end
 
 -- Gives the bot his death awrds, if there are any
 function AwardBonus:Death(bot)
+	-- Drop out for edge cases (LD bear, AW clone)
+	if not DataTables:IsRealHero(bot) then
+		Debug:Print(bot:GetName()..' is not a real hero unit.  No Death Award given.')
+		return
+	end	
 	-- to be printed to players
 	local msg = bot.stats.name .. ' Death Bonus Awarded:'
 	local isAwarded = false
@@ -323,10 +332,12 @@ function AwardBonus:Death(bot)
 			end
 		end
 	end
-	if isAwarded and not isLoudWarning then
-		Utilities:Print(msg, MSG_WARNING, ATTENTION)
-	elseif isAwarded and isLoudWarning then
-				Utilities:Print(msg, MSG_BAD, BAD_LIST)
+	if Settings.deathBonus.announce then
+		if isAwarded and not isLoudWarning then
+			Utilities:Print(msg, MSG_WARNING, ATTENTION)
+		elseif isAwarded and isLoudWarning then
+			Utilities:Print(msg, MSG_BAD, BAD_LIST)
+		end
 	end
 end
 
@@ -344,23 +355,43 @@ end
 -- Returns a numerical value to award
 function AwardBonus:GetValue(bot, award)
 	local isLoud = false
+	local dotaTime
+  -- base bonus is always the same
 	local base = math.random(Settings.deathBonus.range[award][1], Settings.deathBonus.range[award][2])
+	-- if range scaling is enabled, then scale
+	if Settings.deathBonus.isRangeTimeScaleEnable then	
+  	base = base * Utilities:GetTime() / Settings.deathBonus.rangeTimeScale[award]
+	end	
 	--scale base by skill and variance
 	local scaled = base * bot.stats.skill * Utilities:GetVariance(Settings.deathBonus.variance[award])
+	-- scale by role if enabled
+	if Settings.deathBonus.scaleEnabled[award] then
+		scaled = scaled * Settings.deathBonus.scale[award][bot.stats.role]
+		--Debug:Print(award..': Scaling by Role '..bot.stats.role..': Scale: '..Settings.deathBonus.scale[award][bot.stats.role])
+	end
 	-- Round and maybe clamp
 	local clamped = 0
 	if Settings.deathBonus.clampOverride[award] then
 		clamped = Utilities.Round(scaled)
 	else
-		clamped = Utilities:RoundedClamp(scaled, Settings.deathBonus.clamp[award][1], Settings.deathBonus.clamp[award][2])
+		-- base clamp
+		local upperClamp = Settings.deathBonus.clamp[award][2]
+		-- Perhaps scale upper clamp, if enabled
+		if Settings.deathBonus.isClampTimeScaleEnable then 
+			dotaTime =  Utilities:GetTime()
+		  upperClamp = upperClamp * Utilities:GetTime() / Settings.deathBonus.clampTimeScale[award]	
+		end
+		clamped = Utilities:RoundedClamp(scaled, Settings.deathBonus.clamp[award][1], upperClamp)
 	end
 	-- set isLoud
 	isLoud = (Settings.deathBonus.isClampLoud[award] and clamped == Settings.deathBonus.clamp[award][2])
 	         or
 	         Settings.deathBonus.isLoud[award]
-	if isDebug then print(award..': Base Award: '..base..' Scaled: '..scaled..' Clamped:'..clamped) end
-	if isDebug then print(award..': Is Clamp Loud: '..tostring(Settings.deathBonus.isClampLoud[award])..
-		                           ' isLoud: '..tostring(Settings.deathBonus.isLoud[award])) end
+	if isDebug then print(award..': Base Award: '..base..' Scaled: '..scaled..' Clamped: '..clamped) end
+	if isDebug then 
+		--print(award..': Is Clamp Loud: '..tostring(Settings.deathBonus.isClampLoud[award])..
+		--                           ' isLoud: '..tostring(Settings.deathBonus.isLoud[award])) 
+  end
 	return clamped, isLoud
 end
 
@@ -374,6 +405,7 @@ function AwardBonus:ShouldAward(bot,award)
 	-- otherwise roll for it
 	local roll = math.random()
 	local isAward = roll < bot.stats.chance[award]
+	--Debug:Print('Death Award: '..award..': roll: '..roll..' chance: '..bot.stats.chance[award])
 	return isAward
 end
 
@@ -454,9 +486,9 @@ function AwardBonus:GetXPMBonus(bot)
   local targetXPM = 0
   local playerXPM, playerName = DataTables:GetRoleXPM(bot)
   -- the above will return zero if the is no counterpart, if that is the case return
-  if playerXPM ==0 then
+  if playerXPM == 0 then
   	if isDebug then print('No player for this bot.') end
-  	return 0 
+  	return 0  	   
   end
   -- add offset to the target
   targetXPM = targetXPM + playerXPM + Settings.xpm.offset

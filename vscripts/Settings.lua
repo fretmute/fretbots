@@ -119,13 +119,30 @@ if Settings == nil then
 			-- clamps are applied to the scaled value
 			range = 
 			{
-      	gold 					= {250, 500},
-        armor 				= {1, 3},
-        magicResist 	= {1, 3},
-        levels 				= {1, 2},
-        neutral 			= {1, 1},
-        stats					= {1, 3}					
+      	gold 					= {0, 500},
+        armor 				= {0, 3},
+        magicResist 	= {0, 3},
+        levels 				= {0, 2},
+        neutral 			= {0, 1},
+        stats					= {0, 3}					
 			},
+			-- (Seconds) Both ends of the range multiplied by gametime / this value. 
+			-- Adjust this to prevent large awards early.  Note that clamp has its
+			-- own scaling, so you can, for example, grow quickly but still 
+			-- clamp late.   
+			-- If this is enabled and no default numbers changed, it should
+			-- prevent early game OH SHIT moments, or provide late game OH SHIT moments.
+			-- Default scales to nominal range at 30 minutes (and more beyond)
+			rangeTimeScale  = 
+			{
+   			gold 					= 1800,
+				armor 				= 1800,
+				magicResist 	= 1800,
+				levels 				= 1800,
+				neutral 			= 1800,
+				stats 				= 1800   					
+			},						
+			isRangeTimeScaleEnable = true,
 			-- bonus clamps.  Awards given are clamped between these values
       clamp = 
       {
@@ -146,6 +163,20 @@ if Settings == nil then
 				neutral 			= false,
 				stats 				= false
 			},	
+			-- (Seconds) Upper clamp end scaled by this value.
+			-- Note the lower clamp is never adjusted.  
+			-- Adjust this to allow even greater late game OH SHIT moments.
+			-- Default scales to nominal range at 30 minutes (and more beyond)
+			clampTimeScale = 
+			{
+   			gold 					= 1800,
+				armor 				= 1800,
+				magicResist 	= 1800,
+				levels 				= 1800,
+				neutral 			= 1800,
+				stats 				= 1800   					
+			},							
+			isClampTimeScaleEnable = true,			
       -- chances per indivdual award.  current levels tracked in bot.stats.chance
       chance = 
       {
@@ -205,7 +236,27 @@ if Settings == nil then
 				levels 				= false,
 				neutral 			= false,
 				stats 				= false
-			},	 			     
+			},	 		
+			-- Awards multiplied by this (per role) if enabled
+			scale = 
+			{
+				gold 					= {1, 1, 1, 1, 1},
+				armor 				= {1, 1, 1, 1, 1},
+				magicResist 	= {1, 1, 1, 1, 1},
+				levels 				= {1, 1, 1, 1, 1},
+				neutral 			= {1, 1, 1, 1, 1},
+				stats 				= {1, 1, 1, 1, 1}
+			},	   
+			-- Enable role scaling?  
+			scaleEnabled = 
+			{
+				gold 					= false,
+				armor 				= false,
+				magicResist 	= false,
+				levels 				= false,
+				neutral 			= false,
+				stats 				= false
+			},
       -- sets whether to announce in chat if awards have been given
       announce			= true  
     },

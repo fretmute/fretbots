@@ -27,7 +27,6 @@ function Debug:Print(msg)
 end
 
 -- shorthand for debug table printing
-function Debug:DeepPrint(o)
+function Debug:DeepPrint(o, title)
 	if isDebug then DeepPrintTable(o) end
 end
-
