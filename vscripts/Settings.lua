@@ -75,7 +75,7 @@ if Settings == nil then
 			tierOffset = 0,
 			-- game time (seconds) at which awards are given.  Note that if offset is ~=0 then the latter ones
 			-- will never happen). 
-			timings = {420, 1020, 1620, 2220, 2820}
+			timings = {0, 420, 1020, 1620, 2220}
 		},
 		-- used for awarding bonus gold periodically.  The method that does this award calculates target
 		-- gpm and then adds gold to the bot to attempt to force it to that level of gpm, modified by
@@ -117,12 +117,12 @@ if Settings == nil then
 			-- individual bonus enables (Default is off)
 			enabled = 
 			{
-				gold 					= false,
-				armor 				= false,
-				magicResist 	= false,
-				levels 				= false,
-				neutral 			= false,
-				stats 				= false
+				gold 					= true,
+				armor 				= true,
+				magicResist 	= true,
+				levels 				= true,
+				neutral 			= true,
+				stats 				= true
 			},
 			-- Enabled for humans, or just bots?
 			isBotsOnly = 
@@ -164,7 +164,7 @@ if Settings == nil then
 				neutral 			= 1800,
 				stats 				= 1800   					
 			},						
-			isRangeTimeScaleEnable = true,
+			isRangeTimeScaleEnable = false,
 			-- bonus clamps.  Awards given are clamped between these values
       clamp = 
       {
@@ -198,7 +198,7 @@ if Settings == nil then
 				neutral 			= 1800,
 				stats 				= 1800   					
 			},							
-			isClampTimeScaleEnable = true,			
+			isClampTimeScaleEnable = false,			
       -- chances per indivdual award.  current levels tracked in bot.stats.chance
       chance = 
       {
@@ -288,12 +288,12 @@ if Settings == nil then
     gameStartBonus = 
     {
     	  gold 					= 0,
-				armor 				= 0,
-				magicResist 	= 0,
+				armor 				= 2,
+				magicResist 	= 2,
 				levels 				= 0,
 				neutral       = 0,
-				stats 				= 0   	
-    },
+				stats 				= 3   	
+    },    
    	-- caps for awards per game
 		awardCap = 
     {
@@ -377,40 +377,97 @@ allNeutrals =
 -- Difficulty names
 local difficulties =
 {
-  debug = 
   {
-  	name = 'debug',
-  	description = "Currently: Bots are 1 full tier ahead on neutrals, and receive moderate death bonuses.",
+  	name = 'standard',
+  	description = "Bots are 1 full tier ahead on neutrals, and receive moderate death bonuses.",
   	votes = 0
   },
-  default = 
   {
-  	name = 'default',
-  	description = "Aims for perfect balance (bots are still dumb). Bot XPM and GPM equal to equivalent player. Neutral tiers align.",
+  	name = 'harder',
+  	description = "More aggressive death scaling past twenty minutes.",
   	votes = 0
-  },
-  --debugHard = 
-  --{
-  --	name = 'debugHard',
-  --	description = "Bots 1 full tier ahead on neutrals.  Death bonuses double every 10 minutes.",
-  --	votes = 0
-  --},  
+  },  
+  {
+  	name = 'uhoh',
+  	description = "Aggresive death scaling with upper clamps disabled. Bots will be rich.",
+  	votes = 0
+  },    
 }
 
 -- Sets difficulty value
 function Settings:Initialize(difficulty)
 	-- no argument implies default, do nothing
-  -- Default -- This aims to make bots exactly the GPM / XPM of the humans with no other bonuses
 	if difficulty == nil then return end
-	-- Replicate and add more if statements for custom difficulties
-	-- Debug diffculty - speeds timings
-	if difficulty == 'debug' then
-  	-- override neutral timings for speed (this puts bots ~ 1/2 a full tier ahead)
-  	--Settings.neutralItems.timings = {200, 620, 1220, 1820, 2420}
-  	Settings.neutralItems.timings = {0, 420, 1020, 1620, 2220}
-  	-- Also override deathbonus settings for test
-  	Settings.deathBonus.enabled = 
-  	{
+ 	-- Replicate and add more if statements for custom difficulties
+	if difficulty == 'standard' then
+		return
+	end		
+	if difficulty == 'harder' then	
+		-- aggressive death scaling    
+    Settings.deathBonus.isRangeTimeScaleEnable = true
+    Settings.deathBonus.isClampTimeScaleEnable = true 		
+		Settings.deathBonus.clampTimeScale = 
+		{
+ 			gold 					= 1200,
+			armor 				= 1200,
+			magicResist 	= 1200,
+			levels 				= 1200,
+			neutral 			= 1200,
+			stats 				= 1200   					
+		}	
+		Settings.deathBonus.rangeTimeScale = 
+		{
+ 			gold 					= 1200,
+			armor 				= 1200,
+			magicResist 	= 1200,
+			levels 				= 1200,
+			neutral 			= 1200,
+			stats 				= 1200   					
+		}			
+		Settings.deathBonus.clamp = 
+	  {
+	  	gold 					= {300, 1500},
+	    armor 				= {1, 3},
+	    magicResist 	= {1, 3},
+	    levels 				= {1, 2},
+	    neutral 			= {1, 2},
+	    stats					= {1, 3}	
+	  }
+	  return
+	end
+if difficulty == 'uhoh' then	
+    -- very aggressive death scaling
+    Settings.deathBonus.isRangeTimeScaleEnable = true
+    Settings.deathBonus.isClampTimeScaleEnable = true 	
+		Settings.deathBonus.rangeTimeScale = 
+		{
+ 			gold 					= 600,
+			armor 				= 600,
+			magicResist 	= 600,
+			levels 				= 600,
+			neutral 			= 600,
+			stats 				= 600   					
+		}			
+		Settings.deathBonus.clamp = 
+	  {
+	  	gold 					= {300, 1500},
+	    armor 				= {1, 3},
+	    magicResist 	= {1, 3},
+	    levels 				= {1, 2},
+	    neutral 			= {1, 2},
+	    stats					= {1, 3}	
+	  }	
+		Settings.deathBonus.range = 
+		{
+    	gold 					= {0, 750},
+      armor 				= {0, 4},
+      magicResist 	= {0, 4},
+      levels 				= {0, 2},
+      neutral 			= {0, 1},
+      stats					= {0, 4}					
+		}
+		Settings.deathBonus.clampOverride = 
+		{
 			gold 					= true,
 			armor 				= true,
 			magicResist 	= true,
@@ -418,20 +475,8 @@ function Settings:Initialize(difficulty)
 			neutral 			= true,
 			stats 				= true
 		}
-		-- adjust game start bonus here
-		Settings.gameStartBonus = 
-    {
-    	  gold 					= 0,
-				armor 				= 2,
-				magicResist 	= 2,
-				levels 				= 0,
-				neutral       = 0,
-				stats 				= 3   	
-    }    
-    -- Disable DeathBonus time scale
-    Settings.deathBonus.isRangeTimeScaleEnable = false
-    Settings.deathBonus.isClampTimeScaleEnable = false 
-	end		
+		return
+	end
 end
 
 -- Periodically checks to see if settings have been chosen
@@ -524,7 +569,7 @@ function Settings:OnPlayerChat(event)
 	-- if no vote from the player, check if he's voting for a difficulty
 	if playerVoted[playerID] ~= nil then
 		if not playerVoted[playerID] then
-		  for _, difficulty in pairs(difficulties) do
+		  for _, difficulty in ipairs(difficulties) do
 		  	print(text..': '..difficulty.name)
 		  	-- If voted for difficulty, reflect that
 		    if text == difficulty.name then
