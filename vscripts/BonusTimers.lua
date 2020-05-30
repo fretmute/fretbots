@@ -12,6 +12,8 @@ require 'Settings'
 require 'Utilities'
 -- Award functions
 require 'AwardBonus'
+-- Flags for tracking status
+require 'Flags'
 
 -- local debug flag
 local thisDebug = true; 
@@ -57,11 +59,9 @@ function NeutralItemTimer()
 		print('NeutralItemTimer method registered')
 		inits.neutralItemTimer = true
 	end
-  -- This returns the number of seconds on the game clock (once the game starts at 00:00 as opposed
-  -- to the negative time the game starts with
-  local gametime = GameRules:GetDOTATime(false, false)
-  -- if time is zero we're in pregame and shouldn't do anything (try again in 2 seconds)
-  if gametime == 0 then return retryInterval end
+  local gametime = Utilities:GetAbsoluteTime()
+  -- Don't do anything if time is negative
+  if gametime < 0 then return math.ceil(gametime * -1) end
   -- set tier we're attempting to award
   tier = award + Settings.neutralItems.tierOffset
   -- If we hit tier 6 quit and stop the timer
@@ -70,7 +70,7 @@ function NeutralItemTimer()
   	if isDebug then
   		print('NeutralItemTimer done.  Unregistering.')
     end
-  	return
+  	return nil
   end
   -- Logic to do things here, we'll use this method primarily for giving neutrals to bots  
   local interval = 0
@@ -127,6 +127,7 @@ function PerMinuteTimer()
 	-- if no bots, unregister 
 	if Bots == nil then
 	  Timers:RemoveTimer(names.perMinuteTimer)
+	  return nil
 	end
 	local isApply = false
 	-- loop over all bots
@@ -213,37 +214,56 @@ function BonusTimers:GameStartBonus()
   end
 end
   
+-- registers the bonus timner listeners
+function BonusTimers:Register()
+	-- Game start bonus - Special case that happens one time when BonusTimers are registered 
+	BonusTimers:GameStartBonus()		  
+	-- Register NeutralItemTimer
+	if not inits.neutralItemTimer then
+		if isDebug then
+			DeepPrintTable(Settings.neutralItems)
+		end
+		print('Registering NeutralItemTimer.')
+		Timers:CreateTimer(names.neutralItemTimer, {callback =  NeutralItemTimer} )
+		inits.neutralItemTimer = true
+	end
+	-- Register per minute timer (first executed one minute after game start so we're
+	-- not dividing by a decimal and inflating GPM/XPM
+	if not inits.perMinuteTimer then
+		print('Registering PerMinuteTimer.')
+		Timers:CreateTimer(names.perMinuteTimer, {endTime = perMinuteTimerInterval, callback =  PerMinuteTimer} )
+		inits.perMinuteTimer = true
+	end			
+end
+  
 -- OnGameRulesStateChange callback -- registers timers we only want to run after the game starts
 function BonusTimers:OnGameRulesStateChange()
 	if GameRules:State_Get() == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
-		-- Game start bonus
-		BonusTimers:GameStartBonus()	
-		-- Register NeutralItemTimer
-		if not inits.neutralItemTimer then
-			if isDebug then
-				DeepPrintTable(Settings.neutralItems)
-			end
-			print('Registering NeutralItemTimer.')
-			Timers:CreateTimer(names.neutralItemTimer, {callback =  NeutralItemTimer} )
-			inits.neutralItemTimer = true
-		end
-		-- Register per minute timer (first executed one minute after game start so we're
-		-- not dividing by a decimal and inflating GPM/XPM
-		if not inits.perMinuteTimer then
-			print('Registering PerMinuteTimer.')
-			Timers:CreateTimer(names.perMinuteTimer, {endTime = perMinuteTimerInterval, callback =  PerMinuteTimer} )
-			inits.perMinuteTimer = true
-		end		
+    BonusTimers:Register()
 	end
 end
   
 -- Registers timers (or listens to events that register timers)
 function BonusTimers:Initialize()
-	-- We want some timers to start immediately (in pre time) and others to only happen after the game starts
-	-- register those timers in the DOTA_GAMERULES_STATE_GAME_IN_PROGRESS event
-	ListenToGameEvent( "game_rules_state_change", Dynamic_Wrap( BonusTimers, "OnGameRulesStateChange" ), self )
+	if not Flags.isBonusTimersInitialized then 
+		-- Determine where we are
+		local state =  GameRules:State_Get()
+		-- various ways to implement based on game state
+		-- Are we entering this after the horn blew?
+		if state == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
+			 -- then immediately register listeners
+			 BonusTimers:Register()
+			 print('Game already in progress.  Registering BonusTimers.')
+		-- is game over? Return if so
+	  elseif state == DOTA_GAMERULES_STATE_POST_GAME or state == DOTA_GAMERULES_STATE_DISCONNECT then
+			return
+		-- otherwise we are pre-horn and should register a game state listener 
+		-- that will register once the horn sounds
+	  else
+		  ListenToGameEvent( "game_rules_state_change", Dynamic_Wrap( BonusTimers, "OnGameRulesStateChange" ), self)
+		  print('Game not in progress.  Registering BonusTimer GameState Listener.')
+		end
+		Flags.isBonusTimersInitialized = true
+	end
 end  
-  
--- Initialize
-BonusTimers:Initialize()
   

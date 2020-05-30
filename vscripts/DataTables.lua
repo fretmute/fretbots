@@ -19,6 +19,9 @@ local thisDebug = true
 local isDebug = Debug.IsDebug() and thisDebug
 local isChatDebug = Debug.IsDebug() and false
 local isVerboseDebug = Debug.IsDebug() and false
+-- Set to true to initialize data tables on loading this file every time
+local isSoloDebug = false
+-- Set to true to buff Fret if he's in the game
 local isBuff = false
 
 -- Globals 
@@ -58,7 +61,6 @@ function DataTables:Initialize()
   		local isFret = Debug:IsFret(id);
   		-- Buff Fret for Debug purposes
   		if isFret and not Flags.isDebugBuffed and isBuff then
-  			--NeutralItems:GiveRandom(unit,2,1)
         BuffUnit:Hero(unit)		   	      	
         Flags.isDebugBuffed = true
 		  end  			
@@ -164,7 +166,7 @@ function DataTables:GenerateStatsTables(unit)
 	  	-- Unit name
 	  	name = thisName,
 	  	-- Skill
-	  	skill = DataTables:GetSkill(thisName, thisRole),
+	  	skill = DataTables:GetSkill(thisName, thisRole, thisIsBot),
 	  	-- Current death bonus chances
 	  	chance = 
 	  	{
@@ -325,13 +327,13 @@ end
 
 -- returns a flat multiplier to represent the skill of the bot, combined with their role.
 -- This affects all numeric bonuses
-function DataTables:GetSkill(name, role)
+function DataTables:GetSkill(name, role, isBot)
 	-- valid roles only
 	if role < 1 or role > 5 then return 0 end
 	-- remember math.Random only returns integers, so multiply / divide by 100
   local skill = math.random(Settings.skill.variance[role][1] * 100, Settings.skill.variance[role][2] * 100) / 100
   -- Warn humans, maybe
-  if Settings.skill.isWarn and skill > Settings.skill.warningThreshold then
+  if Settings.skill.isWarn and skill > Settings.skill.warningThreshold and isBot then
     Utilities:Print(name.. ' is very talented!', MSG_BAD, ATTENTION)
   end
   return skill
@@ -419,10 +421,8 @@ end
 function DataTables:IsRealHero(unit)
 	return unit:IsHero() and unit:IsRealHero() and not unit:IsIllusion() and not unit:IsClone()	
 end
-	
--- Run this
-DataTables:Initialize()
 
-print('DataTables Loaded')
-
-
+-- Initialize (if Debug)
+if isSoloDebug then 
+	DataTables:Initialize()
+end

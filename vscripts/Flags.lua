@@ -11,4 +11,10 @@ function Flags:Initialize()
 	Flags.isEntityHurtRegistered = false;
 	Flags.isSettingsLoaded = false;
 	Flags.isDebugBuffed = false;
+	Flags.isPlayerChatRegistered = false;
+	Flags.isFretBotsInitialized = false;
+	Flags.isBonusTimersInitialized = false;	
 end
+
+-- Create flags
+Flags:Initialize()

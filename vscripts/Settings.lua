@@ -3,6 +3,10 @@
 require 'Debug'
  -- Other Flags
 require 'Flags'
+ -- Timers
+ require 'Timers'
+ -- Utilities
+ require 'Utilities'
 
 settings = nil
 
@@ -11,11 +15,29 @@ local thisDebug = true;
 local isDebug = Debug.IsDebug() and thisDebug;
 Settings = nil    
 
+-- Other local variables
+local settingsTimerName = 'settingsTimerName'
+-- number of human players
+local players = 0
+-- table to keep track of player votes
+local playerVoted = {}
+-- is voting closed
+local isVotingClosed = false
+-- Have voting directions been posted?
+local isVotingOpened = false
+
 -- Instantiate ourself
 if Settings == nil then
 	-- default settings here, override only what you change in Initialize()
   Settings =  
   {  
+  	-- Change this to select the default difficulty (chosen if 
+  	-- no one votes during difficulty voting time)
+  	defaultDifficulty = 'debug',
+  	-- game state in which voting should end
+  	voteEndState = DOTA_GAMERULES_STATE_PRE_GAME,
+  	-- voting ends when state is above and time is > this
+  	voteEndTime = -50,  	
   	-- are multipliers multiplicative, or additive (multiplicative is harder)
   	isMultiplicative = true,
   	-- Taunt humans when they die with chatwheel sounds?
@@ -26,9 +48,9 @@ if Settings == nil then
 			-- percentages, by role (1, 2, 3, 4, 5).  A random number is chosen between the clamps
 			variance = 
 			{
-				{0.8, 1.3},
-				{0.8, 1.3},
-				{0.8, 1.3},
+				{1.0, 1.3},
+				{0.9, 1.3},
+				{0.9, 1.3},
 				{0.8, 1.3},
 				{0.8, 1.3}
 			},
@@ -299,7 +321,7 @@ allNeutrals =
 	{name = 'item_ocean_heart',						tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
 	{name = 'item_poor_mans_shield',			tier = 1, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
 	{name = 'item_royal_jelly', 					tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_trusty_shovel',					tier = 1, ranged = true, 	melee = true,		roles={0,0,0,1,1}},
+	{name = 'item_trusty_shovel',					tier = 1, ranged = true, 	melee = true,		roles={0,0,0,0,0}},
 	{name = 'item_ironwood_tree',					tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
 	-- tier 2                                                                    		
 	{name = 'item_dragon_scale', 					tier = 2, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
@@ -352,6 +374,29 @@ allNeutrals =
 	{name = 'item_woodland_striders',			tier = 5, ranged = true, 	melee = true,		roles={1,1,1,1,1}},				
 }
 
+-- Difficulty names
+local difficulties =
+{
+  debug = 
+  {
+  	name = 'debug',
+  	description = "Currently: Bots are 1 full tier ahead on neutrals, and receive moderate death bonuses.",
+  	votes = 0
+  },
+  default = 
+  {
+  	name = 'default',
+  	description = "Aims for perfect balance (bots are still dumb). Bot XPM and GPM equal to equivalent player. Neutral tiers align.",
+  	votes = 0
+  },
+  --debugHard = 
+  --{
+  --	name = 'debugHard',
+  --	description = "Bots 1 full tier ahead on neutrals.  Death bonuses double every 10 minutes.",
+  --	votes = 0
+  --},  
+}
+
 -- Sets difficulty value
 function Settings:Initialize(difficulty)
 	-- no argument implies default, do nothing
@@ -389,8 +434,124 @@ function Settings:Initialize(difficulty)
 	end		
 end
 
--- Initialize here to default.  Can be recalled from other scripts to overwrite
--- (or change forever by changing this string)
-Settings:Initialize('debug')
-Debug:DeepPrint(Settings)
+-- Periodically checks to see if settings have been chosen
+function Settings:DifficultySelectTimer()
+	-- If voting is closed, apply settings, remove timer
+	if isVotingClosed then
+		Settings:ApplyVoteSettings()
+	  Timers:RemoveTimer(settingsTimerName)
+	  return nil
+	end
+	-- If voting not yet open, display directions
+	if not isVotingOpen then
+		local msg = 'Difficulty voting is now open! Type a difficulty into chat to vote. Choices follow:'
+		Utilities:Print(msg, MSG_GOOD)
+		for _, difficulty in pairs(difficulties) do
+		  msg = difficulty.name..': '..difficulty.description
+		  Utilities:Print(msg, MSG_GOOD)
+		end
+	  isVotingOpen = true
+	end
+	-- Check voting status
+	local haveAllVoted = true
+	-- anyone hasn't voted, voting isn't done
+	for _, voted in pairs(playerVoted) do
+	  haveAllVoted = haveAllVoted and voted
+	end
+	-- set voting closed
+	if haveAllVoted or Settings:ShouldCloseVoting() then
+	  isVotingClosed = true
+	end
+	-- run again in 1 second
+	return 1
+end
+
+-- Determine winner of voting and applies settings (or applies default difficulty)
+function Settings:ApplyVoteSettings()
+	local maxVotes = 0
+	local winner = nil
+	for i, difficulty in pairs(difficulties) do
+	  if difficulty.votes > maxVotes then
+	  	winner = difficulty
+	  end
+	end
+  -- edge case: no one voted
+  if winner == nil then
+  	winner = difficulties[Settings.defaultDifficulty]
+  end
+  -- Apply
+	Settings:Initialize(winner.name)
+	msg = 'Voting closed. Applied difficulty: '..winner.name
+  Utilities:Print(msg, MSG_GOOD)
+  Debug:DeepPrint(Settings)
+end
+
+-- Returns true if voting should close due to game state
+function Settings:ShouldCloseVoting()
+  local state =  GameRules:State_Get()
+  if state > Settings.voteEndState then
+  	return true
+  end
+  if state == Settings.voteEndState then
+    local gameTime = Utilities:GetAbsoluteTime()
+		if gameTime > Settings.voteEndTime then
+			return true
+		end
+	end
+	return false
+end
+
+-- Register a chat listener for settings voting
+function Settings:RegisterChatEvent()
+  if not Flags.isPlayerChatRegistered then
+  	-- size playerVoted array
+  	local playerCount = Utilities:GetNumberOfHumans() 
+  	for i = 1, playerCount do
+  		table.insert(playerVoted, false)
+  	end 
+  	ListenToGameEvent("player_chat", Dynamic_Wrap(Settings, 'OnPlayerChat'), Settings)
+  	print('Settings: PlayerChat event listener registered.')
+  	Flags.isPlayerChatRegistered = true
+  end
+end
+
+-- Monitors chat for votes on settings
+function Settings:OnPlayerChat(event)
+	-- return if voting is closed
+	if isVotingClosed then return end
+	-- Get event data
+	local playerID, text = Settings:GetChatEventData(event)
+	-- if no vote from the player, check if he's voting for a difficulty
+	if playerVoted[playerID] ~= nil then
+		if not playerVoted[playerID] then
+		  for _, difficulty in pairs(difficulties) do
+		  	print(text..': '..difficulty.name)
+		  	-- If voted for difficulty, reflect that
+		    if text == difficulty.name then
+		    	-- players can only vote once
+		    	playerVoted[playerID] = true
+		    	-- increment votes for diff
+		      difficulty.votes = difficulty.votes + 1
+		      -- let players know the vote counted
+		      local msg = 'Player '..playerID..' voted for '..difficulty.name..'. '
+		      msg = msg..difficulty.votes..' total votes for '..difficulty.name
+		      Utilities:Print(msg, MSG_GOOD)
+		    end
+		  end
+		end
+	end
+end
+
+-- Parse chat event information 
+function Settings:GetChatEventData(event)
+	local userID = event.userid
+	local text = event.text
+	return userID, text
+end
+
+-- Register settings vote timer and chat event monitor
+Settings:RegisterChatEvent()
+Timers:CreateTimer(settingsTimerName, {endTime = 1, callback =  Settings['DifficultySelectTimer']} )
+
+
 

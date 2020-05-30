@@ -15,26 +15,77 @@ require 'Version'
 require 'BonusTimers'
 -- Utilities
 require 'Utilities'
+-- Settings
+require 'Settings'
 
+-- Instantiate ourself
+if FretBots == nil then
+  FretBots = {}
+end
 
 -- local debug flag
 local thisDebug = true; 
+-- set true to prevent initialize from returning when it realizes
+-- that it has already been run once
+local isAllowMultipleStarts = true;
 local isDebug = Debug.IsDebug() and thisDebug;
 
+-- other local vars
+local playersLoadedTimerName = 'playersLoadedTimerName'
+local isAllPlayersSpawned = false
+local playerSpawnCount = 0
+-- if game time goes past this point, then assume all players loaded
+local playerLoadFailSafe = -50
+
 -- Starting this script is largely handled by the requires, as separate pieces start
--- themselves.  However, every time we reload this we want to reinitialize the initial table, so
--- that is called here.
-function Initialize()
-	-- Override difficulty, perhaps -- note there could be possible race conditions, but this is unlikely due to the
-	-- "immediate" bot bonus being offset some from the script being loaded
-	-- ##TODO:  Implement that -^
-	Settings:Initialize('debug')
-	DataTables:Initialize()
+-- themselves. DataTables cannot be initialized until all players have loaded, so
+-- this function (which gets called at the beginning of pre game) in turn starts a 
+-- timer method to monitor for all players being loaded, which will in turn
+-- initialize the data tables
+function FretBots:Initialize()
+	-- Register the listener that will check for all players spawning and then init datatables
+	ListenToGameEvent('dota_on_hero_finish_spawn', Dynamic_Wrap(FretBots, 'OnPlayerSpawned'), FretBots)
+	Timers:CreateTimer(playersLoadedTimerName, {endTime = 1, callback =  FretBots['PlayersLoadedTimer']} )
+end
+
+-- Runs until all players are loaded in and then initializes the DataTables
+function FretBots:PlayersLoadedTimer()
+	-- if all players are loaded, initialize datatables and stop timer
+	if isAllPlayersSpawned then
+		Debug:Print('Initializing DataTables')
+		DataTables:Initialize()
+		-- Start bonus timers (they require DataTables to exist)
+		BonusTimers:Initialize()
+		Timers:RemoveTimer(playersLoadedTimerName)
+	  return nil
+	end
+	-- Check once per second until all players have loaded
+	local count = PlayerResource:GetPlayerCount()
+	if playerSpawnCount == count then
+		isAllPlayersSpawned = true
+	end
+	-- Check if we're past the load timeout
+	local gameTime = Utilities:GetAbsoluteTime()
+	if gameTime > playerLoadFailSafe then
+		isAllPlayersSpawned = true
+	end
+	Debug:Print('Waiting for players to spawn: '..math.ceil(gameTime)..' : '..playerLoadFailSafe)
+	return 1
+end
+
+function FretBots:OnPlayerSpawned(event)
+	playerSpawnCount = playerSpawnCount + 1
+	Debug:Print('Spawned Players: '..playerSpawnCount)
+end
+
+-- Start things up (only once)
+if not Flags.isFretBotsInitialized then
 	-- Print version to console 
 	print(versionString);
 	print('Version: ' .. version);
-	Utilities:Print('Fret Bots! Version: ' .. version, MSG_GOOD, MATCH_READY)
+	-- Welcome Message
+	Utilities:Print('Fret Bots! Version: ' .. version, MSG_GOOD, MATCH_READY)	
+	-- Register the listener that will run Initialize() once the game starts
+	Utilities:RegsiterGameStateListener(FretBots, 'Initialize', DOTA_GAMERULES_STATE_PRE_GAME )
+	Flags.isFretBotsInitialized = true
 end
-
--- Execute
-Initialize()

@@ -1,2 +1,2 @@
-version = '0.1.4.2'
-versionString = '0.1.4.X are balance passes (with occasional bug fixes).'
+version = '0.2.0.0'
+versionString = '0.2.0.0: Improved initialization process and implemented difficulty voting via chat.'

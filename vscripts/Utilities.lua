@@ -1,6 +1,13 @@
 -- Provides for common utilites
 if Utulities == nil then
-	Utilities = {}
+	Utilities = 
+	{
+		listeners = 
+		{
+			names = {},
+			objects = {}
+		}
+	}
 end
 
 -- constants for use in these methods
@@ -138,7 +145,91 @@ function Utilities:GetTime()
   return dotaTime
 end
 
+-- Get absolute time
+function Utilities:GetAbsoluteTime()
+  local dotaTime = GameRules:GetDOTATime(false, true)
+  return dotaTime
+end
+
+-- Sorts a table
 function Utilities:SortHighToLow(data)
   table.sort(data, function(x,y) return x > y end)
   return data
+end
+
+-- Returns true if a player (by ID) is a bot
+function Utilities:IsPlayerBot(playerID)
+	return PlayerResource:GetSteamAccountID(playerID) == 0
+end
+
+-- returns the number of human players in the game
+function Utilities:GetNumberOfHumans()
+	local count = PlayerResource:GetPlayerCount()
+	local humans = 0
+	for i = 0, count-1 do
+		local isBot = Utilities:IsPlayerBot(i)
+	  if not isBot then 
+	  	humans = humans + 1
+	  end
+	end
+	return humans
+end
+
+-- Used to register game state listeners (with a generic functionality)
+-- Gets current game state.  If game is over, returns.  If the game is
+-- otherwise in or past initState, immediately runs an initializer.  
+-- Prior to that state, registers a listener function that should
+-- handle further game state changes (and call initializer) itself.
+function Utilities:RegsiterGameStateListener(o, initializer, initState)
+	-- Determine where we are
+	local state =  GameRules:State_Get()
+	-- various ways to implement based on game state
+  if state == DOTA_GAMERULES_STATE_POST_GAME or state == DOTA_GAMERULES_STATE_DISCONNECT then
+		return
+	-- are we at or past the init state? Then init
+	elseif state >= initState then
+		local func = o[initializer]
+		func(o)
+	-- otherwise register a listener that will call init at the proper time.
+  else
+  	local name = DoUniqueString('listener')
+  	local gameStateListener = GameStateListener:New()
+	  table.insert(Utilities.listeners.names,name)
+	  table.insert(Utilities.listeners.objects, gameStateListener)
+	  gameStateListener:Register(o, initializer, initState) 
+	end
+end
+
+-- GameStateListener class for registering functions that will run once when
+-- a certain game state is reached
+if GameStateListener == nil then
+	GameStateListener = class({})
+end
+
+-- Returns an object of the class
+function GameStateListener:New (o)
+  o = o or {} 
+  setmetatable(o, self)
+  self.__index = self
+  return o
+end
+
+-- This function is called when the game event occurs
+function GameStateListener:Listen()
+	local state =  GameRules:State_Get()
+	if state == self.initState then
+		local func = self.object[self.initializer]
+		func(self.object)
+	end
+end
+
+-- Sets internal data and registers a game state listener
+function GameStateListener:Register(o, initializer, initState)
+	print('Registering GameStateListener')
+	-- set internal pointers
+  self.object = o
+	self.initializer = initializer
+	self.initState = initState
+	-- Register listener
+	ListenToGameEvent('game_rules_state_change', Dynamic_Wrap(self, 'Listen'), self)
 end
