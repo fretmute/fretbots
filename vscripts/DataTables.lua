@@ -11,6 +11,7 @@ require 'BuffUnit'
 require 'Settings'
 -- Convenience Utilities
 require 'Utilities'
+
 local role = require('RoleUtility')
 
 
@@ -23,6 +24,10 @@ local isVerboseDebug = Debug.IsDebug() and false
 local isSoloDebug = false
 -- Set to true to buff Fret if he's in the game
 local isBuff = false
+-- Warn Fret if he left this on
+if isBuff then
+  Utilities:Print('Hey Fret, isBuff is True!', MSG_BAD, DISASTAH)
+end
 
 -- Globals 
 Bots = {};
@@ -40,6 +45,7 @@ end
 
 -- Sets up data tables, buffs Fret for debug
 function DataTables:Initialize()
+	Debug:Print('Initializing DataTables')
 	-- Don't do this more than once.
 	--if Flags.isStatsInitialized then return end;
 	-- Lifted From Anarchy - Props
@@ -115,99 +121,86 @@ function DataTables:GenerateStatsTables(unit)
 	  thisId = unit:GetPlayerID()
 	  thisTeam=PlayerResource:GetTeam(thisId)
 	  thisRole = 0;
-	  -- If this is a bot, determine their role - This is by slot for BotXP 			
-	  -- Radiant
-	  if thisIsBot and (thisTeam == 2) then
-	  	if thisId == 0 then thisRole = 2
-	  	elseif thisId == 1 then thisRole = 3
-	  	elseif thisId == 2 then thisRole = 4
-	  	elseif thisId == 3 then thisRole = 5
-	  	elseif thisId == 4 then thisRole = 1
-	  	end
-	  end
-	  if thisIsBot and (thisTeam == 3) then
-	  	if thisId == 5 then thisRole = 2
-	  	elseif thisId == 6 then thisRole = 1
-	  	elseif thisId == 7 then thisRole = 5
-	  	elseif thisId == 8 then thisRole = 4
-	  	elseif thisId == 9 then thisRole = 3
-	    end
-	  end
- 	end
+	end
 	-- name for debug purposes
  	local thisName = unit:GetName()
   thisRole = DataTables:GetRole(thisName)
  	
 	-- create a stats table for the bot
 	local stats = 
-	  {
-	  	-- Number of kills
-	  	kills 		=			0,
-	  	-- Number of deaths: There is listener for this, we should register and track there	
-	  	deaths 		= 		0,
-	  	-- If KillStreak gets large, negatively affect multiplier
-	  	killStreak = 0,
-	  	-- If DeathStreak grows, enhance multiplier
-	  	deathStreak = 0,
-	  	-- teamNetWorth could be useful for a multiplier for bonuses	  	
-	  	teamNetWorth = 0,
-	  	-- enemyTeamNetWorth could be useful for a multiplier for bonuses	  	
-	  	enemyTeamNetWorth = 0,
-	  	-- netowrth
-	  	netWorth = 0,
-	  	-- Is this a bot?
-	  	isBot = thisIsBot,
-	  	-- Team
-	  	team = thisTeam,
-	  	-- Role
-	  	role = thisRole,
-	  	-- Damage Table (by type)
-	  	damageTable = {DAMAGE_TYPE_PHYSICAL=0, DAMAGE_TYPE_MAGICAL=0, DAMAGE_TYPE_PURE=0},
-	  	-- Unit name
-	  	name = thisName,
-	  	-- Skill
-	  	skill = DataTables:GetSkill(thisName, thisRole, thisIsBot),
-	  	-- Current death bonus chances
-	  	chance = 
-	  	{
-	  	  gold = 0,
-	  	  armor = 0,
-	  	  magicResist = 0,
-	  	  levels = 0,
-	  	  neutral = 0,
-	  	  stats = 0	
-	  	},
-	  	-- Death bonus awards
-	  	awards = 
-      {
-   			gold 					= 0,
-				armor 				= 0,
-				magicResist 	= 0,
-				levels 				= 0,
-				neutral	      = 0,
-				stats 				= 0   	
-      },	
-	  	-- current level of neutral item
-	  	neutralTier = 0,
-	  	-- Hero isMelee
-	  	isMelee = role.IsMelee(unit:GetBaseAttackRange()),
-	  	-- player ID
-	  	id = thisId
-	  }
-	  -- Reduce human skill
-	  if not thisIsBot then stats.skill = stats.skill * 0.5 end
-	  -- Insert the stats object to the bot
-	  unit.stats = stats;
-	  -- update non-accruing deathBonus chances since they will never change
-	  for _, award in pairs(Settings.deathBonus.order) do
-			if not Settings.deathBonus.accrue[award] then
-				unit.stats.chance[award] = Settings.deathBonus.chance[award]
-			end
+  {
+  	-- Number of kills
+  	kills 		=			0,
+  	-- Number of deaths: There is listener for this, we should register and track there	
+  	deaths 		= 		0,
+  	-- If KillStreak gets large, negatively affect multiplier
+  	killStreak = 0,
+  	-- If DeathStreak grows, enhance multiplier
+  	deathStreak = 0,
+  	-- teamNetWorth could be useful for a multiplier for bonuses	  	
+  	teamNetWorth = 0,
+  	-- enemyTeamNetWorth could be useful for a multiplier for bonuses	  	
+  	enemyTeamNetWorth = 0,
+  	-- netowrth
+  	netWorth = 0,
+  	-- Is this a bot?
+  	isBot = thisIsBot,
+  	-- Team
+  	team = thisTeam,
+  	-- Role
+  	role = thisRole,
+  	-- Damage Table (by type)
+  	damageTable = {DAMAGE_TYPE_PHYSICAL=0, DAMAGE_TYPE_MAGICAL=0, DAMAGE_TYPE_PURE=0},
+  	-- Unit name
+  	internalName = thisName,
+  	-- Better unit name (actual hero name)
+  	name = Utilities:GetName(thisName),
+  	-- Skill
+  	skill = DataTables:GetSkill(thisName, thisRole, thisIsBot),
+  	-- Current death bonus chances
+  	chance = 
+  	{
+  	  gold 				= 0,
+  	  armor 			= 0,
+  	  magicResist = 0,
+  	  levels 			= 0,
+  	  neutral 		= 0,
+  	  stats 			= 0	
+  	},
+  	-- Death bonus awards
+  	awards = 
+    {
+ 			gold 					= 0,
+			armor 				= 0,
+			magicResist 	= 0,
+			levels 				= 0,
+			neutral	      = 0,
+			stats 				= 0   	
+    },	
+  	-- current level of neutral item
+  	neutralTier = 0,
+  	-- Hero isMelee
+  	isMelee = role.IsMelee(unit:GetBaseAttackRange()),
+  	-- player ID
+  	id = thisId
+  }
+  -- Reduce human skill
+  if not thisIsBot then stats.skill = stats.skill * 0.5 end
+  -- Insert the stats object to the bot
+  unit.stats = stats;
+  -- update non-accruing deathBonus chances since they will never change
+  for _, award in pairs(Settings.deathBonus.order) do
+		if not Settings.deathBonus.accrue[award] then
+			unit.stats.chance[award] = Settings.deathBonus.chance[award]
 		end
-	  
-	  if (isDebug) then
-	  	print('Data tables initialized for ' ..thisName .. '. Unit ID: ' .. tostring(stats.id))
-	  end
+	end	  
+  if (isDebug) then
+  	print('Data tables initialized for ' ..thisName .. '. Unit ID: ' .. tostring(stats.id))
+  end
+  -- Warn humans about bot skill if enabled and skill is high
+  if Settings.skill.isWarn and stats.skill > Settings.skill.warningThreshold and thisIsBot then
+ 		Utilities:Print(stats.name.. ' is very talented!',  Utilities:GetPlayerColor(stats.id), ATTENTION)
+ 	end
 end 
 
 -- Called by OnEntityKilled to update stats of the victim
@@ -332,10 +325,6 @@ function DataTables:GetSkill(name, role, isBot)
 	if role < 1 or role > 5 then return 0 end
 	-- remember math.Random only returns integers, so multiply / divide by 100
   local skill = math.random(Settings.skill.variance[role][1] * 100, Settings.skill.variance[role][2] * 100) / 100
-  -- Warn humans, maybe
-  if Settings.skill.isWarn and skill > Settings.skill.warningThreshold and isBot then
-    Utilities:Print(name.. ' is very talented!', MSG_BAD, ATTENTION)
-  end
   return skill
 end
 	
@@ -425,4 +414,5 @@ end
 -- Initialize (if Debug)
 if isSoloDebug then 
 	DataTables:Initialize()
+	DeepPrintTable(Bots)
 end

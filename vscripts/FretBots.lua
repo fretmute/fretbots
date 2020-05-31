@@ -35,7 +35,7 @@ local playersLoadedTimerName = 'playersLoadedTimerName'
 local isAllPlayersSpawned = false
 local playerSpawnCount = 0
 -- if game time goes past this point, then assume all players loaded
-local playerLoadFailSafe = -50
+local playerLoadFailSafe = -75
 
 -- Starting this script is largely handled by the requires, as separate pieces start
 -- themselves. DataTables cannot be initialized until all players have loaded, so
@@ -60,7 +60,7 @@ function FretBots:PlayersLoadedTimer()
 	  return nil
 	end
 	-- Check once per second until all players have loaded
-	local count = PlayerResource:GetPlayerCount()
+	local count = Utilities:GetPlayerCount()
 	if playerSpawnCount == count then
 		isAllPlayersSpawned = true
 	end
@@ -81,8 +81,8 @@ end
 -- Start things up (only once)
 if not Flags.isFretBotsInitialized then
 	-- Print version to console 
-	print(versionString);
-	print('Version: ' .. version);
+	print('Version: ' .. version)
+	print(versionString)
 	-- Welcome Message
 	Utilities:Print('Fret Bots! Version: ' .. version, MSG_GOOD, MATCH_READY)	
 	-- Register the listener that will run Initialize() once the game starts

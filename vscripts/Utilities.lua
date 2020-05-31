@@ -1,4 +1,7 @@
 -- Provides for common utilites
+-- Hero Names
+local heroNames = require('HeroNames')
+
 if Utulities == nil then
 	Utilities = 
 	{
@@ -11,36 +14,42 @@ if Utulities == nil then
 end
 
 -- constants for use in these methods
-MSG_GOOD = 1
-MSG_WARNING = 2
-MSG_BAD = 3
--- sound constan		ts
-DISASTAH						 = 'soundboard.disastah'
-FIRECRACKER 				 = 'soundboard.new_year_firecrackers'
-MATCH_READY     		 = 'Stinger.MatchReady'
-ATTENTION       		 = 'soundboard.rimshot'
-BEAUTIFUL       		 = 'soundboard.krasavchik'
-BEEP            		 = 'DotaSOS.TestBeep'
-ROSHAN          		 = 'Roshan.Death'
-RUSSIAN_REKT    		 = 'soundboard.eto_prosto_netchto'
-SAD_TROMBONE    		 = 'soundboard.sad_bone'
-BRUTAL          		 = 'soundboard.brutal'
-GG              		 = 'soundboard.ehto_g_g'
-OH_MY_LORD      		 = 'soundboard.oh_my_lord'
-QUESTIONABLE    		 = 'soundboard.that_was_questionable'
-WHAT_HAPPENED   		 = 'soundboard.what_just_happened'
-NEXT_LEVEL      		 = 'soundboard.next_level'
-PERFECT         		 = 'absolutely_perfect'
-DISAPPOINTED    		 = 'soundboard.glados.disappointed'
-PATIENCE        		 = 'soundboard.patience'
-NORMALIN        		 = 'soundboard.eto_nenormalno'
-HERO            		 = 'soundboard.youre_a_hero'
-GROAN           		 = 'soundboard.ti9.crowd_groan'
-APPLAUSE             = 'soundboard.applause'
-                		
+MSG_GOOD 					= 1
+MSG_WARNING 			= 2
+MSG_BAD 					= 3
+MSG_AWARD					= 4
 
-BAD_LIST					   = {DISASTAH, RUSSIAN_REKT, GG, OH_MY_LORD, BEAUTIFUL}
-PLAYER_DEATH_LIST 	 = {PATIENCE, DISAPPOINTED, APPLAUSE, PERFECT, QUESTIONABLE, SAD_TROMBONE, WHAT_HAPPENED}
+-- sound constants
+DISASTAH							= 'soundboard.disastah'
+FIRECRACKER						= 'soundboard.new_year_firecrackers'
+MATCH_READY						= 'Stinger.MatchReady'
+ATTENTION							= 'soundboard.rimshot'
+BEAUTIFUL							= 'soundboard.krasavchik'
+BEEP									= 'DotaSOS.TestBeep'
+ROSHAN								= 'Roshan.Death'
+RUSSIAN_REKT					= 'soundboard.eto_prosto_netchto'
+SAD_TROMBONE					= 'soundboard.sad_bone'
+BRUTAL								= 'soundboard.brutal'
+GG										= 'soundboard.ehto_g_g'
+OH_MY_LORD						= 'soundboard.oh_my_lord'
+QUESTIONABLE					= 'soundboard.that_was_questionable'
+WHAT_HAPPENED					= 'soundboard.what_just_happened'
+NEXT_LEVEL						= 'soundboard.next_level'
+PERFECT								= 'absolutely_perfect'
+DISAPPOINTED					= 'soundboard.glados.disappointed'
+PATIENCE							= 'soundboard.patience'
+NORMALIN							= 'soundboard.eto_nenormalno'
+HERO									= 'soundboard.youre_a_hero'
+GROAN									= 'soundboard.ti9.crowd_groan'
+APPLAUSE							= 'soundboard.applause'
+                		
+-- tables for random sounds
+BAD_LIST							= {DISASTAH, RUSSIAN_REKT, GG, OH_MY_LORD, BEAUTIFUL}
+PLAYER_DEATH_LIST			= {PATIENCE, DISAPPOINTED, APPLAUSE, PERFECT, QUESTIONABLE, SAD_TROMBONE, WHAT_HAPPENED, NEXT_LEVEL, NORMALIN, GROAN}
+
+-- duh
+TEAM_RADIANT					= 2
+TEAM_DIRE							= 3
 
 -- message colors
 local colors = 
@@ -49,38 +58,75 @@ local colors =
 	warning = '#fbff00',
 	bad = '#ff0000', 
 }
+-- note that the first index is a blank table because radiant / dire are 2 / 3 
+local playerColors = 
+{
+	{},
+	{
+		'#3375ff',
+		'#66ffbf',
+		'#bf00bf',
+		'#f3f00b',
+		'#ff6b00',
+	},
+	{
+		'#fe86c2',
+		'#a1b447',
+		'#65d9f7',
+		'#008321',
+		'#a46900',
+	}
+}
+local awardColors = 
+{
+	gold 					= '#DAA520',
+	armor 				= '#B911FC',
+	magicResist 	= '#1A88FC',
+	levels 				= '#eb4b4b',
+	neutral 			= '#5B388F',
+	stats 				= '#CF6A32',	
+}
+local neutralColors = 
+{
+	'#A9A9A9',
+	'#008000',
+	'#0000FF',
+	'#800080',
+	'#FFA500',
+}
 
 -- Evidently dota lua doesn't like ... arguments and you just have to overload and check for nil. Whatever.
 -- This method will print a message to the players, with optional color and sound.   
 function Utilities:Print(msg, msgType, sound)
   local color
 	local isColor = false
+	local message = ''
 	-- invalid arguments
 	if msg == nil then return end
-	-- no color
-	if msgType == nil then
-		GameRules:SendCustomMessage(msg,0,0)
+	-- no color (and msg is actually a string)
+	if msgType == nil and type(msg) == 'string' then
+		GameRules:SendCustomMessage(msg, 0, 0)
 		return
 	end
 	-- handle color, only use valid ones
 	if msgType == MSG_GOOD then
-		color = colors.good
-		isColor = true
+		message = Utilities:ColorString(msg, colors.good)
 	elseif msgType == MSG_WARNING then
-		color = colors.warning
-		isColor = true
+		message = Utilities:ColorString(msg, colors.warning)
 	elseif msgType == MSG_BAD then
-		color = colors.bad
-		isColor = true
+		message = Utilities:ColorString(msg, colors.bad)
+	elseif msgType == MSG_AWARD then
+		-- if it's an award message then msg should be a table
+		if type(msg) == 'table' then
+			message = Utilities:FormatAwardMessage(msg)
+		end
+	-- check if they passed what we think is a valid color 
+	-- I'm aware this is not a full check, but this is good enough for now
+	elseif string.find(msgType, '#') ~= nil and string.len(msgType) == 7 then
+		message = Utilities:ColorString(msg, msgType)
 	end
-	-- valid color
-	if isColor then
-		local message = "<font color='"..color.."'>"..msg..'</font>'
-		GameRules:SendCustomMessage(message,0,0) 
-	-- use default when they screw up
-	else
-		GameRules:SendCustomMessage(msg,0,0)
-	end
+	-- print the message
+	GameRules:SendCustomMessage(message, 0, 0)
 	-- no sound
 	if sound == nil then return end
 	-- play sound
@@ -89,6 +135,36 @@ function Utilities:Print(msg, msgType, sound)
 	else
 		EmitGlobalSound(sound[math.random(#sound)])
 	end
+end
+
+-- Returns a color coded string for award announcements
+function Utilities:FormatAwardMessage(awards)
+	local msg = ''
+	local bot = awards[1]
+	-- first artifact: hero name, by color
+	msg = msg..Utilities:ColorString(bot.stats.name, Utilities:GetPlayerColor(bot.stats.id))
+	msg = msg..Utilities:ColorString(': Bonus:', colors.good)
+	-- Loop over table entries
+	for i = 2, #awards do
+	  local awardType = awards[i][1]
+	  local awardValue = awards[i][2]  	
+	  local awardMsg = ' '..Utilities:FirstToUpper(awardType)..': '..awardValue
+	  msg = msg..Utilities:ColorString(awardMsg, awardColors[awardType])  
+	end
+	return msg
+end
+
+-- Returns the localized hero name, if there is one
+function Utilities:GetName(name)
+	if heroNames[name] ~= nil then
+		return heroNames[name] 
+	end
+	return name
+end
+
+-- returns html encoding to change the text of msg the appropriate color
+function Utilities:ColorString(msg, color)
+	return "<font color='"..color.."'>"..msg..'</font>'
 end
 
 -- Gets a random sound from a table
@@ -162,6 +238,12 @@ function Utilities:IsPlayerBot(playerID)
 	return PlayerResource:GetSteamAccountID(playerID) == 0
 end
 
+-- Returns the number of players in the game
+-- note that PlayerResource:GetPlayerCount() also returns coaches etc 
+function Utilities:GetPlayerCount()
+	return PlayerResource:GetPlayerCountForTeam(TEAM_RADIANT) +  PlayerResource:GetPlayerCountForTeam(TEAM_DIRE)
+end
+
 -- returns the number of human players in the game
 function Utilities:GetNumberOfHumans()
 	local count = PlayerResource:GetPlayerCount()
@@ -173,6 +255,47 @@ function Utilities:GetNumberOfHumans()
 	  end
 	end
 	return humans
+end
+
+-- returns html color code for the team/position a player occupies
+function Utilities:GetPlayerColor(playerID)
+	for team = TEAM_RADIANT, TEAM_DIRE do
+		for index = 1, 5 do
+			if PlayerResource:GetNthPlayerIDOnTeam(team, index) == playerID then
+				return playerColors[team][index]
+			end
+		end
+	end
+end
+
+-- returns true if the playerID is assigned to a team.  
+-- Use this to filter out coaches / observers
+function Utilities:IsTeamPlayer(playerID)
+	for team = TEAM_RADIANT, TEAM_DIRE do
+		for index = 1, 5 do
+			if PlayerResource:GetNthPlayerIDOnTeam(team, index) == playerID then
+				return true
+			end
+		end
+	end
+end
+
+-- Copies matching table fields from source to target
+function Utilities:DeepCopy(source, target)
+  for key, value in pairs(source) do 
+    if target[key] ~= nil then
+    	if type(value) == 'table' then 
+    		Utilities:DeepCopy(source[key], target[key])
+      else
+      	target[key] = value
+    	end
+    end
+  end
+end
+
+-- return a string with the first letter capitalized
+function Utilities:FirstToUpper(str)
+	return (str:gsub("^%l", string.upper))
 end
 
 -- Used to register game state listeners (with a generic functionality)
@@ -233,3 +356,4 @@ function GameStateListener:Register(o, initializer, initState)
 	-- Register listener
 	ListenToGameEvent('game_rules_state_change', Dynamic_Wrap(self, 'Listen'), self)
 end
+

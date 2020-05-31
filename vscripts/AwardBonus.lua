@@ -56,7 +56,7 @@ function AwardBonus:gold(bot, bonus)
 	if bot.stats.awards.gold < Settings.awardCap.gold then
 	  PlayerResource:ModifyGold(bot.stats.id, bonus, false, 0)
 	  bot.stats.awards.gold = bot.stats.awards.gold + bonus
-	  return true
+	  return true  
 	end
 	return false
 end
@@ -151,7 +151,7 @@ function AwardBonus:RandomNeutralItem(unit, tier)
 	  end
 	end
 	-- select a new item from the list
-	local item = AwardBonus:SelectRandomNeutralItem(tier, unit)	
+	local item, realName = AwardBonus:SelectRandomNeutralItem(tier, unit)	
 	-- award the new item if one was available
 	if item ~= nil then
 	  -- determine if the unit already has one (neutrals always in slot 16)
@@ -161,7 +161,7 @@ function AwardBonus:RandomNeutralItem(unit, tier)
 			unit:RemoveItem(currentItem)
 		end
 		AwardBonus:NeutralItem(unit, item, tier)
-		return true, item
+		return true, realName
 	end
 	return false
 end
@@ -241,7 +241,7 @@ function AwardBonus:SelectRandomNeutralItem(tier, unit)
   end
   -- return the selected item
   if item ~= nil then
-	  return item.name
+	  return item.name, item.realName
 	else
 		return nil
 	end
@@ -267,6 +267,8 @@ end
 
 -- Gives the bot his death awrds, if there are any
 function AwardBonus:Death(bot)
+	local awardsTable = {}
+	table.insert(awardsTable, bot)
 	-- Drop out for edge cases (LD bear, AW clone)
 	if not DataTables:IsRealHero(bot) then
 		Debug:Print(bot:GetName()..' is not a real hero unit.  No Death Award given.')
@@ -313,6 +315,11 @@ function AwardBonus:Death(bot)
         isSuccess, name = AwardBonus[award](AwardBonus, bot, value)
         -- if success, set isAwarded, isLoudWarning, Clear chance, Update message
         if isSuccess then
+        	if name == nil then
+        	  table.insert(awardsTable, {award, value})
+        	else
+        		table.insert(awardsTable, {award, name})
+        	end
         	isAwarded = true
 					isLoudWarning = (isLoud or isLoudWarning) 
 					if name == nil then
@@ -334,9 +341,11 @@ function AwardBonus:Death(bot)
 	end
 	if Settings.deathBonus.announce then
 		if isAwarded and not isLoudWarning then
-			Utilities:Print(msg, MSG_WARNING, ATTENTION)
+			Utilities:Print(awardsTable, MSG_AWARD, ATTENTION)
+			--Utilities:Print(msg, MSG_WARNING, ATTENTION)
 		elseif isAwarded and isLoudWarning then
-			Utilities:Print(msg, MSG_BAD, BAD_LIST)
+			Utilities:Print(awardsTable, MSG_AWARD, BAD_LIST)
+		 --Utilities:Print(msg, MSG_BAD, BAD_LIST)
 		end
 	end
 end
@@ -399,8 +408,15 @@ end
 function AwardBonus:ShouldAward(bot,award)
 	-- trivial case
 	if bot.stats.chance[award] >= 1 then 
-		if isDebug then print('Chance for '..award..' was 1 or greater.') end
+		if isDebug then print(bot.stats.name..': Chance for '..award..' was 1 or greater.') end
 		return true 
+	end
+	-- alsmost as trivial case: check if deathStreakThreshold is enabled
+	if Settings.deathBonus.deathStreakThreshold >= 0 then
+		if bot.stats.deathStreak >= Settings.deathBonus.deathStreakThreshold then
+			if isDebug then print(bot.stats.name..': automatic '..award..' bonus due to death streak of '..bot.stats.deathStreak..'.') end
+			return true
+		end
 	end
 	-- otherwise roll for it
 	local roll = math.random()
@@ -441,7 +457,8 @@ function AwardBonus:GetGPMBonus(bot)
   targetGPM = targetGPM * multiplier
   -- if the bot is already better than this, do not give award
   if botGPM > targetGPM then 
-  	if isDebug then print('Bot GPM too high for bonus: '..botGPM..' vs '..targetGPM..' Hero Base GPM: '..playerGPM..' Player Hero: '..playerName) end
+  	-- These seem bug free, but too lazy to give them their own flag to disable
+  	--if isDebug then print('Bot GPM too high for bonus: '..botGPM..' vs '..targetGPM..' Hero Base GPM: '..playerGPM..' Player Hero: '..playerName) end
   	return 0 
   end
   -- get GPM difference
@@ -549,7 +566,7 @@ end
 
 
 -- Returns total multiplier for the bonus
--- this is either strictly multiplicative, or the average of the three
+-- this is either strictly multiplicative, or additive
 function AwardBonus:GetPerMinuteMultiplier(skill, scale, variance)
   if Settings.isMultiplicative then
     return skill * scale * variance

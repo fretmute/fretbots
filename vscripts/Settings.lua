@@ -8,8 +8,6 @@ require 'Flags'
  -- Utilities
  require 'Utilities'
 
-settings = nil
-
 -- local debug flag
 local thisDebug = true; 
 local isDebug = Debug.IsDebug() and thisDebug;
@@ -25,6 +23,10 @@ local playerVoted = {}
 local isVotingClosed = false
 -- Have voting directions been posted?
 local isVotingOpened = false
+-- Number of votes case
+local numVotes = 0
+-- start abitrariy large, fix when chat listener is registered
+local maxvotes = 64
 
 -- Instantiate ourself
 if Settings == nil then
@@ -33,11 +35,11 @@ if Settings == nil then
   {  
   	-- Change this to select the default difficulty (chosen if 
   	-- no one votes during difficulty voting time)
-  	defaultDifficulty = 'debug',
+  	defaultDifficulty = 'standard',
   	-- game state in which voting should end
   	voteEndState = DOTA_GAMERULES_STATE_PRE_GAME,
   	-- voting ends when state is above and time is > this
-  	voteEndTime = -50,  	
+  	voteEndTime = -80,  	
   	-- are multipliers multiplicative, or additive (multiplicative is harder)
   	isMultiplicative = true,
   	-- Taunt humans when they die with chatwheel sounds?
@@ -49,10 +51,10 @@ if Settings == nil then
 			variance = 
 			{
 				{1.0, 1.3},
-				{0.9, 1.3},
-				{0.9, 1.3},
-				{0.8, 1.3},
-				{0.8, 1.3}
+				{1.0, 1.3},
+				{1.0, 1.3},
+				{1.0, 1.3},
+				{1.0, 1.3}
 			},
 			-- Warns players that the bot is very strong if they are over this threshold
 			warningThreshold = 1.2,
@@ -312,85 +314,164 @@ end
 allNeutrals = 
 { 
 	--                                              roles= 1,2,3,4,5
-	{name = 'item_arcane_ring', 					tier = 1, ranged = true, 	melee = true, 	roles={1,1,1,1,1}},
-	{name = 'item_broom_handle', 					tier = 1, ranged = false, melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_faded_broach', 					tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_iron_talon', 						tier = 1, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_keen_optic', 						tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_mango_tree', 						tier = 1, ranged = true, 	melee = true,		roles={0,0,0,0,0}},
-	{name = 'item_ocean_heart',						tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_poor_mans_shield',			tier = 1, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_royal_jelly', 					tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_trusty_shovel',					tier = 1, ranged = true, 	melee = true,		roles={0,0,0,0,0}},
-	{name = 'item_ironwood_tree',					tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
+	{name = 'item_arcane_ring', 					tier = 1, ranged = true, 	melee = true, 	roles={1,1,1,1,1}, realName = 'Arcane Ring'},
+	{name = 'item_broom_handle', 					tier = 1, ranged = false, melee = true,		roles={1,1,1,0,0}, realName = 'Broom Handle'},
+	{name = 'item_faded_broach', 					tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Faded Broach'},
+	{name = 'item_iron_talon', 						tier = 1, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Iron Talon'},
+	{name = 'item_keen_optic', 						tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Keen Optic'},
+	{name = 'item_mango_tree', 						tier = 1, ranged = true, 	melee = true,		roles={0,0,0,0,0}, realName = 'Mango Tree'},
+	{name = 'item_ocean_heart',						tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Ocean Heart'},
+	{name = 'item_poor_mans_shield',			tier = 1, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = "Poor Man's Shield"},
+	{name = 'item_royal_jelly', 					tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Royal Jelly'},
+	{name = 'item_trusty_shovel',					tier = 1, ranged = true, 	melee = true,		roles={0,0,0,0,0}, realName = 'Trusty Shovel'},
+	{name = 'item_ironwood_tree',					tier = 1, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Ironwood Tree'},
 	-- tier 2                                                                    		
-	{name = 'item_dragon_scale', 					tier = 2, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_essence_ring', 					tier = 2, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_grove_bow', 						tier = 2, ranged = true, 	melee = false,	roles={1,1,1,1,1}},
-	{name = 'item_imp_claw', 							tier = 2, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_nether_shawl', 					tier = 2, ranged = true, 	melee = true,		roles={0,0,0,0,0}},
-	{name = 'item_philosophers_stone', 		tier = 2, ranged = true, 	melee = true,		roles={0,0,0,0,0}},
-	{name = 'item_pupils_gift',						tier = 2, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_vambrace',							tier = 2, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_ring_of_aquila', 				tier = 2, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_vampire_fangs',					tier = 2, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_clumsy_net', 						tier = 2, ranged = true, 	melee = true,		roles={1,1,1,1,1}},	
+	{name = 'item_dragon_scale', 					tier = 2, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Dragon Scale'},
+	{name = 'item_essence_ring', 					tier = 2, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Essence Ring'},
+	{name = 'item_grove_bow', 						tier = 2, ranged = true, 	melee = false,	roles={1,1,1,1,1}, realName = 'Grove Bow'},
+	{name = 'item_imp_claw', 							tier = 2, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Imp Claw'},
+	{name = 'item_nether_shawl', 					tier = 2, ranged = true, 	melee = true,		roles={0,0,0,0,0}, realName = 'Nether Shawl'},
+	{name = 'item_philosophers_stone', 		tier = 2, ranged = true, 	melee = true,		roles={0,0,0,0,0}, realName = "Philosopher's Stone"},
+	{name = 'item_pupils_gift',						tier = 2, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = "Pupil's Gift"},
+	{name = 'item_vambrace',							tier = 2, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Vambrace'},
+	{name = 'item_ring_of_aquila', 				tier = 2, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Ring of Aquila'},
+	{name = 'item_vampire_fangs',					tier = 2, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Vampire Fangs'},
+	{name = 'item_clumsy_net', 						tier = 2, ranged = true, 	melee = true,		roles={1,1,1,1,1}}, realName = 'Clumsy Net',	
 	-- tier 3                                                                    		
-	{name = 'item_craggy_coat', 					tier = 3, ranged = true, 	melee = true,		roles={0,0,1,1,1}},
-	{name = 'item_enchanted_quiver', 			tier = 3, ranged = true, 	melee = false,	roles={1,1,1,1,1}},
-	{name = 'item_greater_faerie_fire', 	tier = 3, ranged = true,	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_mind_breaker', 					tier = 3, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_orb_of_destruction', 		tier = 3, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_paladin_sword',					tier = 3, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_quickening_charm',			tier = 3, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_spider_legs', 					tier = 3, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_titan_sliver',					tier = 3, ranged = true, 	melee = true,		roles={1,1,1,1,1}},	
-	{name = 'item_repair_kit',				    tier = 3, ranged = true, 	melee = true,		roles={0,0,1,1,1}},
-  {name = 'item_spy_gadget', 						tier = 3, ranged = true, 	melee = false,	roles={0,0,0,1,1}},	
+	{name = 'item_craggy_coat', 					tier = 3, ranged = true, 	melee = true,		roles={0,0,1,1,1}, realName = 'Craggy Coat'},
+	{name = 'item_enchanted_quiver', 			tier = 3, ranged = true, 	melee = false,	roles={1,1,1,1,1}, realName = 'Enchanted Quiver'},
+	{name = 'item_greater_faerie_fire', 	tier = 3, ranged = true,	melee = true,		roles={1,1,1,0,0}, realName = 'Greater Faerie Fire'},
+	{name = 'item_mind_breaker', 					tier = 3, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Mind Breaker'},
+	{name = 'item_orb_of_destruction', 		tier = 3, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Orb of Destruction'},
+	{name = 'item_paladin_sword',					tier = 3, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Paladin Sword'},
+	{name = 'item_quickening_charm',			tier = 3, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Quickening Charm'},
+	{name = 'item_spider_legs', 					tier = 3, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Spider Legs'},
+	{name = 'item_titan_sliver',					tier = 3, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Titan Sliver'},	
+	{name = 'item_repair_kit',				    tier = 3, ranged = true, 	melee = true,		roles={0,0,1,1,1}, realName = 'Repair Kit'},
+  {name = 'item_spy_gadget', 						tier = 3, ranged = true, 	melee = false,	roles={0,0,0,1,1}, realName = 'Telescope'},	
 	-- tier 4                                                                    		
-	{name = 'item_flicker', 							tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_havoc_hammer', 					tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_illusionsts_cape', 			tier = 4, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_panic_button', 					tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_minotaur_horn', 				tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_ninja_gear', 						tier = 4, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_princes_knife',					tier = 4, ranged = true, 	melee = false,	roles={1,1,1,1,1}},
-	{name = 'item_spell_prism',						tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_the_leveller',					tier = 4, ranged = true, 	melee = true,		roles={1,1,0,0,0}},	
-	{name = 'item_timeless_relic',				tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}},	
-	{name = 'item_witless_shako',					tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}},	
+	{name = 'item_flicker', 							tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Flicker'},
+	{name = 'item_havoc_hammer', 					tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Havoc Hammer'},
+	{name = 'item_illusionsts_cape', 			tier = 4, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = "Illusionist's Cape"},
+	{name = 'item_panic_button', 					tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Magic Lamp'},
+	{name = 'item_minotaur_horn', 				tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Minotaur Horn'},
+	{name = 'item_ninja_gear', 						tier = 4, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Ninja Gear'},
+	{name = 'item_princes_knife',					tier = 4, ranged = true, 	melee = false,	roles={1,1,1,1,1}, realName = "Prince's Knife"},
+	{name = 'item_spell_prism',						tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Spell Prism'},
+	{name = 'item_the_leveller',					tier = 4, ranged = true, 	melee = true,		roles={1,1,0,0,0}, realName = 'The Leveller'},	
+	{name = 'item_timeless_relic',				tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Timeless Relic'},	
+	{name = 'item_witless_shako',					tier = 4, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Witless Shako'},	
 	-- tier 5                                                                    		
-	{name = 'item_apex', 									tier = 5, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_ballista', 							tier = 5, ranged = true, 	melee = false,	roles={1,1,1,0,0}},
-	{name = 'item_demonicon', 						tier = 5, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_ex_machina', 						tier = 5, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_fallen_sky', 					  tier = 5, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_force_boots', 					tier = 5, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_mirror_shield',					tier = 5, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_pirate_hat',						tier = 5, ranged = true, 	melee = true,		roles={1,1,1,0,0}},
-	{name = 'item_seer_stone', 						tier = 5, ranged = true, 	melee = true,		roles={1,1,1,1,1}},
-	{name = 'item_desolator_2',						tier = 5, ranged = true, 	melee = true,		roles={1,1,0,0,0}},	
-	{name = 'item_trident',				        tier = 5, ranged = true, 	melee = true,		roles={1,1,1,0,0}},	
-	{name = 'item_woodland_striders',			tier = 5, ranged = true, 	melee = true,		roles={1,1,1,1,1}},				
+	{name = 'item_apex', 									tier = 5, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Apex'},
+	{name = 'item_ballista', 							tier = 5, ranged = true, 	melee = false,	roles={1,1,1,0,0}, realName = 'Ballista'},
+	{name = 'item_demonicon', 						tier = 5, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Book of the Dead'},
+	{name = 'item_ex_machina', 						tier = 5, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Ex Machina'},
+	{name = 'item_fallen_sky', 					  tier = 5, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Fallen Sky'},
+	{name = 'item_force_boots', 					tier = 5, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Force Boots'},
+	{name = 'item_mirror_shield',					tier = 5, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Mirror Shield'},
+	{name = 'item_pirate_hat',						tier = 5, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Pirate Hat'},
+	{name = 'item_seer_stone', 						tier = 5, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Seer Stong'},
+	{name = 'item_desolator_2',						tier = 5, ranged = true, 	melee = true,		roles={1,1,0,0,0}, realName = 'Stygian Desolator'},	
+	{name = 'item_trident',				        tier = 5, ranged = true, 	melee = true,		roles={1,1,1,0,0}, realName = 'Trident'},	
+	{name = 'item_woodland_striders',			tier = 5, ranged = true, 	melee = true,		roles={1,1,1,1,1}, realName = 'Woodland Striders'},				
 }
 
--- Difficulty names
+-- Difficulties.  Table entries with matching keys for Settings will overwrite.
 local difficulties =
 {
   {
   	name = 'standard',
   	description = "Bots are 1 full tier ahead on neutrals, and receive moderate death bonuses.",
-  	votes = 0
-  },
+  	votes = 0,
+  	color = '#00ff00',
+  }, 
   {
   	name = 'harder',
   	description = "More aggressive death scaling past twenty minutes.",
-  	votes = 0
-  },  
+  	votes = 0,
+  	color = '#e8fc51',
+		-- aggressive death scaling    
+    deathBonus = 
+    {
+	    isRangeTimeScaleEnable = true,
+	    isClampTimeScaleEnable = true, 		
+			clampTimeScale = 
+			{
+	 			gold 					= 1200,
+				armor 				= 1200,
+				magicResist 	= 1200,
+				levels 				= 1200,
+				neutral 			= 1200,
+				stats 				= 1200,   					
+			},	
+			rangeTimeScale = 
+			{
+	 			gold 					= 1200,
+				armor 				= 1200,
+				magicResist 	= 1200,
+				levels 				= 1200,
+				neutral 			= 1200,
+				stats 				= 1200,   					
+			},		
+			clamp = 
+		  {
+		  	gold 					= {300, 1500},
+		    armor 				= {1, 3},
+		    magicResist 	= {1, 3},
+		    levels 				= {1, 2},
+		    neutral 			= {1, 2},
+		    stats					= {1, 3},	
+		  },  	
+		},
+  },   
   {
-  	name = 'uhoh',
+  	name = 'evenharder',
   	description = "Aggresive death scaling with upper clamps disabled. Bots will be rich.",
-  	votes = 0
+  	votes = 0,
+  	color = '#e8961c',
+  	-- very aggressive death scaling
+  	deathBonus = 
+  	{
+	    isRangeTimeScaleEnable = true,
+	    isClampTimeScaleEnable = true,	
+			rangeTimeScale = 
+			{
+	 			gold 					= 600,
+				armor 				= 600,
+				magicResist 	= 600,
+				levels 				= 600,
+				neutral 			= 600,
+				stats 				= 600,   					
+			},			
+			clamp = 
+		  {
+		  	gold 					= {300, 7500},
+		    armor 				= {1, 	10},
+		    magicResist 	= {1, 	10},
+		    levels 				= {1, 	4},
+		    neutral 			= {1, 	3},
+		    stats					= {1, 	10},	
+		  },	
+			range = 
+			{
+	    	gold 					= {0, 750},
+	      armor 				= {0, 4},
+	      magicResist 	= {0, 4},
+	      levels 				= {0, 2},
+	      neutral 			= {0, 1},
+	      stats					= {0, 4},					
+			},
+			-- increased chance as well
+			chance = 
+	    {
+	    	gold 					= 0.15,
+	      armor 				= 0.15,
+	      magicResist 	= 0.15,
+	      levels 				= 0.20,
+	      neutral 			= 0.20,
+	      stats 				= 0.1
+	    },
+	  },
   },    
 }
 
@@ -398,85 +479,8 @@ local difficulties =
 function Settings:Initialize(difficulty)
 	-- no argument implies default, do nothing
 	if difficulty == nil then return end
- 	-- Replicate and add more if statements for custom difficulties
-	if difficulty == 'standard' then
-		return
-	end		
-	if difficulty == 'harder' then	
-		-- aggressive death scaling    
-    Settings.deathBonus.isRangeTimeScaleEnable = true
-    Settings.deathBonus.isClampTimeScaleEnable = true 		
-		Settings.deathBonus.clampTimeScale = 
-		{
- 			gold 					= 1200,
-			armor 				= 1200,
-			magicResist 	= 1200,
-			levels 				= 1200,
-			neutral 			= 1200,
-			stats 				= 1200   					
-		}	
-		Settings.deathBonus.rangeTimeScale = 
-		{
- 			gold 					= 1200,
-			armor 				= 1200,
-			magicResist 	= 1200,
-			levels 				= 1200,
-			neutral 			= 1200,
-			stats 				= 1200   					
-		}			
-		Settings.deathBonus.clamp = 
-	  {
-	  	gold 					= {300, 1500},
-	    armor 				= {1, 3},
-	    magicResist 	= {1, 3},
-	    levels 				= {1, 2},
-	    neutral 			= {1, 2},
-	    stats					= {1, 3}	
-	  }
-	  return
-	end
-if difficulty == 'uhoh' then	
-    -- very aggressive death scaling
-    Settings.deathBonus.isRangeTimeScaleEnable = true
-    Settings.deathBonus.isClampTimeScaleEnable = true 	
-		Settings.deathBonus.rangeTimeScale = 
-		{
- 			gold 					= 600,
-			armor 				= 600,
-			magicResist 	= 600,
-			levels 				= 600,
-			neutral 			= 600,
-			stats 				= 600   					
-		}			
-		Settings.deathBonus.clamp = 
-	  {
-	  	gold 					= {300, 1500},
-	    armor 				= {1, 3},
-	    magicResist 	= {1, 3},
-	    levels 				= {1, 2},
-	    neutral 			= {1, 2},
-	    stats					= {1, 3}	
-	  }	
-		Settings.deathBonus.range = 
-		{
-    	gold 					= {0, 750},
-      armor 				= {0, 4},
-      magicResist 	= {0, 4},
-      levels 				= {0, 2},
-      neutral 			= {0, 1},
-      stats					= {0, 4}					
-		}
-		Settings.deathBonus.clampOverride = 
-		{
-			gold 					= true,
-			armor 				= true,
-			magicResist 	= true,
-			levels 				= true,
-			neutral 			= true,
-			stats 				= true
-		}
-		return
-	end
+	-- Override settings table entries if found
+ 	Utilities:DeepCopy(difficulty, Settings)
 end
 
 -- Periodically checks to see if settings have been chosen
@@ -490,21 +494,17 @@ function Settings:DifficultySelectTimer()
 	-- If voting not yet open, display directions
 	if not isVotingOpen then
 		local msg = 'Difficulty voting is now open! Type a difficulty into chat to vote. Choices follow:'
-		Utilities:Print(msg, MSG_GOOD)
-		for _, difficulty in pairs(difficulties) do
-		  msg = difficulty.name..': '..difficulty.description
-		  Utilities:Print(msg, MSG_GOOD)
+		Utilities:Print(msg)
+		for _, difficulty in ipairs(difficulties) do
+			if Settings:IsValidDifficulty(difficulty) then
+			  msg = difficulty.name..': '..difficulty.description
+				Utilities:Print(msg, difficulty.color)
+			end
 		end
 	  isVotingOpen = true
 	end
-	-- Check voting status
-	local haveAllVoted = true
-	-- anyone hasn't voted, voting isn't done
-	for _, voted in pairs(playerVoted) do
-	  haveAllVoted = haveAllVoted and voted
-	end
 	-- set voting closed
-	if haveAllVoted or Settings:ShouldCloseVoting() then
+	if numVotes >= maxVotes or Settings:ShouldCloseVoting() then
 	  isVotingClosed = true
 	end
 	-- run again in 1 second
@@ -515,19 +515,27 @@ end
 function Settings:ApplyVoteSettings()
 	local maxVotes = 0
 	local winner = nil
-	for i, difficulty in pairs(difficulties) do
-	  if difficulty.votes > maxVotes then
-	  	winner = difficulty
-	  end
+	for _, difficulty in ipairs(difficulties) do
+		if Settings:IsValidDifficulty(difficulty) then 
+		  if difficulty.votes > maxVotes then
+		  	winner = difficulty
+		  end
+		end
 	end
-  -- edge case: no one voted
+  -- edge case: no one voted, pick first valid difficulty
   if winner == nil then
-  	winner = difficulties[Settings.defaultDifficulty]
+		for _, difficulty in ipairs(difficulties) do
+			if Settings:IsValidDifficulty(difficulty) then 
+				winner = difficulty
+				break
+			end
+		end
   end
-  -- Apply
-	Settings:Initialize(winner.name)
+  Debug:Print('Winning Difficulty:')
+  Debug:DeepPrint(winner)
 	msg = 'Voting closed. Applied difficulty: '..winner.name
-  Utilities:Print(msg, MSG_GOOD)
+  Utilities:Print(msg, winner.color)
+  Settings:Initialize(winner)
   Debug:DeepPrint(Settings)
 end
 
@@ -546,14 +554,33 @@ function Settings:ShouldCloseVoting()
 	return false
 end
 
+-- Returns true if a table is a valid difficulty table
+function Settings:IsValidDifficulty(diff)
+	local isValid = true
+	isValid = isValid and diff.name ~= nil
+  if not isValid then return isValid end
+  isValid = isValid and type(diff.name) == 'string'
+  if not isValid then return isValid end
+	isValid = isValid and diff.description ~= nil
+  if not isValid then return isValid end
+  isValid = isValid and type(diff.description) == 'string'
+  if not isValid then return isValid end  
+	isValid = isValid and diff.color ~= nil
+  if not isValid then return isValid end
+  isValid = isValid and type(diff.color) == 'string'
+  if not isValid then return isValid end    
+	isValid = isValid and diff.votes ~= nil
+  if not isValid then return isValid end
+  isValid = isValid and type(diff.votes) == 'number'
+  if not isValid then return isValid end    
+  return isValid
+end
+
 -- Register a chat listener for settings voting
 function Settings:RegisterChatEvent()
   if not Flags.isPlayerChatRegistered then
-  	-- size playerVoted array
-  	local playerCount = Utilities:GetNumberOfHumans() 
-  	for i = 1, playerCount do
-  		table.insert(playerVoted, false)
-  	end 
+  	-- set max number of vote
+ 		maxVotes = Utilities:GetNumberOfHumans() 
   	ListenToGameEvent("player_chat", Dynamic_Wrap(Settings, 'OnPlayerChat'), Settings)
   	print('Settings: PlayerChat event listener registered.')
   	Flags.isPlayerChatRegistered = true
@@ -566,37 +593,48 @@ function Settings:OnPlayerChat(event)
 	if isVotingClosed then return end
 	-- Get event data
 	local playerID, text = Settings:GetChatEventData(event)
+	-- return if the player is not on a team
+	if not Utilities:IsTeamPlayer(playerID) then return end
 	-- if no vote from the player, check if he's voting for a difficulty
-	if playerVoted[playerID] ~= nil then
-		if not playerVoted[playerID] then
-		  for _, difficulty in ipairs(difficulties) do
-		  	print(text..': '..difficulty.name)
-		  	-- If voted for difficulty, reflect that
-		    if text == difficulty.name then
-		    	-- players can only vote once
-		    	playerVoted[playerID] = true
-		    	-- increment votes for diff
-		      difficulty.votes = difficulty.votes + 1
-		      -- let players know the vote counted
-		      local msg = 'Player '..playerID..' voted for '..difficulty.name..'. '
-		      msg = msg..difficulty.votes..' total votes for '..difficulty.name
-		      Utilities:Print(msg, MSG_GOOD)
-		    end
-		  end
-		end
+	if playerVoted[tostring(playerID)] == nil then
+	  for _, difficulty in ipairs(difficulties) do
+  		-- If voted for difficulty, reflect that
+	    if string.lower(text) == string.lower(difficulty.name) then
+	    	-- players can only vote once
+	    	playerVoted[tostring(playerID)] = true
+	    	-- increment votes for diff
+	      difficulty.votes = difficulty.votes + 1
+	      -- increment number of votes
+	      numVotes = numVotes + 1
+	      -- let players know the vote counted
+	      local msg = PlayerResource:GetPlayerName(playerID)..' voted for '..difficulty.name..'. '
+	      msg = msg..difficulty.votes..' total votes for '..difficulty.name..'.'
+	      Utilities:Print(msg, Utilities:GetPlayerColor(playerID))
+	    end
+  	end
 	end
 end
 
 -- Parse chat event information 
 function Settings:GetChatEventData(event)
-	local userID = event.userid
+	local playerID = event.playerid
 	local text = event.text
-	return userID, text
+	return playerID, text
 end
 
--- Register settings vote timer and chat event monitor
-Settings:RegisterChatEvent()
-Timers:CreateTimer(settingsTimerName, {endTime = 1, callback =  Settings['DifficultySelectTimer']} )
+-- this callback gets run once when game state enters DOTA_GAMERULES_STATE_HERO_SELECTION
+-- this prevents us from attempting to get the number of players before they have all loaded
+function Settings:InitializationTimer()
+  -- Register settings vote timer and chat event monitor
+  Debug:Print('Begining Settings Initialization.')
+	Settings:RegisterChatEvent()
+	Timers:CreateTimer(settingsTimerName, {endTime = 1, callback =  Settings['DifficultySelectTimer']} )
+end
 
-
-
+--Don't run initialization until all players have loaded into the game.
+-- I'm not sure if things like GetPlayerCount() track properly before this, 
+-- and am not willing to test since this facility is in place and is easier.
+if not Flags.isSettingsInitialized then
+	Utilities:RegsiterGameStateListener(Settings, 'InitializationTimer', DOTA_GAMERULES_STATE_HERO_SELECTION )
+	Flags.isSettingsInitialized = true
+end
