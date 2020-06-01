@@ -104,15 +104,19 @@ function AwardBonus:magicResist(bot, bonus)
 end
 
 -- Levels
-function AwardBonus:levels(bot, levels)		
+function AwardBonus:levels(bot, levels)	
 	if bot.stats.awards.levels < Settings.awardCap.levels then
 	  -- get current level and XP
 	  local currentLevel = PlayerResource:GetLevel(bot.stats.id)
 	  local currentXP = bot:GetCurrentXP()
-	  -- get target XP
-	  local targetXP = xpPerLevel[currentLevel + levels]
-	  -- award the difference
-	  bot:AddExperience(targetXP - currentXP, 0, false, true)
+	  local currentLevelXP = xpPerLevel[currentLevel]
+	  local targetLevel = math.ceil(levels)
+	  local targetLevelXP = xpPerLevel[currentLevel + targetLevel]
+	  -- get the average amount of experience per level difference
+	  local averageXP = (targetLevelXP - currentLevelXP) / targetLevel
+	  -- award average XP per level times levels 
+	  local awardXP = Utilities:Round(averageXP * levels)
+	  bot:AddExperience(awardXP, 0, false, true)
 	  bot.stats.awards.levels = bot.stats.awards.levels + levels
 	  return true
 	end
@@ -126,15 +130,20 @@ end
 
 -- neutral
 function AwardBonus:neutral(bot, bonus)
-  local tier = bot.stats.neutralTier + bonus
-  local isSuccess 
-  local itemName
-  isSuccess, itemName = AwardBonus:RandomNeutralItem(bot, tier)
-  return isSuccess, itemName
+	if bot.stats.awards.neutral < Settings.awardCap.neutral then
+	  local tier = bot.stats.neutralTier + bonus
+	  local isSuccess 
+	  local itemName
+	  isSuccess, itemName = AwardBonus:RandomNeutralItem(bot, tier)
+	  return isSuccess, itemName
+	else
+		Debug:Print('Bot has reached the neutral award limit of '..Settings.awardCap.neutral)
+		return false
+	end
 end
 
 -- Gives a random neutral item to a unit
-function AwardBonus:RandomNeutralItem(unit, tier)
+function AwardBonus:RandomNeutralItem(unit, tier, isForceAward)
 	local role = unit.stats.role
 	-- check if the bot already has an item from this tier (or higher)
 	if unit.stats.neutralTier >= tier then 
@@ -144,11 +153,19 @@ function AwardBonus:RandomNeutralItem(unit, tier)
 		end
 	end
 	-- check if the unit is at or above the award limit
-	if unit.stats.awards.neutral >= Settings.awardCap.neutral then
-		if isDebug then
-			print('Bot is at the award limit of '..unit.stats.awards.neutral)
-		  return false
-	  end
+	local isCheck
+	if isForceAward == nil then 
+		isCheck = true
+	else
+		isCheck = not isForceAward
+	end
+	if isCheck then
+		if unit.stats.awards.neutral >= Settings.awardCap.neutral then
+			if isDebug then
+				print('Bot is at the award limit of '..unit.stats.awards.neutral)
+			  return false
+		  end
+		end
 	end
 	-- select a new item from the list
 	local item, realName = AwardBonus:SelectRandomNeutralItem(tier, unit)	
@@ -176,12 +193,12 @@ function AwardBonus:NeutralItem(bot, itemName, tier)
 		end
 	end
 	-- check if the unit is at or above the award limit
-	if bot.stats.awards.neutral >= Settings.awardCap.neutral then
-		if isDebug then
-			print('Bot is at the award limit of '..bot.stats.awards.neutral)
-		  return false
-	  end
-	end	
+	--if bot.stats.awards.neutral >= Settings.awardCap.neutral then
+	--	if isDebug then
+	--		print('Bot is at the award limit of '..bot.stats.awards.neutral)
+	--	  return false
+	-- end
+	--end	
   if bot:HasRoomForItem(itemName, true, true) then
   	local item = CreateItem(itemName, bot, bot)
     item:SetPurchaseTime(0)
@@ -258,7 +275,7 @@ function AwardBonus:GiveTierToBots(tier)
 				if isDebug then
 					print('Giving tier '..tostring(tier)..', Role '..tostring(bot.stats.role) ..' item to '..bot:GetName())
 				end
-			  AwardBonus:RandomNeutralItem(bot, tier, bot.stats.role)
+			  AwardBonus:RandomNeutralItem(bot, tier, bot.stats.role, true)
 			  awards = awards + 1
 			end
 		end
@@ -365,23 +382,32 @@ end
 function AwardBonus:GetValue(bot, award)
 	local isLoud = false
 	local dotaTime
+	local debugTable = {}
+	debugTable.award = award
+  debugTable.range = {Settings.deathBonus.range[award][1], Settings.deathBonus.range[award][2]}
   -- base bonus is always the same
-	local base = math.random(Settings.deathBonus.range[award][1], Settings.deathBonus.range[award][2])
+	local base = Utilities:RandomDecimal(Settings.deathBonus.range[award][1], Settings.deathBonus.range[award][2])
+	debugTable.baseAward = base
 	-- if range scaling is enabled, then scale
 	if Settings.deathBonus.isRangeTimeScaleEnable then	
   	base = base * Utilities:GetTime() / Settings.deathBonus.rangeTimeScale[award]
+  	debugTable.rangeScale = Settings.deathBonus.rangeTimeScale[award]
 	end	
 	--scale base by skill and variance
-	local scaled = base * bot.stats.skill * Utilities:GetVariance(Settings.deathBonus.variance[award])
+	local variance = Utilities:GetVariance(Settings.deathBonus.variance[award])
+	local scaled = base * bot.stats.skill * variance
+	debugTable.skill = bot.stats.skill
+	debugTable.variance = variance
 	-- scale by role if enabled
 	if Settings.deathBonus.scaleEnabled[award] then
+		debugTable.roleScale = Settings.deathBonus.scale[award][bot.stats.role]
 		scaled = scaled * Settings.deathBonus.scale[award][bot.stats.role]
-		--Debug:Print(award..': Scaling by Role '..bot.stats.role..': Scale: '..Settings.deathBonus.scale[award][bot.stats.role])
 	end
+	debugTable.scaled = scaled
 	-- Round and maybe clamp
 	local clamped = 0
 	if Settings.deathBonus.clampOverride[award] then
-		clamped = Utilities.Round(scaled)
+		clamped = Utilities:Round(scaled, Settings.deathBonus.round[award])
 	else
 		-- base clamp
 		local upperClamp = Settings.deathBonus.clamp[award][2]
@@ -390,17 +416,22 @@ function AwardBonus:GetValue(bot, award)
 			dotaTime =  Utilities:GetTime()
 		  upperClamp = upperClamp * Utilities:GetTime() / Settings.deathBonus.clampTimeScale[award]	
 		end
-		clamped = Utilities:RoundedClamp(scaled, Settings.deathBonus.clamp[award][1], upperClamp)
+		debugTable.clamps = {Settings.deathBonus.clamp[award][1], upperClamp}
+		local rounded = Utilities:Round(scaled, Settings.deathBonus.round[award])
+		clamped = Utilities:Clamp(rounded, Settings.deathBonus.clamp[award][1], upperClamp)
+	  debugTable.rounded = rounded
 	end
+	debugTable.clamped = clamped
 	-- set isLoud
 	isLoud = (Settings.deathBonus.isClampLoud[award] and clamped == Settings.deathBonus.clamp[award][2])
 	         or
 	         Settings.deathBonus.isLoud[award]
-	if isDebug then print(award..': Base Award: '..base..' Scaled: '..scaled..' Clamped: '..clamped) end
+	--if isDebug then print(award..': Base Award: '..base..' Scaled: '..scaled..' Clamped: '..clamped) end
 	if isDebug then 
 		--print(award..': Is Clamp Loud: '..tostring(Settings.deathBonus.isClampLoud[award])..
 		--                           ' isLoud: '..tostring(Settings.deathBonus.isLoud[award])) 
   end
+  Debug:DeepPrint(debugTable)
 	return clamped, isLoud
 end
 

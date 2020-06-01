@@ -23,16 +23,20 @@ local isVerboseDebug = Debug.IsDebug() and false
 -- Set to true to initialize data tables on loading this file every time
 local isSoloDebug = false
 -- Set to true to buff Fret if he's in the game
-local isBuff = false
+local isBuff = true
 -- Warn Fret if he left this on
 if isBuff then
   Utilities:Print('Hey Fret, isBuff is True!', MSG_BAD, DISASTAH)
 end
 
 -- Globals 
-Bots = {};
-Players = {};
-AllUnits = {};
+Bots = {}
+Players = {}
+PlayerBots = {}
+AllUnits = {}
+
+BotTeam = 0
+HumanTeam = 0
 
 -- convenient constants for dumb valve integers
 local RADIANT = 2
@@ -40,7 +44,7 @@ local DIRE = 3
 
 -- Instantiate the class
 if DataTables == nil then
-	DataTables = class({});
+	DataTables = class({})
 end
 
 -- Sets up data tables, buffs Fret for debug
@@ -143,6 +147,12 @@ function DataTables:GenerateStatsTables(unit)
   	enemyTeamNetWorth = 0,
   	-- netowrth
   	netWorth = 0,
+  	-- Bot Team Kills
+  	botTeamKills = 0,
+  	-- Current human team kill advantage
+  	humanKillAdvantage = 0,
+  	-- Human Team kills
+  	humanTeamKills = 0,
   	-- Is this a bot?
   	isBot = thisIsBot,
   	-- Team
@@ -205,6 +215,10 @@ end
 
 -- Called by OnEntityKilled to update stats of the victim
 function DataTables:DoDeathUpdate(victim, killer)
+	-- Always update team kills
+	victim.stats.botTeamKills = PlayerResource:GetTeamKills(BotTeam)
+	victim.stats.humanTeamKills = PlayerResource:GetTeamKills(HumanTeam)
+	victim.stats.humanKillAdvantage = victim.stats.humanTeamKills - victim.stats.botTeamKills
 	-- ignore kills by non-heroes (they won't have stats tables)
 	if killer.stats == nil then return end
 	-- don't track players		
@@ -348,9 +362,13 @@ function DataTables:PurgeHumanSideBots()
   local countToRemove
   if radiant > dire then 
   	team = RADIANT
+  	HumanTeam = RADIANT
+  	BotTeam = DIRE
   	countToRemove = 5 - radiant
   else
   	team = DIRE
+  	HumanTeam = DIRE
+  	BotTeam = RADIANT  	
   	countToRemove = 5 - dire
   end
   if isDebug then 
@@ -365,6 +383,7 @@ function DataTables:PurgeHumanSideBots()
 	  		table.remove(Bots,i)
 	  		removed = removed + 1
 	  		print('Removing '..unit.stats.name..' from the bots list.')
+	  		table.insert(PlayerBots, unit)
 	  		break
 	  	end
 	  end 

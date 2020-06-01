@@ -1,20 +1,22 @@
 -- Instantiate the class
 if Flags == nil then
-	Flags = class({})
+	Flags = {}
 end
 
 -- Set up global flags
 function Flags:Initialize()
 	-- Global flags
-	Flags.isEntityKilledRegistered 			= false
-	Flags.isStatsInitialized 						= false
-	Flags.isEntityHurtRegistered 				= false
-	Flags.isSettingsInitialized					= false
-	Flags.isSettingsLoaded 							= false
-	Flags.isDebugBuffed 								= false
-	Flags.isPlayerChatRegistered 				= false
-	Flags.isFretBotsInitialized 				= false
-	Flags.isBonusTimersInitialized 			= false
+	Flags.isEntityKilledRegistered 				= false
+	Flags.isStatsInitialized 							= false
+	Flags.isEntityHurtRegistered 					= false
+	Flags.isSettingsInitialized						= false
+	Flags.isSettingsFinalized  						= false
+	Flags.isDebugBuffed 									= false
+	Flags.isPlayerChatRegistered 					= false
+	Flags.isFretBotsInitialized 					= false
+	Flags.isBonusTimersInitialized 				= false
+	Flags.isDynamicDifficultyInitialized 	= false
+	Flags.isDynamicDifficultyFinalized  	= false
 end
 
 -- Create flags

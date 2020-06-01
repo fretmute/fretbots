@@ -4,7 +4,7 @@ local FretId = "76561197969449114";
 
 -- Instantiate the class
 if Debug == nil then
-	Debug = class({});
+	Debug = {};
 end
 
 -- Edit this return to enable / disable debug
@@ -19,6 +19,10 @@ function Debug:IsFret(id)
 	else
 		return false;
 	end
+end
+
+function Debug:IsPlayerIDFret(playerID)
+	return Debug:IsFret(PlayerResource:GetSteamID(playerID))
 end
 
 -- shorthand for debug printing

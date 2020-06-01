@@ -1,6 +1,8 @@
 -- Provides for common utilites
 -- Hero Names
 local heroNames = require('HeroNames')
+-- sweet DeepPrint function I cadged from GitHub
+local inspect = require('inspect')
 
 if Utulities == nil then
 	Utilities = 
@@ -14,10 +16,12 @@ if Utulities == nil then
 end
 
 -- constants for use in these methods
-MSG_GOOD 					= 1
-MSG_WARNING 			= 2
-MSG_BAD 					= 3
-MSG_AWARD					= 4
+MSG_GOOD 							= 1
+MSG_WARNING 					= 2
+MSG_BAD 							= 3
+MSG_AWARD							= 4
+MSG_CONSOLE_GOOD			= 5
+MSG_CONSOLE_BAD				= 6
 
 -- sound constants
 DISASTAH							= 'soundboard.disastah'
@@ -54,9 +58,11 @@ TEAM_DIRE							= 3
 -- message colors
 local colors = 
 {
-	good = '#00ff00', 
-	warning = '#fbff00',
-	bad = '#ff0000', 
+	good					= '#00ff00', 
+	warning				= '#fbff00',
+	bad						= '#ff0000',
+	consoleGood 	= '#1ce8b5', 
+	consoleBad    = '#e68d39',	
 }
 -- note that the first index is a blank table because radiant / dire are 2 / 3 
 local playerColors = 
@@ -120,6 +126,10 @@ function Utilities:Print(msg, msgType, sound)
 		if type(msg) == 'table' then
 			message = Utilities:FormatAwardMessage(msg)
 		end
+	elseif msgType == MSG_CONSOLE_GOOD then
+		message = Utilities:ColorString(msg, colors.consoleGood)
+	elseif msgType == MSG_CONSOLE_BAD then
+		message = Utilities:ColorString(msg, colors.consoleBad)		
 	-- check if they passed what we think is a valid color 
 	-- I'm aware this is not a full check, but this is good enough for now
 	elseif string.find(msgType, '#') ~= nil and string.len(msgType) == 7 then
@@ -190,15 +200,30 @@ function Utilities:Clamp(number, minimum, maximum)
 	return number
 end
 
--- Rounds to nearest integer
-function Utilities:Round(num)
-	local decimal = num - math.floor(num)
-	if decimal >= 0.5 then
-	  return math.ceil(num) 
+-- Rounds a number 
+function Utilities:Round(num, decimals)
+	-- if no decimals argument, round to an integer
+	if decimals == nil or decimals <= 0 then
+		local decimal = num - math.floor(num)
+		if decimal >= 0.5 then
+		  return math.ceil(num) 
+		else
+			return math.floor(num)
+		end
+	-- otherwise round to decimal places
 	else
-		return math.floor(num)
+	  return Utilities:Round(num * 10 ^ decimals) / (10 ^ decimals)
 	end
 end 
+
+-- Returns a random decimal number between two numbers
+function Utilities:RandomDecimal(low, high)
+  local percentage = math.random()
+  local range = high - low
+  local scaled = range * percentage
+  return scaled + low
+end
+
 
 -- Returns a variance multipler (picks a random number between the two numbers (both integers) then divides by 100
 function Utilities:GetVariance(data)
@@ -282,6 +307,7 @@ end
 
 -- Copies matching table fields from source to target
 function Utilities:DeepCopy(source, target)
+	
   for key, value in pairs(source) do 
     if target[key] ~= nil then
     	if type(value) == 'table' then 
@@ -297,6 +323,70 @@ end
 function Utilities:FirstToUpper(str)
 	return (str:gsub("^%l", string.upper))
 end
+
+-- splits a string into tokens based on a splitter character.
+-- Returns table of tokens.
+function Utilities:Tokenize(text, splitter)
+	if splitter == nil then
+		splitter = "%s"
+	end
+	local tokens = {}
+	for str in string.gmatch(text, "([^"..splitter.."]+)") do
+		table.insert(tokens, str)
+	end
+	return tokens
+end
+
+-- Returns a human readable string (deep print) of a table
+function Utilities:Inspect(tableData)
+	return inspect(tableData)
+end
+
+-- Prints a table to chat
+function Utilities:TableToChat(tableData, color)
+	if color == nil then
+		Utilities:Print(inspect(tableData))
+	else
+		Utilities:Print(inspect(tableData), color)
+	end
+end
+
+-- Returns a table from the string version thereof
+function Utilities:TableFromString(text)
+  return (loadstring or load)("return "..text)()
+end
+
+-- Applies an offset to a table
+function Utilities:ApplyTableOffset(tableData, offset)
+	for key, value in ipairs(tableData) do
+		tableData[key] = value + offset
+	end
+end
+
+-- returns a copy of a table
+function Utilities:CloneTable(obj, seen)
+	-- Handle non-tables and previously-seen tables.
+	if type(obj) ~= 'table' then return obj end
+	if seen and seen[obj] then return seen[obj] end
+	-- New table; mark it as seen an copy recursively.
+	local s = seen or {}
+	local res = {}
+	s[obj] = res
+	for k, v in next, obj do res[Utilities:CloneTable(k, s)] = Utilities:CloneTable(v, s) end
+	return setmetatable(res, getmetatable(obj))
+end
+
+-- returns the playerID of the host
+function Utilities:GetHostPlayerID()
+	for i = 0, PlayerResource:GetPlayerCount() do
+		local player = PlayerResource:GetPlayer(i)
+		local isHost = GameRules:PlayerHasCustomGameHostPrivileges(player)
+		if isHost then
+			return i
+		end
+	end
+end
+
 
 -- Used to register game state listeners (with a generic functionality)
 -- Gets current game state.  If game is over, returns.  If the game is

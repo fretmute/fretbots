@@ -15,6 +15,8 @@ require 'Version'
 require 'BonusTimers'
 -- Utilities
 require 'Utilities'
+-- Dynamic Difficulty Adjustor
+require 'DynamicDifficulty'
 -- Settings
 require 'Settings'
 
@@ -54,6 +56,8 @@ function FretBots:PlayersLoadedTimer()
 	if isAllPlayersSpawned then
 		Debug:Print('Initializing DataTables')
 		DataTables:Initialize()
+		-- Set the host ID for whitelisting settings chat commands
+		Settings:SetHostPlayerID()
 		-- Start bonus timers (they require DataTables to exist)
 		BonusTimers:Initialize()
 		Timers:RemoveTimer(playersLoadedTimerName)
