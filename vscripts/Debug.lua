@@ -34,3 +34,13 @@ end
 function Debug:DeepPrint(o, title)
 	if isDebug then DeepPrintTable(o) end
 end
+
+-- Kills a random bot
+function Debug:KillBot()
+	for _, bot in pairs(Bots) do
+		if bot:IsAlive() then 
+			bot:ForceKill(true)
+			break
+		end
+	end
+end

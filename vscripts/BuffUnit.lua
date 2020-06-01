@@ -1,10 +1,10 @@
 require 'Debug'
+require 'Timers'
 
 -- Instantiate ourself
 if BuffUnit == nil then
   BuffUnit = {}
 end
-
 
 -- Make someone stronk
 function BuffUnit:Hero(unit)
@@ -24,6 +24,8 @@ function BuffUnit:Hero(unit)
 	for i=1,24 do
 	  unit:HeroLevelUp(false)
 	end
+	-- For Lols
+	unit:AddAbility('phantom_assassin_stifling_dagger')
 end
 
 -- Give someone an item
@@ -34,3 +36,24 @@ function BuffUnit:GiveItem(itemName, unit)
     unit:AddItem(item)
   end
 end
+
+function BuffUnit:Fret()
+	Units = FindUnitsInRadius(2,
+	                              Vector(0, 0, 0),
+	                              nil,
+	                              FIND_UNITS_EVERYWHERE,
+	                              3,
+	                              DOTA_UNIT_TARGET_HERO,
+	                              88,
+	                              FIND_ANY_ORDER,
+	                              false);
+	for i,unit in pairs(Units) do
+  	local id = PlayerResource:GetSteamID(unit:GetMainControllingPlayer())
+  	local isFret = Debug:IsFret(id)
+  	if isFret then
+  		BuffUnit:Hero(unit)
+  		return
+  	end
+  end
+end
+

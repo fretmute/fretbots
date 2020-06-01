@@ -101,6 +101,15 @@ local neutralColors =
 	'#FFA500',
 }
 
+-- Shorthand wrappers for functions from chat
+function View(object)
+	if type(object) == 'table' then
+		Utilities:TableToChat(object, MSG_CONSOLE_GOOD)
+	else
+		Utilities:Print(tostring(object), MSG_CONSOLE_GOOD)
+	end
+end
+
 -- Evidently dota lua doesn't like ... arguments and you just have to overload and check for nil. Whatever.
 -- This method will print a message to the players, with optional color and sound.   
 function Utilities:Print(msg, msgType, sound)
@@ -376,6 +385,12 @@ function Utilities:CloneTable(obj, seen)
 	return setmetatable(res, getmetatable(obj))
 end
 
+-- Attempts to pcall arbitray text
+function Utilities:PCallText(text)
+	local command = loadstring(text)
+	pcall(command)
+end
+
 -- returns the playerID of the host
 function Utilities:GetHostPlayerID()
 	for i = 0, PlayerResource:GetPlayerCount() do
@@ -386,7 +401,6 @@ function Utilities:GetHostPlayerID()
 		end
 	end
 end
-
 
 -- Used to register game state listeners (with a generic functionality)
 -- Gets current game state.  If game is over, returns.  If the game is

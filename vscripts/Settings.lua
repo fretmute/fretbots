@@ -673,7 +673,10 @@ function Settings:OnPlayerChat(event)
  	-- if Settings have been chosen then monitor for commands to change them
  	if Flags.isSettingsFinalized then
  		if playerID == hostID or Debug:IsPlayerIDFret(playerID) then
-		  Settings:DoChatCommandParse(text)
+ 			-- check for 'light' commands
+		  local isSuccess = Settings:DoChatCommandParse(text)
+		  -- if not that, then try to pcall arbitrary text
+			Utilities:PCallText(text)
 		end
  	end
 end
@@ -682,37 +685,38 @@ end
 function Settings:DoChatCommandParse(text)
  	local tokens = Utilities:Tokenize(text)
   local command = Settings:GetCommand(tokens)
-  -- If that was a command, do it
-  if command ~= nil then
-  	-- get prints a setting to chat
-    if command == 'get' then
-			Settings:DoGetCommand(tokens)
-    end
-  	--set writes to something
-    if command == 'set' then
-    	Settings:DoSetCommand(tokens)
-    end 	  
-  	--set writes to something
-    if command == 'nudge' then
-    	Settings:DoNudgeCommand(tokens)
-    end 	   
-  	-- Toggle dynamic difficulty
-    if command == 'ddtoggle' then
-    	Settings:DoDDToggleCommand()
-    end 	   
-  	-- suspend dynamic difficulty
-    if command == 'ddsuspend' then
-    	Settings:DoDDSuspendCommand()
-    end 	
-  	-- reset dynamic difficulty (this restores default GPM/XPM)
-    if command == 'ddreset' then
-    	Settings:DoDDResetCommand()
-    end 	 
-  	-- enable dynamic difficulty
-    if command == 'ddenable' then
-    	Settings:DoDDEnableCommand()
-    end 	                 
+  -- No command, return false
+  if command == nil then return false end
+  -- Otherwise process
+	-- get prints a setting to chat
+  if command == 'get' then
+		Settings:DoGetCommand(tokens)
   end
+	--set writes to something
+  if command == 'set' then
+  	Settings:DoSetCommand(tokens)
+  end 	  
+	--set writes to something
+  if command == 'nudge' then
+  	Settings:DoNudgeCommand(tokens)
+  end 	   
+	-- Toggle dynamic difficulty
+  if command == 'ddtoggle' then
+  	Settings:DoDDToggleCommand()
+  end 	   
+	-- suspend dynamic difficulty
+  if command == 'ddsuspend' then
+  	Settings:DoDDSuspendCommand()
+  end 	
+	-- reset dynamic difficulty (this restores default GPM/XPM)
+  if command == 'ddreset' then
+  	Settings:DoDDResetCommand()
+  end 	 
+	-- enable dynamic difficulty
+  if command == 'ddenable' then
+  	Settings:DoDDEnableCommand()
+  end 	 
+  return true                
 end
 
 -- Toggles Dynamic difficulty
@@ -850,7 +854,6 @@ function Settings:DoNudgeCommand(tokens)
 		Utilities:Print(stringTarget..' nudged successfully: '..
 									val, MSG_CONSOLE_GOOD)			
 	end
-
 end
 
 -- Parses chat message for valid settings votes and handles them.
