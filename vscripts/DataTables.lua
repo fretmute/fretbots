@@ -23,7 +23,7 @@ local isVerboseDebug = Debug.IsDebug() and false
 -- Set to true to initialize data tables on loading this file every time
 local isSoloDebug = false
 -- Set to true to buff Fret if he's in the game
-local isBuff = true
+local isBuff = false
 -- Warn Fret if he left this on
 if isBuff then
   Utilities:Print('Hey Fret, isBuff is True!', MSG_BAD, DISASTAH)
