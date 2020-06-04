@@ -173,11 +173,11 @@ if Settings == nil then
       clamp = 
       {
       	gold 					= {100, 1500},
-        armor 				= {0, 3},
-        magicResist 	= {0, 3},
-        levels 				= {0, 2},
-        neutral 			= {0, 2},
-        stats					= {0, 3}
+        armor 				= {1, 3},
+        magicResist 	= {1, 3},
+        levels 				= {1, 2},
+        neutral 			= {1, 2},
+        stats					= {1, 3}
       },
       -- if override is true, then the clamps aren't applied
       clampOverride = 
@@ -312,11 +312,11 @@ if Settings == nil then
 		awardCap = 
     {
  			gold 					= 25000,
-			armor 				= 20,
-			magicResist 	= 20,
+			armor 				= 25,
+			magicResist 	= 25,
 			levels 				= 10,
 			neutral 			= 2,
-			stats 				= 20,   	
+			stats 				= 25,   	
     },		
     -- Settings for dynamically adjusting difficulty
     dynamicDifficulty = 
@@ -427,7 +427,7 @@ allNeutrals =
 }
 
 -- Difficulties.  Table entries with matching keys for Settings will overwrite.
-local difficulties =
+difficulties =
 {
   {
   	name = 'Standard',
@@ -558,6 +558,8 @@ function Settings:Initialize(difficulty)
  	Flags.isSettingsFinalized = true
 end
 
+
+
 -- Periodically checks to see if settings have been chosen
 function Settings:DifficultySelectTimer()
 	-- If voting is closed, apply settings, remove timer
@@ -594,6 +596,7 @@ function Settings:ApplyVoteSettings()
 		if Settings:IsValidDifficulty(difficulty) then 
 		  if difficulty.votes > maxVotes then
 		  	winner = difficulty
+		  	maxVotes = difficulty.votes 
 		  end
 		end
 	end
