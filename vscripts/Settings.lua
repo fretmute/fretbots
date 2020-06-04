@@ -173,11 +173,11 @@ if Settings == nil then
       clamp = 
       {
       	gold 					= {100, 1500},
-        armor 				= {1, 3},
-        magicResist 	= {1, 3},
-        levels 				= {1, 2},
-        neutral 			= {1, 2},
-        stats					= {1, 3}
+        armor 				= {0, 3},
+        magicResist 	= {0, 3},
+        levels 				= {0, 2},
+        neutral 			= {0, 2},
+        stats					= {0, 3}
       },
       -- if override is true, then the clamps aren't applied
       clampOverride = 
@@ -246,12 +246,12 @@ if Settings == nil then
       -- variance per type
       variance = 
       {
-      	gold 				= {0.8, 1.3},
-        armor 			= {0.8, 1.3},
-        magicResist = {0.8, 1.3},
-        levels 			= {0.8, 1.3},
-        neutral 		= {0.8, 1.3},
-        stats				= {0.8, 1.3}
+      	gold 				= {0.8, 1.2},
+        armor 			= {0.8, 1.2},
+        magicResist = {0.8, 1.2},
+        levels 			= {0.8, 1.2},
+        neutral 		= {0.8, 1.2},
+        stats				= {0.8, 1.2}
       },
       -- is this award always loud?
       isLoud = 
@@ -312,11 +312,11 @@ if Settings == nil then
 		awardCap = 
     {
  			gold 					= 25000,
-			armor 				= 25,
-			magicResist 	= 25,
+			armor 				= 20,
+			magicResist 	= 20,
 			levels 				= 10,
 			neutral 			= 2,
-			stats 				= 25   	
+			stats 				= 20,   	
     },		
     -- Settings for dynamically adjusting difficulty
     dynamicDifficulty = 
@@ -333,12 +333,12 @@ if Settings == nil then
 	    	-- Awards scaled by scale amount every <this many> kills beyond the threshold
 	    	incrementEvery = 2,
 	    	-- base bonus increased by this much when over threshold
-	    	base					= 75,
+	    	base					= 50,
 				-- incremental amounts are added to the base every time
 				-- the increment amount is reached, i.e. if threshold is 5,
 				-- incrementEvery is 2, and the bots are 9 kills behind,
 				-- then the nudge will be base + (increment * 2)
-	    	increment 		= 50,
+	    	increment 		= 25,
 	    },    	
     	xpm = 
     	{
@@ -349,12 +349,12 @@ if Settings == nil then
 	    	-- Awards scaled by scale amount every <this many> kills beyond the threshold
 	    	incrementEvery = 2,
 	    	-- base bonus increased by this much when over threshold
-	    	base					= 75,
+	    	base					= 50,
 				-- incremental amounts are added to the base every time
 				-- the increment amount is reached, i.e. if threshold is 5,
 				-- incrementEvery is 2, and the bots are 9 kills behind,
 				-- then the nudge will be base + (increment * 2)
-	    	increment 		= 35,
+	    	increment 		= 25,
 	    },    	    
     },
   }

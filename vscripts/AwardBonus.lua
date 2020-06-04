@@ -177,8 +177,13 @@ function AwardBonus:RandomNeutralItem(unit, tier, isForceAward)
 		if currentItem ~= nil then
 			unit:RemoveItem(currentItem)
 		end
-		AwardBonus:NeutralItem(unit, item, tier)
-		return true, realName
+		if AwardBonus:NeutralItem(unit, item, tier) then
+			-- only track death awards, not timed ones (which are forced)
+			if not isForceAward then
+			 unit.stats.awards.neutral = unit.stats.awards.neutral + 1
+			end
+			return true, realName
+		end
 	end
 	return false
 end
@@ -192,19 +197,11 @@ function AwardBonus:NeutralItem(bot, itemName, tier)
 			return false
 		end
 	end
-	-- check if the unit is at or above the award limit
-	--if bot.stats.awards.neutral >= Settings.awardCap.neutral then
-	--	if isDebug then
-	--		print('Bot is at the award limit of '..bot.stats.awards.neutral)
-	--	  return false
-	-- end
-	--end	
   if bot:HasRoomForItem(itemName, true, true) then
   	local item = CreateItem(itemName, bot, bot)
     item:SetPurchaseTime(0)
     bot:AddItem(item)
     bot.stats.neutralTier = tier
-    bot.stats.awards.neutral = bot.stats.awards.neutral + 1
     return true
   end
   return false

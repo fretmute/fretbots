@@ -104,6 +104,7 @@ end
 -- Restores GPM/XPM offsets to default
 function DynamicDifficulty:Reset()
   Utilities:DeepCopy(cache.gpm,Settings.gpm)
+  Utilities:DeepCopy(cache.xpm,Settings.xpm)
 end
 
 -- Toggles the enable state of DynamicDifficulty
