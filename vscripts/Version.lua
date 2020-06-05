@@ -1,4 +1,4 @@
-version = '0.3.0.4'
+version = '0.3.0.5'
 versionString = [[Changelog:
 
 Improved Settings chat listener functionality. Settings can now be manipulated via chat:
@@ -46,4 +46,6 @@ Made console debug print messages for death awards more consistent and useful.
 
 Fixed typo in the neutrals table preventing the localized name for clumsy 
 net from being printed in awards messages.
+
+Moved Tier 4 item timing back 400 seconds, and Tier 5 item timing to 60 mintues.
 ]]

@@ -79,7 +79,7 @@ if Settings == nil then
 			tierOffset = 0,
 			-- game time (seconds) at which awards are given.  Note that if offset is ~=0 then the latter ones
 			-- will never happen). 
-			timings = {0, 420, 1020, 1620, 2220}
+			timings = {0, 420, 1020, 2020, 3600}
 		},
 		-- used for awarding bonus gold periodically.  The method that does this award calculates target
 		-- gpm and then adds gold to the bot to attempt to force it to that level of gpm, modified by
@@ -241,7 +241,7 @@ if Settings == nil then
 				magicResist 	= 2,
 				levels 				= 2,
 				neutral 			= 0,
-				stats 				= 0   	
+				stats 				= 0,   	
       },      
       -- variance per type
       variance = 
@@ -315,7 +315,7 @@ if Settings == nil then
 			armor 				= 25,
 			magicResist 	= 25,
 			levels 				= 10,
-			neutral 			= 2,
+			neutral 			= 1,
 			stats 				= 25,   	
     },		
     -- Settings for dynamically adjusting difficulty
