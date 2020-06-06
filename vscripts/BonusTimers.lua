@@ -75,7 +75,14 @@ function NeutralItemTimer()
   -- Logic to do things here, we'll use this method primarily for giving neutrals to bots  
   local interval = 0
   if isDebug then
-    print('Tier: '..tostring(tier).. ' award: ' .. tostring(award)..' Time: '..tostring(gametime).. ' Bonus time: '..tostring(Settings.neutralItems.timings[award]))
+  	local debugMsg = 
+  	{
+  		Tier = tier,
+  		Award = award,
+  		Time = gametime,
+  		BonusTime = Settings.neutralItems.timings[award]
+  	}
+    Debug:DeepPrint(debugMsg)
   end
   if gametime > Settings.neutralItems.timings[award] and not tiersAwarded[tier] then
     AwardBonus:GiveTierToBots(tier)

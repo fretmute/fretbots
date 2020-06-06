@@ -1,4 +1,4 @@
-version = '0.3.0.5'
+version = '0.3.1.0'
 versionString = [[Changelog:
 
 Improved Settings chat listener functionality. Settings can now be manipulated via chat:

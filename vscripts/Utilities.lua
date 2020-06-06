@@ -161,8 +161,8 @@ function Utilities:FormatAwardMessage(awards)
 	local msg = ''
 	local bot = awards[1]
 	-- first artifact: hero name, by color
-	msg = msg..Utilities:ColorString(bot.stats.name, Utilities:GetPlayerColor(bot.stats.id))
-	msg = msg..Utilities:ColorString(': Bonus:', colors.good)
+	msg = msg..Utilities:ColorString(bot.stats.name..': ', Utilities:GetPlayerColor(bot.stats.id))
+	msg = msg..Utilities:ColorString('Bonus:', colors.good)
 	-- Loop over table entries
 	for i = 2, #awards do
 	  local awardType = awards[i][1]
@@ -401,6 +401,21 @@ function Utilities:GetHostPlayerID()
 		end
 	end
 end
+
+-- iterates over a table by keys, alphabetically
+function Utilities:PairsByKeys (t, f)
+      local a = {}
+      for n in pairs(t) do table.insert(a, n) end
+      table.sort(a, f)
+      local i = 0      -- iterator variable
+      local iter = function ()   -- iterator function
+        i = i + 1
+        if a[i] == nil then return nil
+        else return a[i], t[a[i]]
+        end
+      end
+      return iter
+    end
 
 -- Used to register game state listeners (with a generic functionality)
 -- Gets current game state.  If game is over, returns.  If the game is
