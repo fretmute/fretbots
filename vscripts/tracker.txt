@@ -1,0 +1,208 @@
+0.4.0.1
+-----------------------------------
+TODO: 
+
+Implement dynamic difficulty adjustment for death awards.
+
+Rework neutral item awards such that each hero has its own timing 
+per neutral level, and make awards lower the time for the next tier
+rather than immediately reward the item.
+
+-----------------------------------
+
+-----------------------------------
+0.4.0.1
+-----------------------------------
+Implemented 'Easier' difficulty.
+
+Fixed dumb bug with Debug:Print().
+
+Implemented 'difficulty' chat command.  Lobby hose can dynamically override
+the selected difficulty once one has been applied. 'difficulty <votename>'
+to apply.
+
+-----------------------------------
+0.4.0.0 Dev
+-----------------------------------
+Refactored Settings.lua.  NeutralItem table and difficulty tables
+have been moved to external files, and are loaded via require/dofile.
+
+Local 'difficulties' table from Settings.lua is now global as 'Difficulties'
+in order to facilitate dynamic difficulty assertion.
+
+'Difficulties' table copies all difficulties into indices by name as
+they are loaded.  Difficulties are still also arranged by numeric index
+in order to allow the voting list to appear in order.
+
+Bugfix: The colon immediately following the bot's name in death award 
+messages is now the color of the bot's name (was previously green.)
+
+-----------------------------------
+0.3.0.5
+-----------------------------------
+Moved Tier 4 item timing back 400 seconds, and Tier 5 item timing to 60 mintues.
+
+-----------------------------------
+0.3.0.4
+-----------------------------------
+Fixed bug causing voting tallies to be inaccurate. Reverted standard difficulty setting tweaks.
+
+-----------------------------------
+0.3.0.3, Maybe
+-----------------------------------
+Minor tweaks to difficulty to make it a bit easier at standard.
+
+-----------------------------------
+0.3.0.2
+-----------------------------------
+Added support for PCall(text) commands from chat.
+
+-----------------------------------
+0.3.0.1
+-----------------------------------
+Disabled isBuff flag.
+
+-----------------------------------
+0.3.0.0
+-----------------------------------
+Improved Settings chat listener functionality. Settings can now be manipulated via chat:
+
+	'get'				:		Prints the apprpriate Settings table value to chat.
+	'set'				:		Modifes the appropriate Settings table value.
+	'nudge'			:		Adds the nudge value to all values of a Settings table entry.
+	'ddenable'	:		Enables Dynamic Difficulty.
+	'ddsuspend' :		Suspends dynamic difficulty.  Current offset bonuses remain.
+	'ddreset'		:   Restores offset bonuses to the default of the current settings.
+	'ddtoggle'	:		Toggles the enable state of Dynamic Difficulty.
+
+Note that only the host or Fret can currently issue these commands.
+
+Added an option argument to Utilities:Round() to allow rounding to decimal places
+rather than just to integers.
+
+Armor, Magic Resist, and Level awards are now rounded to two decimal places rather
+than an integer value.
+
+Adjusted random number generator for base awards to return decimal values between
+the limits rather than integers; this will result in more granular awards 
+for those awards that were adjusted to round to decimals.
+
+Adjusted Level Award logic:
+	
+	Previously	:		An award of 2 levels would place a bot at the zero experience point
+									of the level 2 levels higher than it currently is, which could,
+									in theory, mean that it gets basically 1.1 levels if it is already
+									near to levelling.  Awards were in integer format.
+	Now					:		Awards are rounded to two decimal places.  The XP for the 
+									difference between the current level and the ceiling of the bonus
+									is calculated.  This value is then averaged by the ceiling of 
+									the bonus in order to determine the average amount of XP per
+									level awarded.  This average number is then multiplied by the
+									levels bonus.  tldr: level awards are now more granular and 
+									consistent.  
+
+Implemented first attempt at dynamic difficulty adjustment.  Currently alters
+GPM / XPM target offsets based on human kill advantage.  WIP.
+
+Made console debug print messages for death awards more consistent and useful.
+
+Fixed typo in the neutrals table preventing the localized name for clumsy 
+net from being printed in awards messages.
+
+
+-----------------------------------
+0.2.1.0
+-----------------------------------
+Adjusted settings initialization function to use a GameState listener to
+prevent it from running before all players have loaded. It should now be
+possible to start the script in any game state without issues.
+
+Made existing 'debug' difficulty the baseline difficulty level.  
+Renamed to standard.
+
+Changed standard difficulty skil variance lower bound to 1.0 for all 
+positions.
+
+Added additional difficulty levels.
+
+Implemented Utilities:DeepCopy() to make applying difficulties a bit simpler.
+
+Adjusted AwardBonus:ShouldAward() to actually play attention to the 
+deathStreakThreshold setting.
+
+Implemented Utilities:PlayerCount() to replace PlayerResource:PlayerCount(),
+since we never care about non-players, and it returns coaches, etc.
+
+Fixed bug: voting previously included coaches, observers, etc (see above).
+
+Fixed bug: player_chat event listener now returns playerid instead of 
+userid (which previously caused some internal confusion).
+
+Reworked vote tracking system to be less crappy.
+
+Vote tracking messages are now color coded by the color of the player 
+that voted.
+
+Most player facing messages now use localized hero / item names instead of
+the internal name strings.
+
+Add Utilities:ColorString() to facilitate more easy coloring of messages.
+
+Reworked Utilities:Print() to facilitate more nuanced coloring of messages.
+
+Improved vote acceptance messages (printed by color of voting player).
+
+Improved award message printing (color coded award types / hero names).
+
+Tweaked random sound lists.
+
+Added a nag message if isBuff is enabled.
+
+Cleaned up some untidy code.
+
+-----------------------------------
+0.2.0.1
+-----------------------------------
+Made existing 'debug' difficulty the baseline difficulty level.  Renamed to standard.
+
+Added additional difficulty levels.
+
+-----------------------------------
+0.2.0.0
+-----------------------------------
+Implemented a generic GameStateListener class to facilitate the calling
+of functions that we only want to run once at during a particular game state.
+
+Implemented a tiered gamestate/timer initialization system in order to 
+(hopefully) properly initalize the script regardless of point of the point
+at which it is invoked from the console (including pick phase).
+
+Implemented the choosing of settings by team chat during PreGame. 
+
+-----------------------------------
+0.1.4.2
+-----------------------------------
+Reverted 'debug' settings to previous values (time scale factor for death bonuses disabled, neutral items for bots 1 tier ahead of humans).
+
+-----------------------------------
+0.1.4.1 Dev
+-----------------------------------
+Fixed for good (hopefully) fake hero units (Arc Warden / Lone Druid) causing issues
+
+Implemented optional role scaling for death bonuses.
+
+Implemented scaling over time for both variance to death bonus rolls, and death bonus upper clamp.
+
+Balance pass to bonuses
+
+-----------------------------------
+0.1.4.0 Dev
+-----------------------------------
+Balance pass
+Increase bot neutral item timing reception by 200s across the board.
+
+Housekeeping
+Move GPM and XPM bonus calculation methods from DataTables.lua to AwardBonus.lua
+Change GPM/XPM debug table printing to isVerboseDebug level (lower priority since they seem to be working)
+
+

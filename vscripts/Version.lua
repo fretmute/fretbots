@@ -1,51 +1,23 @@
-version = '0.3.0.5'
+version = '0.4.0.1'
 versionString = [[Changelog:
+Implemented 'Easier' difficulty.
 
-Improved Settings chat listener functionality. Settings can now be manipulated via chat:
+Fixed dumb bug with Debug:Print().
 
-  'get'       :   Prints the apprpriate Settings table value to chat.
-  'set'       :   Modifes the appropriate Settings table value.
-  'nudge'     :   Adds the nudge value to all values of a Settings table entry.
-  'ddenable'  :   Enables Dynamic Difficulty.
-  'ddsuspend' :   Suspends dynamic difficulty.  Current offset bonuses remain.
-  'ddreset'   :   Restores offset bonuses to the default of the current settings.
-  'ddtoggle'  :   Toggles the enable state of Dynamic Difficulty.
+Implemented 'difficulty' chat command.  Lobby hose can dynamically override
+the selected difficulty once one has been applied. 'difficulty <votename>'
+to apply.
 
-Note that only the host or Fret can currently issue these commands.
+Refactored Settings.lua.  NeutralItem table and difficulty tables
+have been moved to external files, and are loaded via require/dofile.
 
-Added arbitrary Pcall chat commands.
+Local 'difficulties' table from Settings.lua is now global as 'Difficulties'
+in order to facilitate dynamic difficulty assertion.
 
-Added an option argument to Utilities:Round() to allow rounding to decimal places
-rather than just to integers.
+'Difficulties' table copies all difficulties into indices by name as
+they are loaded.  Difficulties are still also arranged by numeric index
+in order to allow the voting list to appear in order.
 
-Armor, Magic Resist, and Level awards are now rounded to two decimal places rather
-than an integer value.
-
-Adjusted random number generator for base awards to return decimal values between
-the limits rather than integers; this will result in more granular awards 
-for those awards that were adjusted to round to decimals.
-
-Adjusted Level Award logic:
-  
-  Previously  :   An award of 2 levels would place a bot at the zero experience point
-                  of the level 2 levels higher than it currently is, which could,
-                  in theory, mean that it gets basically 1.1 levels if it is already
-                  near to levelling.  Awards were in integer format.
-  Now         :   Awards are rounded to two decimal places.  The XP for the 
-                  difference between the current level and the ceiling of the bonus
-                  is calculated.  This value is then averaged by the ceiling of 
-                  the bonus in order to determine the average amount of XP per
-                  level awarded.  This average number is then multiplied by the
-                  levels bonus.  tldr: level awards are now more granular and 
-                  consistent.  
-
-Implemented first attempt at dynamic difficulty adjustment.  Currently alters
-GPM / XPM target offsets based on human kill advantage.  WIP.
-
-Made console debug print messages for death awards more consistent and useful.
-
-Fixed typo in the neutrals table preventing the localized name for clumsy 
-net from being printed in awards messages.
-
-Moved Tier 4 item timing back 400 seconds, and Tier 5 item timing to 60 mintues.
+Bugfix: The colon immediately following the bot's name in death award 
+messages is now the color of the bot's name (was previously green.)
 ]]

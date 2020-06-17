@@ -27,7 +27,7 @@ end
 
 -- shorthand for debug printing
 function Debug:Print(msg)
-	if type('msg') == 'table' then
+	if type(msg) == 'table' then
 		if isDebug then DeepPrintTable(msg) end
 	else
 		if isDebug then print(msg) end
