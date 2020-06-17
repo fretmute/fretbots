@@ -4,6 +4,10 @@
     
 local settings =
 {
+	name = 'Harder',
+	description = "More aggressive death scaling past twenty minutes.",
+	votes = 0,
+	color = '#e8fc51',	
 	deathBonus = 
   {
     isRangeTimeScaleEnable = true,

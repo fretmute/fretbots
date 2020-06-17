@@ -4,6 +4,10 @@
     
 local settings =
 {
+	name = 'DynamicStandard',
+	description = "Like Standard, but with dynamic adjustments enabled.",
+	votes = 0,
+	color = '#800080',	
 	dynamicDifficulty = 
 	{
 		enabled					= true

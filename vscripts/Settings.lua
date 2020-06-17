@@ -26,7 +26,9 @@ local isVotingOpened = false
 -- Number of votes cast
 local numVotes = 0
 -- start abitrariy large, fix when chat listener is registered
-local maxvotes = DOTA_MAX_PLAYERS
+local maxVotes = DOTA_MAX_PLAYERS
+-- voting time elapsed (starts at -1 since the timer increments immediately)
+local votingTimeElapsed = -1
 -- The playerID of the host.  Used to whitelist chat commands.
 local hostID = -1
 
@@ -38,40 +40,17 @@ end
 -- neutral item drop settings
 allNeutrals = require 'SettingsNeutralItemTable'
 
--- Difficulties.  Table entries with matching keys for Settings will overwrite.
-Difficulties =
+-- Difficulty Table.  Iterated over to set up difficulties
+local validDifficulties = 
 {
-  {
-  	name = 'Standard',
-  	description = "Bots are 1 full tier ahead on neutrals, and receive moderate death bonuses.",
-  	votes = 0,
-  	color = '#00ff00',
-  	settings = dofile('SettingsDefault')
-  }, 
-  {
-  	name = 'Harder',
-  	description = "More aggressive death scaling past twenty minutes.",
-  	votes = 0,
-  	color = '#e8fc51',
-  	-- aggressive death scaling
-		settings = dofile('DifficultyHarder')
-  },   
-  {
-  	name = 'EvenHarder',
-  	description = "Aggresive death scaling with upper clamps disabled. Bots will be rich.",
-  	votes = 0,
-  	color = '#e8961c',
-  	-- very aggressive death scaling
-  	settings = dofile('DifficultyEvenHarder')
-  },
-  {
-  	name = 'DynamicStandard',
-  	description = "Like Standard, but with dynamic adjustments enabled.",
-  	votes = 0,
-  	color = '#800080',
-    settings = dofile('SettingsDynamicStandard')
-  },     
+	'SettingsDefault','DifficultyEasier','DifficultyHarder','DifficultyEvenHarder'
 }
+
+-- Difficulties.  Table entries with matching keys for Settings will overwrite.
+Difficulties = {}
+for i,difficulty in ipairs(validDifficulties) do
+	table.insert(Difficulties, dofile(difficulty))
+end
 
 -- Valid commands for altering settings from chat
 local chatCommands =
@@ -83,6 +62,7 @@ local chatCommands =
 	'ddsuspend',
 	'ddtoggle',
 	'ddreset',
+	'difficulty'
 }
 
 -- Sets difficulty value
@@ -90,7 +70,7 @@ function Settings:Initialize(difficulty)
 	-- no argument implies default, do nothing
 	if difficulty == nil then return end
 	-- Override settings table entries if found
- 	Utilities:DeepCopy(difficulty.settings, Settings)
+ 	Utilities:DeepCopy(difficulty, Settings)
  	-- Cache base offsets for DynamicDifficulty
  	-- Set Flag
  	Flags.isSettingsFinalized = true
@@ -98,6 +78,8 @@ end
 
 -- Periodically checks to see if settings have been chosen
 function Settings:DifficultySelectTimer()
+	-- increment elapsed time
+	votingTimeElapsed = votingTimeElapsed + 1
 	-- If voting is closed, apply settings, remove timer
 	if isVotingClosed then
 		Settings:ApplyVoteSettings()
@@ -164,6 +146,7 @@ end
 
 -- Returns true if voting should close due to game state
 function Settings:ShouldCloseVoting()
+	-- voting ends immediately if we reach voteEndState
   local state =  GameRules:State_Get()
   if state > Settings.voteEndState then
   	return true
@@ -264,7 +247,18 @@ function Settings:DoChatCommandParse(text)
   if command == 'ddenable' then
   	Settings:DoDDEnableCommand()
   end 	 
+	-- enable dynamic difficulty
+  if command == 'difficulty' then
+  	Settings:DoSetDifficultyCommand()
+  end 	   
   return true                
+end
+
+-- Asserts a difficulty level
+function Settings:DoSetDifficultyCommand()
+	local msg ='Dynamic Difficulty Enable Toggled: '..
+	            tostring(Settings.dynamicDifficulty.enabled)
+	Utilities:Print(msg, MSG_CONSOLE_GOOD)
 end
 
 -- Toggles Dynamic difficulty

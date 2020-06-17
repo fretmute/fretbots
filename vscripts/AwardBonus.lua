@@ -423,11 +423,6 @@ function AwardBonus:GetValue(bot, award)
 	isLoud = (Settings.deathBonus.isClampLoud[award] and clamped == Settings.deathBonus.clamp[award][2])
 	         or
 	         Settings.deathBonus.isLoud[award]
-	--if isDebug then print(award..': Base Award: '..base..' Scaled: '..scaled..' Clamped: '..clamped) end
-	if isDebug then 
-		--print(award..': Is Clamp Loud: '..tostring(Settings.deathBonus.isClampLoud[award])..
-		--                           ' isLoud: '..tostring(Settings.deathBonus.isLoud[award])) 
-  end
   Debug:DeepPrint(debugTable)
 	return clamped, isLoud
 end

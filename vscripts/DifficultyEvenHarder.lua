@@ -4,6 +4,10 @@
     
 local settings =
 {
+	name = 'EvenHarder',
+	description = "Aggresive death scaling with upper clamps disabled. Bots will be rich.",
+	votes = 0,
+	color = '#e8961c',
 	deathBonus = 
 	{
     isRangeTimeScaleEnable = true,

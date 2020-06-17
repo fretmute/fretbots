@@ -3,14 +3,22 @@
 	
 	-- default settings here, override only what you change in Initialize()
   local settings =  
-  {  
+  { 
+  	-- Name of the settings group (difficulty)
+  	name = 'Standard',
+  	-- Printed to chat when voting
+  	description = "Bots are 1 full tier ahead on neutrals, and receive moderate death bonuses.",
+  	-- Used to track votes of the settings
+  	votes = 0,
+  	-- Color in which to print to chat
+  	color = '#00ff00',
   	-- Change this to select the default difficulty (chosen if 
   	-- no one votes during difficulty voting time)
   	defaultDifficulty = 'standard',
   	-- game state in which voting should end
   	voteEndState = DOTA_GAMERULES_STATE_PRE_GAME,
-  	-- voting ends when state is above and time is > this
-  	voteEndTime = -80,  	
+  	-- voting ends when this amount of time has passed since voting began
+  	voteEndTime = 30,  	
   	-- are multipliers multiplicative, or additive (multiplicative is harder)
   	isMultiplicative = true,
   	-- Taunt humans when they die with chatwheel sounds?
@@ -21,11 +29,11 @@
 			-- percentages, by role (1, 2, 3, 4, 5).  A random number is chosen between the clamps
 			variance = 
 			{
-				{1.0, 1.3},
-				{1.0, 1.3},
-				{1.0, 1.3},
-				{1.0, 1.3},
-				{1.0, 1.3}
+				{0.9, 1.3},
+				{0.9, 1.3},
+				{0.9, 1.3},
+				{0.9, 1.3},
+				{0.9, 1.3}
 			},
 			-- Warns players that the bot is very strong if they are over this threshold
 			warningThreshold = 1.2,
@@ -87,7 +95,7 @@
       order = {'neutral', 'levels', 'stats', 'armor', 'magicResist', 'gold'},
       --The maximum number of awards per death
       maxAwards = 2,
-			-- individual bonus enables (Default is off)
+			-- individual bonus enables 
 			enabled = 
 			{
 				gold 					= true,
@@ -97,6 +105,16 @@
 				neutral 			= true,
 				stats 				= true
 			},
+			-- Further option to only enable if the bots are behind in kills
+			isEnabledOnlyWhenBehind = 
+			{
+				gold 					= false,
+				armor 				= false,
+				magicResist 	= false,
+				levels 				= false,
+				neutral 			= false,
+				stats 				= false
+			},			
 			-- Enabled for humans, or just bots?
 			isBotsOnly = 
 			{
@@ -142,9 +160,9 @@
       clamp = 
       {
       	gold 					= {100, 1500},
-        armor 				= {1, 3},
-        magicResist 	= {1, 3},
-        levels 				= {1, 2},
+        armor 				= {0, 3},
+        magicResist 	= {0, 3},
+        levels 				= {0, 2},
         neutral 			= {1, 2},
         stats					= {1, 3}
       },
@@ -271,11 +289,11 @@
     gameStartBonus = 
     {
     	  gold 					= 0,
-				armor 				= 2,
-				magicResist 	= 2,
+				armor 				= 0,
+				magicResist 	= 0,
 				levels 				= 0,
 				neutral       = 0,
-				stats 				= 3   	
+				stats 				= 0   	
     },    
    	-- caps for awards per game
 		awardCap = 
