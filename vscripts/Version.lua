@@ -1,4 +1,4 @@
-version = '0.4.0.1'
+version = '0.4.0.2'
 versionString = [[Changelog:
 Implemented 'Easier' difficulty.
 
@@ -20,4 +20,7 @@ in order to allow the voting list to appear in order.
 
 Bugfix: The colon immediately following the bot's name in death award 
 messages is now the color of the bot's name (was previously green.)
+
+Adjusted dynamic clamps to be rounded to the same number of deciamsl as
+the setting they clamp.
 ]]

@@ -413,6 +413,8 @@ function AwardBonus:GetValue(bot, award)
 			dotaTime =  Utilities:GetTime()
 		  upperClamp = upperClamp * Utilities:GetTime() / Settings.deathBonus.clampTimeScale[award]	
 		end
+		-- round clamp (adjustments are probably dumb decimals)
+		upperClamp = Utilities:Round(upperClamp, Settings.deathBonus.round[award])
 		debugTable.clamps = {Settings.deathBonus.clamp[award][1], upperClamp}
 		local rounded = Utilities:Round(scaled, Settings.deathBonus.round[award])
 		clamped = Utilities:Clamp(rounded, Settings.deathBonus.clamp[award][1], upperClamp)

@@ -38,6 +38,8 @@ function DynamicDifficulty:Adjust(victim)
 	if not Flags.isDynamicDifficultyFinalized then return end
 	-- ensure we're enabled
 	if not Settings.dynamicDifficulty.enabled then return end
+	-- do not do anything for humans
+	if not victim.stats.isBot then return end
 	-- GPM
 	DynamicDifficulty:MakeAdjustment('gpm')
 	-- XPM
