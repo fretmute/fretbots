@@ -1,5 +1,3 @@
-0.4.0.1
------------------------------------
 TODO: 
 
 Implement dynamic difficulty adjustment for death awards.
@@ -7,9 +5,26 @@ Implement dynamic difficulty adjustment for death awards.
 Rework neutral item awards such that each hero has its own timing 
 per neutral level, and make awards lower the time for the next tier
 rather than immediately reward the item.
-
 -----------------------------------
 
+-----------------------------------
+0.4.0.3
+-----------------------------------
+Reworked voting closure methodology, now ends a set number of seconds
+after it began rather than a number of seconds into a game state.
+
+'ddenable' chat command now takes additional optional arguments to 
+set advantageThreshold and incrementEvery.
+
+Added Utilities:Warn() method for printing messages to chat when
+variables are equal to certain values.
+
+Modified Debug:Print to print an optional header.
+
+Refactored the functions for returning GPM and XPM bonuses for
+the BonusTimer awards.
+
+Added 'RoleScaled' difficulty to promote testing of role scaling.
 -----------------------------------
 0.4.0.2
 -----------------------------------

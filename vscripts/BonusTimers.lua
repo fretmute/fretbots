@@ -137,16 +137,17 @@ function PerMinuteTimer()
 	  return nil
 	end
 	local isApply = false
+	
+	-- Get GPM/XPM tables
+	local gpm, xpm = DataTables:GetPerMinuteTables()
 	-- loop over all bots
 	for _, bot in pairs(Bots) do
 		if bot ~= nil then
 			-- GPM bonus
-			local goldBonus = AwardBonus:GetGPMBonus(bot)
+			local goldBonus, xpBonus = AwardBonus:GetPerMinuteBonus(bot, gpm, xpm)
 			if goldBonus > 0 then
 				AwardBonus:gold(bot, goldBonus)
 			end
-			-- XPM bonus
-			local xpBonus = AwardBonus:GetXPMBonus(bot)
 			if xpBonus > 0 then
 				AwardBonus:Experience(bot, xpBonus)
 			end

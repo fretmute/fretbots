@@ -191,6 +191,18 @@ function Utilities:GetSound(list)
 	return list[math.random(1,table.getn(list))]
 end
 
+-- Prints a warning to chat if the first argument is equal to any values in the 
+-- table of the second argument
+function Utilities:Warn(value, values, warning)
+	for _,tableValue in ipairs(values) do
+		if value == tableValue then
+			formattedWarning = string.format(warning,value)
+			Utilities:Print(formattedWarning, MSG_WARNING)
+		end
+	end
+end
+
+
 -- clamps a number between two values, returns clamp rounded to nearest integer
 function Utilities:RoundedClamp(number, minimum, maximum)
 	local num = Utilities:Clamp(number, minimum, maximum)

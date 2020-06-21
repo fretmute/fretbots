@@ -19,6 +19,8 @@
   	voteEndState = DOTA_GAMERULES_STATE_PRE_GAME,
   	-- voting ends when this amount of time has passed since voting began
   	voteEndTime = 30,  	
+  	-- Warning timings for vote ending
+  	voteWarnTimes = {10,5},
   	-- are multipliers multiplicative, or additive (multiplicative is harder)
   	isMultiplicative = true,
   	-- Taunt humans when they die with chatwheel sounds?
@@ -273,12 +275,12 @@
 			-- Enable role scaling?  
 			scaleEnabled = 
 			{
-				gold 					= false,
-				armor 				= false,
-				magicResist 	= false,
-				levels 				= false,
-				neutral 			= false,
-				stats 				= false
+				gold 					= true,
+				armor 				= true,
+				magicResist 	= true,
+				levels 				= true,
+				neutral 			= true,
+				stats 				= true
 			},
       -- sets whether to announce in chat if awards have been given
       announce			= true  

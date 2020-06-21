@@ -300,7 +300,7 @@ function DataTables:GetRoleGPM(bot)
 end
 
 -- Returns the XPM of the comparable position on the human side	
--- or zero if there is no mathing human
+-- or zero if there is no matching human
 function DataTables:GetRoleXPM(bot)
 	local data = {}
 	local names = {}
@@ -330,6 +330,36 @@ function DataTables:GetRoleXPM(bot)
 	else
 		return 0	
 	end
+end
+
+-- Returns GPM and XPM tables for humans
+function DataTables:GetPerMinuteTables()
+	local gpm = {}
+	local xpm = {}
+	local names = {}
+	for _,unit in pairs(Players) do
+		local gp = PlayerResource:GetGoldPerMin(unit.stats.id)
+		local xp = PlayerResource:GetXPPerMin(unit.stats.id)
+		table.insert(gpm,gp)
+		table.insert(xpm,xp)
+		table.insert(names, unit.stats.name)
+	end
+	-- specific debug case, pretend we have more players than we do
+	if isDebug and #Players == 1 then
+		for i=2,5 do
+			table.insert(gpm, gpm[1] / i) 
+			table.insert(xpm, xpm[1] / i) 			 
+		end
+	end
+	Utilities:SortHighToLow(gpm)
+	Utilities:SortHighToLow(xpm)
+	-- Special case: since these tables are consumed by role, swap XP for 1 and 2
+	local temp = xpm[1]
+	xpm[1] = xpm[2]
+	xpm[2] = temp
+	Debug:Print(gpm, 'GPM Table')
+	Debug:Print(xpm, 'XPM Table')
+	return gpm, xpm
 end
 
 -- returns a flat multiplier to represent the skill of the bot, combined with their role.

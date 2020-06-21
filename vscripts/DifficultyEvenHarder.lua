@@ -5,7 +5,7 @@
 local settings =
 {
 	name = 'EvenHarder',
-	description = "Aggresive death scaling with upper clamps disabled. Bots will be rich.",
+	description = "Aggressive death scaling with upper clamps disabled. Bots will be rich.",
 	votes = 0,
 	color = '#e8961c',
 	deathBonus = 
@@ -30,6 +30,15 @@ local settings =
 	    neutral 			= {1, 	3},
 	    stats					= {1, 	10},	
 	  },	
+    clampOverride = 
+		{
+			gold 					= true,
+			armor 				= true,
+			magicResist 	= true,
+			levels 				= true,
+			neutral 			= true,
+			stats 				= true
+		},		  
 		range = 
 		{
     	gold 					= {0, 750},

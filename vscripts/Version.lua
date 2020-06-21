@@ -1,10 +1,10 @@
-version = '0.4.0.2'
+version = '0.4.0.3'
 versionString = [[Changelog:
 Implemented 'Easier' difficulty.
 
 Fixed dumb bug with Debug:Print().
 
-Implemented 'difficulty' chat command.  Lobby hose can dynamically override
+Implemented 'difficulty' chat command.  Lobby host can dynamically override
 the selected difficulty once one has been applied. 'difficulty <votename>'
 to apply.
 
@@ -23,4 +23,20 @@ messages is now the color of the bot's name (was previously green.)
 
 Adjusted dynamic clamps to be rounded to the same number of deciamsl as
 the setting they clamp.
+
+Reworked voting closure methodology, now ends a set number of seconds
+after it began rather than a number of seconds into a game state.
+
+'ddenable' chat command now takes additional optional arguments to 
+set advantageThreshold and incrementEvery.
+
+Added Utilities:Warn() method for printing messages to chat when
+variables are equal to certain values.
+
+Modified Debug:Print to print an optional header.
+
+Refactored the functions for returning GPM and XPM bonuses for
+the BonusTimer awards.
+
+Added 'RoleScaled' difficulty to promote testing of role scaling.
 ]]

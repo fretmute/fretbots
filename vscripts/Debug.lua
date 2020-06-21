@@ -26,7 +26,10 @@ function Debug:IsPlayerIDFret(playerID)
 end
 
 -- shorthand for debug printing
-function Debug:Print(msg)
+function Debug:Print(msg, header)
+	if header ~= nil then
+		if isDebug then print(header) end
+	end
 	if type(msg) == 'table' then
 		if isDebug then DeepPrintTable(msg) end
 	else

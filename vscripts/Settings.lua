@@ -43,7 +43,11 @@ allNeutrals = require 'SettingsNeutralItemTable'
 -- Difficulty Table.  Iterated over to set up difficulties
 local validDifficulties = 
 {
-	'SettingsDefault','DifficultyEasier','DifficultyHarder','DifficultyEvenHarder'
+	'SettingsDefault',
+	'DifficultyEasier',
+	'DifficultyHarder',
+	'DifficultyEvenHarder',
+	'DifficultyRoleScaled',
 }
 
 -- Difficulties.  Table entries with matching keys for Settings will overwrite.
@@ -151,12 +155,14 @@ function Settings:ShouldCloseVoting()
   if state > Settings.voteEndState then
   	return true
   end
-  if state == Settings.voteEndState then
-    local gameTime = Utilities:GetAbsoluteTime()
-		if gameTime > Settings.voteEndTime then
-			return true
-		end
-	end
+  -- Warn about impending closure if necessary
+  Utilities:Warn(Settings.voteEndTime - votingTimeElapsed, 
+  								Settings.voteWarnTimes,
+  								"Voting ends in %d seconds!")
+  -- Voting ends a set number of seconds after it begins
+  if votingTimeElapsed >= Settings.voteEndTime then 
+  	return true
+  end
 	return false
 end
 
@@ -245,20 +251,36 @@ function Settings:DoChatCommandParse(text)
   end 	 
 	-- enable dynamic difficulty
   if command == 'ddenable' then
-  	Settings:DoDDEnableCommand()
+  	Settings:DoDDEnableCommand(tokens)
   end 	 
 	-- enable dynamic difficulty
   if command == 'difficulty' then
-  	Settings:DoSetDifficultyCommand()
+  	Settings:DoSetDifficultyCommand(tokens)
   end 	   
   return true                
 end
 
 -- Asserts a difficulty level
-function Settings:DoSetDifficultyCommand()
-	local msg ='Dynamic Difficulty Enable Toggled: '..
-	            tostring(Settings.dynamicDifficulty.enabled)
-	Utilities:Print(msg, MSG_CONSOLE_GOOD)
+function Settings:DoSetDifficultyCommand(tokens)
+	-- tokens[2] will contain the difficulty
+	local difficultyName = tokens[2]
+	local difficulty = {}
+	-- check if it's valid
+	local isValid = false
+	for key, value in pairs(Difficulties) do
+	  if value.name == difficultyName then
+	  	isValid = true
+	  	difficulty = value
+	  end
+	end
+	if isValid then
+		local msg ='Assigning difficulty: '..tostring(difficultyName)
+		Utilities:Print(msg, difficulty.color)
+		Utilities:DeepCopy(difficulty, Settings)
+	else
+		local msg = tostring(difficulty)..' is not a valid difficulty.'
+		Utilities:Print(msg, MSG_CONSOLE_GOOD)	
+	end
 end
 
 -- Toggles Dynamic difficulty
@@ -270,16 +292,37 @@ function Settings:DoDDToggleCommand()
 end
 
 -- Enables Dynamic difficulty
-function Settings:DoDDEnableCommand()
-	DynamicDifficulty:Toggle()
+function Settings:DoDDEnableCommand(tokens)
+	Settings.dynamicDifficulty.enabled = true
 	local msg ='Dynamic Difficulty Enabled.'
+	-- check for additional settings commands
+	if tokens[2] ~= nil then
+		local number = tonumber(tokens[2])
+		if number ~= nil then
+			-- Assign threshold
+			Settings.dynamicDifficulty.gpm.advantageThreshold = number
+			Settings.dynamicDifficulty.xpm.advantageThreshold = number
+			msg = msg..' advantageThreshold set to '..tokens[2]..'. '
+		end
+	end
+	-- check for additional settings commands
+	if tokens[3] ~= nil then
+		local number = tonumber(tokens[3])
+		if number ~= nil then
+			-- Assign incrementEvery
+			Settings.dynamicDifficulty.gpm.incrementEvery = number
+			Settings.dynamicDifficulty.xpm.incrementEvery = number
+			msg = msg..' incrementEvery set to '..tokens[3]..'. '
+		end
+	end	
 	Utilities:Print(msg, MSG_CONSOLE_GOOD)
 end
 
 -- Resets Dynamic difficulty (GPM/XPM to default)
 function Settings:DoDDResetCommand()
 	DynamicDifficulty:Reset()
-	local msg ='Dynamic Difficulty Reset. Default Bonus Offsets Restored:'..
+	Settings.dynamicDifficulty.enabled = false
+	local msg ='Dynamic Difficulty Reset and Disabled. Default Bonus Offsets Restored:'..
               ' GPM: '..Settings.gpm.offset..
               ' XPM: '..Settings.xpm.offset    
 	Utilities:Print(msg, MSG_CONSOLE_GOOD)
