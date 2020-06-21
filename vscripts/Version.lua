@@ -1,4 +1,4 @@
-version = '0.4.0.3'
+version = '0.4.0.4'
 versionString = [[Changelog:
 Implemented 'Easier' difficulty.
 
@@ -39,4 +39,7 @@ Refactored the functions for returning GPM and XPM bonuses for
 the BonusTimer awards.
 
 Added 'RoleScaled' difficulty to promote testing of role scaling.
+
+Finally extracted chat_wheel.txt.  Added some new sounds to the 
+random tables.
 ]]

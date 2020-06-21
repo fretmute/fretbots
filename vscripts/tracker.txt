@@ -8,6 +8,12 @@ rather than immediately reward the item.
 -----------------------------------
 
 -----------------------------------
+0.4.0.4
+-----------------------------------
+Finally extracted chat_wheel.txt.  Added some new sounds to the 
+random tables.
+
+-----------------------------------
 0.4.0.3
 -----------------------------------
 Reworked voting closure methodology, now ends a set number of seconds
@@ -25,6 +31,7 @@ Refactored the functions for returning GPM and XPM bonuses for
 the BonusTimer awards.
 
 Added 'RoleScaled' difficulty to promote testing of role scaling.
+
 -----------------------------------
 0.4.0.2
 -----------------------------------

@@ -42,14 +42,18 @@ NEXT_LEVEL						= 'soundboard.next_level'
 PERFECT								= 'absolutely_perfect'
 DISAPPOINTED					= 'soundboard.glados.disappointed'
 PATIENCE							= 'soundboard.patience'
-NORMALIN							= 'soundboard.eto_nenormalno'
 HERO									= 'soundboard.youre_a_hero'
 GROAN									= 'soundboard.ti9.crowd_groan'
 APPLAUSE							= 'soundboard.applause'
+WOW										= 'soundboard.wow'
+LAKAD									= 'soundboard.ta_daaaa'
+JIAYOU								= 'soundboard.jia_you'
                 		
 -- tables for random sounds
-BAD_LIST							= {DISASTAH, RUSSIAN_REKT, GG, OH_MY_LORD, BEAUTIFUL}
-PLAYER_DEATH_LIST			= {PATIENCE, DISAPPOINTED, APPLAUSE, PERFECT, QUESTIONABLE, SAD_TROMBONE, WHAT_HAPPENED, NEXT_LEVEL, NORMALIN, GROAN}
+BAD_LIST							= {DISASTAH, RUSSIAN_REKT, GG, OH_MY_LORD, BEAUTIFUL, JIAYOU}
+PLAYER_DEATH_LIST			= {PATIENCE, DISAPPOINTED, APPLAUSE, PERFECT, QUESTIONABLE, 
+												 SAD_TROMBONE, WHAT_HAPPENED, NEXT_LEVEL, GROAN,
+												 WOW, LAKAD}
 
 -- duh
 TEAM_RADIANT					= 2
