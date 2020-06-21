@@ -53,7 +53,7 @@ local xpPerLevel =
 
 -- Gold
 function AwardBonus:gold(bot, bonus)
-	if bot.stats.awards.gold < Settings.awardCap.gold then
+	if bot.stats.awards.gold < Settings.awardCap.gold and bonus > 0 then
 	  PlayerResource:ModifyGold(bot.stats.id, bonus, false, 0)
 	  bot.stats.awards.gold = bot.stats.awards.gold + bonus
 	  return true  
@@ -63,7 +63,7 @@ end
 
 -- All stats 
 function AwardBonus:stats(bot, bonus)
-	if bot.stats.awards.stats < Settings.awardCap.stats then
+	if bot.stats.awards.stats < Settings.awardCap.stats and bonus > 0 then
 		local stat
 	  stat = bot:GetBaseStrength()
 	  bot:SetBaseStrength(stat + bonus)
@@ -79,7 +79,7 @@ end
 
 --Armor
 function AwardBonus:armor(bot, bonus)
-	if bot.stats.awards.armor < Settings.awardCap.armor then
+	if bot.stats.awards.armor < Settings.awardCap.armor and bonus > 0 then
 		local armor
 		local base
 		armor = bot:GetPhysicalArmorBaseValue()
@@ -93,7 +93,7 @@ end
 
 -- Magic Resist
 function AwardBonus:magicResist(bot, bonus)	
-	if bot.stats.awards.magicResist < Settings.awardCap.magicResist then
+	if bot.stats.awards.magicResist < Settings.awardCap.magicResist and bonus > 0 then
 	  local resistance
 	  resistance = bot:GetBaseMagicalResistanceValue()
 	  bot:SetBaseMagicalResistanceValue(resistance + bonus)
@@ -105,7 +105,7 @@ end
 
 -- Levels
 function AwardBonus:levels(bot, levels)	
-	if bot.stats.awards.levels < Settings.awardCap.levels then
+	if bot.stats.awards.levels < Settings.awardCap.levels and levels > 0 then
 	  -- get current level and XP
 	  local currentLevel = PlayerResource:GetLevel(bot.stats.id)
 	  local currentXP = bot:GetCurrentXP()
@@ -125,7 +125,9 @@ end
 
 -- XP
 function AwardBonus:Experience(bot, bonus)
-  bot:AddExperience(bonus, 0, false, true)
+	if bonus > 0 then 
+  	bot:AddExperience(bonus, 0, false, true)
+  end
 end
 
 -- neutral

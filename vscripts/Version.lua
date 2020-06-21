@@ -1,4 +1,4 @@
-version = '0.4.0.4'
+version = '0.4.0.5'
 versionString = [[Changelog:
 Implemented 'Easier' difficulty.
 
@@ -42,4 +42,7 @@ Added 'RoleScaled' difficulty to promote testing of role scaling.
 
 Finally extracted chat_wheel.txt.  Added some new sounds to the 
 random tables.
+
+Adjusted the various AwardBonus methods to not attempt to award
+if the bonus is not greater than zero.
 ]]

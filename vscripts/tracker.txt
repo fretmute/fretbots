@@ -8,6 +8,12 @@ rather than immediately reward the item.
 -----------------------------------
 
 -----------------------------------
+0.4.0.5
+-----------------------------------
+Adjusted the various AwardBonus methods to not attempt to award
+if the bonus is not greater than zero.
+
+-----------------------------------
 0.4.0.4
 -----------------------------------
 Finally extracted chat_wheel.txt.  Added some new sounds to the 
