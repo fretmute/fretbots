@@ -18,15 +18,17 @@ end
 -- Event Listener
 function EntityHurt:OnEntityHurt(event)
   -- Get Event Data
-	isHero = EntityHurt:GetIsHero(event);
+	isHero = EntityHurt:GetIsHero(event)
 	-- Drop out for non hero damage
-	if not isHero then return end;
+	if not isHero then return end
 	-- Get other event data
-	victim, attacker, damage, damageType = EntityHurt:GetEntityHurtEventData(event);
+	victim, attacker, damage, damageType = EntityHurt:GetEntityHurtEventData(event)
 	-- drop out if somehow there is no victim
-	if victim == nil then return end;
+	if victim == nil then return end
+	-- drop out of the victim has no stats table
+	if victim.stats == nil then return end
 	-- Add damage to the victim's table
-	victim.stats.damageTable[damageType] = victim.stats.damageTable[damageType] + damage;
+	victim.stats.damageTable[damageType] = victim.stats.damageTable[damageType] + damage
 	-- Debug Print
 	if isDebug then
 		print('Damage Table for ' .. victim.stats.name)

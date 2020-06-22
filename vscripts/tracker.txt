@@ -1,11 +1,13 @@
 TODO: 
 
 Implement dynamic difficulty adjustment for death awards.
-
-Rework neutral item awards such that each hero has its own timing 
-per neutral level, and make awards lower the time for the next tier
-rather than immediately reward the item.
 -----------------------------------
+-----------------------------------
+0.4.1.2
+-----------------------------------
+Tweaked settings for Harder and EvenHarder difficulties.
+
+Modified OnEntityHurt/DeathUpdate to drop out if the victim has no stats table.
 
 -----------------------------------
 0.4.1.1

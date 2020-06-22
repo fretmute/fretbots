@@ -217,6 +217,8 @@ end
 
 -- Called by OnEntityKilled to update stats of the victim
 function DataTables:DoDeathUpdate(victim, killer)
+	-- drop out if no stats table
+	if victim.stats == nil then return end
 	-- Always update team kills
 	victim.stats.botTeamKills = PlayerResource:GetTeamKills(BotTeam)
 	victim.stats.humanTeamKills = PlayerResource:GetTeamKills(HumanTeam)
@@ -244,7 +246,9 @@ function DataTables:DoDeathUpdate(victim, killer)
 	victim.stats.enemyTeamNetWorth = DataTables:GetTeamNetWorth(killer.stats.team)
 	if isDebug then
 		print('Updated stats table for ' .. victim.stats.name)
-		if isVerboseDebug then DeepPrintTable(victim.stats) end
+		DeepPrintTable(victim.stats.chance)
+		DeepPrintTable(victim.stats.awards)
+		
 	end
 end
 
@@ -359,8 +363,6 @@ function DataTables:GetPerMinuteTables()
 	local temp = xpm[1]
 	xpm[1] = xpm[2]
 	xpm[2] = temp
-	Debug:Print(gpm, 'GPM Table')
-	Debug:Print(xpm, 'XPM Table')
 	return gpm, xpm
 end
 

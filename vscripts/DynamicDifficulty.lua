@@ -122,7 +122,7 @@ function DynamicDifficulty:SettingsCacheTimer()
   end
   -- otherwise, cache values and stop the timer
   cache = Utilities:CloneTable(Settings)
- 	Debug:Print('Dynamic Difficulty Settings Cached Timer Complete. Exiting.')
+ 	Debug:Print('Dynamic Difficulty Settings Cache Timer Complete. Exiting.')
  	Timers:RemoveTimer(settingsCacheTimerName)
  	Flags.isDynamicDifficultyFinalized = true 	
 	return nil 

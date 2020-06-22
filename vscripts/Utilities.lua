@@ -440,6 +440,13 @@ function Utilities:GetHostPlayerID()
 	end
 end
 
+-- returns true if a unit is a real hero
+function Utilities:IsRealHero(unit)
+	if unit:IsHero() and unit:IsRealHero() and not unit:IsIllusion() and not unit:IsClone() then
+		return true
+	end
+	return false
+end
 -- iterates over a table by keys, alphabetically
 function Utilities:PairsByKeys (t, f)
       local a = {}

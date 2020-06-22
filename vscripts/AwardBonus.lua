@@ -248,11 +248,11 @@ function AwardBonus:SelectRandomNeutralItem(tier, unit)
 	local item = items[math.random(count)]
 	-- print selection for debug
 	if isDebug and item ~= nil then
-		print('Valid Neutral Items, Tier '..tier..':')
-		for _, it in pairs(items) do
-			print('  '..it.name)
-		end
-		print('Random item selected: ' .. item.name)
+	--	print('Valid Neutral Items, Tier '..tier..':')
+	--	for _, it in pairs(items) do
+	--		print('  '..it.name)
+	--	end
+		print(unit.stats.name..': Random item selected: ' .. item.realName)
 	end
 	-- if there was a valid item, remove it from the table (if settings tell us to)
 	if item ~= nil and Settings.neutralItems.isRemoveUsedItems then
@@ -290,7 +290,7 @@ function AwardBonus:Death(bot)
 	-- track awards
 	local awards = 0
 	-- loop over bonuses in order
-	for _, award in pairs(Settings.deathBonus.order) do
+	for _, award in ipairs(Settings.deathBonus.order) do
 		-- this event gets fired for humans to, so drop out here if we don't want to give rewards to humans
 		if not bot.stats.isBot and Settings.deathBonus.isBotsOnly[award] then
 			if isDebug then 
@@ -336,7 +336,7 @@ function AwardBonus:Death(bot)
 						msg = msg .. ' '..award..': '..name
 					end
 					if isDebug then
-						print('Awarded '..award..': '..value)
+						print(bot.stats.name..': Awarded '..award..': '..value)
 					end
 					-- Clear the chance for this award (if accrued)
 					if Settings.deathBonus.accrue[award] then
@@ -418,7 +418,7 @@ function AwardBonus:GetValue(bot, award)
 	isLoud = (Settings.deathBonus.isClampLoud[award] and clamped == Settings.deathBonus.clamp[award][2])
 	         or
 	         Settings.deathBonus.isLoud[award]
-  Debug:DeepPrint(debugTable)
+  --Debug:DeepPrint(debugTable)
 	return clamped, isLoud
 end
 
@@ -457,10 +457,8 @@ end
 function AwardBonus:GetPerMinuteBonus(bot, gpm, xpm)
 	local botGPM = Utilities:Round(PlayerResource:GetGoldPerMin(bot.stats.id))
 	local gpmBonus, debugTable = AwardBonus:GetSpecificPerMinuteBonus(bot, botGPM, gpm, Settings.gpm)
-	Debug:Print(debugTable, bot.stats.name..' GPM')
 	local botXPM = Utilities:Round(PlayerResource:GetXPPerMin(bot.stats.id))
 	local xpmBonus, debugTable = AwardBonus:GetSpecificPerMinuteBonus(bot, botXPM, xpm, Settings.xpm)
-	Debug:Print(debugTable, bot.stats.name..' XPM')
 	return gpmBonus, xpmBonus
 end
 

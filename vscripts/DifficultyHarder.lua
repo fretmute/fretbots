@@ -39,6 +39,15 @@ local settings =
 	    neutral 			= {30, 240},
 	    stats					= {1, 3},	
 	  },  	
+    accrue = 
+		{
+			gold 					= true,
+			armor 				= true,
+			magicResist 	= true,
+			levels 				= true,
+			neutral 			= true,
+			stats 				= true
+		},      	  
 	}, 
 }
 
