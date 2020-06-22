@@ -45,6 +45,8 @@ local playerLoadFailSafe = -75
 -- timer method to monitor for all players being loaded, which will in turn
 -- initialize the data tables
 function FretBots:Initialize()
+	-- Randomize!
+	FretBots:SetRandomSeed()
 	-- Register the listener that will check for all players spawning and then init datatables
 	ListenToGameEvent('dota_on_hero_finish_spawn', Dynamic_Wrap(FretBots, 'OnPlayerSpawned'), FretBots)
 	Timers:CreateTimer(playersLoadedTimerName, {endTime = 1, callback =  FretBots['PlayersLoadedTimer']} )
@@ -82,6 +84,17 @@ function FretBots:OnPlayerSpawned(event)
 	Debug:Print('Spawned Players: '..playerSpawnCount)
 end
 
+-- Sets the random seed for the game, and burns off the initial bad random number
+function FretBots:SetRandomSeed()
+	local timeString = GetSystemTime()
+	timeString = string.gsub(timeString,':','')
+	local serverTime = Time()
+	serverTime = serverTime - math.floor(serverTime)
+	local seed = tonumber(timeString) + serverTime 
+	seed = math.floor(seed * 100000)
+	math.randomseed(seed)
+	local temp = math.random()
+end
 -- Start things up (only once)
 if not Flags.isFretBotsInitialized then
 	-- Print version to console 

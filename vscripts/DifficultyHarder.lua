@@ -36,7 +36,7 @@ local settings =
 	    armor 				= {1, 3},
 	    magicResist 	= {1, 3},
 	    levels 				= {1, 2},
-	    neutral 			= {1, 2},
+	    neutral 			= {30, 240},
 	    stats					= {1, 3},	
 	  },  	
 	}, 

@@ -189,6 +189,8 @@ function DataTables:GenerateStatsTables(unit)
     },	
   	-- current level of neutral item
   	neutralTier = 0,
+  	-- Timing for next level of neutral item
+  	neutralTiming = Settings.neutralItems.timings[1] + Utilities:GetIntegerVariance(Settings.neutralItems.variance),
   	-- Hero isMelee
   	isMelee = role.IsMelee(unit:GetBaseAttackRange()),
   	-- player ID

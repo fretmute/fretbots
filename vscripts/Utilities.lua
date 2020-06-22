@@ -177,6 +177,17 @@ function Utilities:FormatAwardMessage(awards)
 	return msg
 end
 
+-- Announces neutral item award
+function Utilities:AnnounceNeutral(bot, tier, itemName)
+	-- first artifact: hero name, by color
+  local msg = ''
+	msg = msg..Utilities:ColorString(bot.stats.name..': ', Utilities:GetPlayerColor(bot.stats.id))
+	msg = msg..Utilities:ColorString('Received Neutral Item: ', awardColors.neutral)
+	msg = msg..Utilities:ColorString(itemName, neutralColors[tier])
+	-- print the message
+	GameRules:SendCustomMessage(msg, 0, 0)
+end
+
 -- Returns the localized hero name, if there is one
 function Utilities:GetName(name)
 	if heroNames[name] ~= nil then
@@ -249,7 +260,6 @@ function Utilities:RandomDecimal(low, high)
   return scaled + low
 end
 
-
 -- Returns a variance multipler (picks a random number between the two numbers (both integers) then divides by 100
 function Utilities:GetVariance(data)
 	-- sanity check
@@ -262,6 +272,18 @@ function Utilities:GetVariance(data)
 	-- remember math.Random only returns integers, so multiply / divide by 100
 	local percentage = math.random(data[1] * 100, data[2] * 100) / 100
 	return percentage
+end
+
+-- Returns a random integer between two numbers in a variance table
+function Utilities:GetIntegerVariance(data)
+		-- sanity check
+	if data == nil then 
+		return 0 
+	end
+	if data[1] == nil or data[2] == nil then 
+		return 0 
+	end
+	return math.random(data[1],data[2])
 end
 
 -- Gets game time

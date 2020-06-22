@@ -56,6 +56,7 @@ function AwardBonus:gold(bot, bonus)
 	if bot.stats.awards.gold < Settings.awardCap.gold and bonus > 0 then
 	  PlayerResource:ModifyGold(bot.stats.id, bonus, false, 0)
 	  bot.stats.awards.gold = bot.stats.awards.gold + bonus
+	  Debug:Print('Awarding gold to '..bot.stats.name..'.')
 	  return true  
 	end
 	return false
@@ -72,6 +73,7 @@ function AwardBonus:stats(bot, bonus)
 	  stat = bot:GetBaseIntellect()
 	  bot:SetBaseIntellect(stat + bonus)
 	  bot.stats.awards.stats = bot.stats.awards.stats + bonus
+	  Debug:Print('Awarding stats to '..bot.stats.name..'.')
 	  return true
 	end
 	return false
@@ -86,6 +88,7 @@ function AwardBonus:armor(bot, bonus)
 	 	base = bot:GetAgility() * 0.16
 	 	bot:SetPhysicalArmorBaseValue(armor - base + bonus)
 	 	bot.stats.awards.armor = bot.stats.awards.armor + bonus
+	 	Debug:Print('Awarding armor to '..bot.stats.name..'.')
 	 	return true
 	end
 	return false
@@ -98,6 +101,7 @@ function AwardBonus:magicResist(bot, bonus)
 	  resistance = bot:GetBaseMagicalResistanceValue()
 	  bot:SetBaseMagicalResistanceValue(resistance + bonus)
 	  bot.stats.awards.magicResist = bot.stats.awards.magicResist + bonus
+	  Debug:Print('Awarding magic resist to '..bot.stats.name..'.')
 	  return true
 	end
 	return false
@@ -118,6 +122,7 @@ function AwardBonus:levels(bot, levels)
 	  local awardXP = Utilities:Round(averageXP * levels)
 	  bot:AddExperience(awardXP, 0, false, true)
 	  bot.stats.awards.levels = bot.stats.awards.levels + levels
+	  Debug:Print('Awarding levels  to '..bot.stats.name..'.')
 	  return true
 	end
 	return false
@@ -127,6 +132,7 @@ end
 function AwardBonus:Experience(bot, bonus)
 	if bonus > 0 then 
   	bot:AddExperience(bonus, 0, false, true)
+  	Debug:Print('Awarding experience to '..bot.stats.name..'.')
   end
 end
 
@@ -135,9 +141,13 @@ function AwardBonus:neutral(bot, bonus)
 	if bot.stats.awards.neutral < Settings.awardCap.neutral then
 	  local tier = bot.stats.neutralTier + bonus
 	  local isSuccess 
-	  local itemName
-	  isSuccess, itemName = AwardBonus:RandomNeutralItem(bot, tier)
-	  return isSuccess, itemName
+	  bot.stats.neutralTiming = bot.stats.neutralTiming - bonus
+	  if bot.stats.neutralTiming < 0 then
+	  	bot.stats.neutralTiming = 0
+	  end
+	  bot.stats.awards.neutral = bot.stats.awards.neutral + bonus
+	  Debug:Print('Awarding neutral to '..bot.stats.name..'.')
+	  return true, bonus
 	else
 		Debug:Print('Bot has reached the neutral award limit of '..Settings.awardCap.neutral)
 		return false
@@ -145,7 +155,7 @@ function AwardBonus:neutral(bot, bonus)
 end
 
 -- Gives a random neutral item to a unit
-function AwardBonus:RandomNeutralItem(unit, tier, isForceAward)
+function AwardBonus:RandomNeutralItem(unit, tier)
 	local role = unit.stats.role
 	-- check if the bot already has an item from this tier (or higher)
 	if unit.stats.neutralTier >= tier then 
@@ -155,19 +165,11 @@ function AwardBonus:RandomNeutralItem(unit, tier, isForceAward)
 		end
 	end
 	-- check if the unit is at or above the award limit
-	local isCheck
-	if isForceAward == nil then 
-		isCheck = true
-	else
-		isCheck = not isForceAward
-	end
-	if isCheck then
-		if unit.stats.awards.neutral >= Settings.awardCap.neutral then
-			if isDebug then
-				print('Bot is at the award limit of '..unit.stats.awards.neutral)
-			  return false
-		  end
-		end
+	if unit.stats.awards.neutral >= Settings.awardCap.neutral then
+		if isDebug then
+			print('Bot is at the award limit of '..unit.stats.awards.neutral)
+		  return false
+	  end
 	end
 	-- select a new item from the list
 	local item, realName = AwardBonus:SelectRandomNeutralItem(tier, unit)	
@@ -179,13 +181,8 @@ function AwardBonus:RandomNeutralItem(unit, tier, isForceAward)
 		if currentItem ~= nil then
 			unit:RemoveItem(currentItem)
 		end
-		if AwardBonus:NeutralItem(unit, item, tier) then
-			-- only track death awards, not timed ones (which are forced)
-			if not isForceAward then
-			 unit.stats.awards.neutral = unit.stats.awards.neutral + 1
-			end
-			return true, realName
-		end
+		AwardBonus:NeutralItem(unit, item, tier)
+		return true, realName
 	end
 	return false
 end
@@ -204,6 +201,18 @@ function AwardBonus:NeutralItem(bot, itemName, tier)
     item:SetPurchaseTime(0)
     bot:AddItem(item)
     bot.stats.neutralTier = tier
+    -- Special handling if it's royal jelly	
+    if itemName == "item_royal_jelly" then		
+    	Say(bot:GetPlayerOwner(), "Spending royal jelly charge on self.", false)		
+    	bot:CastAbilityOnTarget(bot, item, bot:GetPlayerOwnerID())		
+    	for _, unit in pairs(Bots) do			
+    		if unit.stats.isBot and unit.stats.team == bot.stats.team and unit.stats.name ~= bot.stats.name then	
+    			Say(bot:GetPlayerOwner(), "Spending royal jelly charge on "..unit.stats.name..'.', false)				
+    			bot:CastAbilityOnTarget(unit, item, bot:GetPlayerOwnerID())				
+    			break			
+    		end		
+    	end	
+    end
     return true
   end
   return false
@@ -260,24 +269,6 @@ function AwardBonus:SelectRandomNeutralItem(tier, unit)
 	  return item.name, item.realName
 	else
 		return nil
-	end
-end
-
--- Attempts to give all of the bots an item from the given tier
-function AwardBonus:GiveTierToBots(tier)
-	local awards = 0
-	-- sanity check
-  if Bots == nil then return end
-	for _, bot in pairs(Bots) do
-		if bot ~= nil then
-			if awards < Settings.neutralItems.maxPerTier then 
-				if isDebug then
-					print('Giving tier '..tostring(tier)..', Role '..tostring(bot.stats.role) ..' item to '..bot:GetName())
-				end
-			  AwardBonus:RandomNeutralItem(bot, tier, bot.stats.role, true)
-			  awards = awards + 1
-			end
-		end
 	end
 end
 

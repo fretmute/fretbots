@@ -27,7 +27,7 @@ local settings =
 	    armor 				= {1, 	10},
 	    magicResist 	= {1, 	10},
 	    levels 				= {1, 	4},
-	    neutral 			= {1, 	3},
+	    neutral 			= {30, 	420},
 	    stats					= {1, 	10},	
 	  },	
     clampOverride = 
@@ -45,7 +45,7 @@ local settings =
       armor 				= {0, 4},
       magicResist 	= {0, 4},
       levels 				= {0, 2},
-      neutral 			= {0, 1},
+      neutral 			= {30, 180},
       stats					= {0, 4},					
 		},
 		-- increased chance as well

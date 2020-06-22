@@ -45,12 +45,14 @@ local inits =
 local tiersAwarded = {false,false,false,false,false}
 -- current award instance (irrespective of offset). used to index timings
 local award = 1
--- default retry interval
-local retryInterval = 2
+-- default neutral timer interval
+local neutralInterval = 1
 -- max tier
 local maxTier = 5
 -- Per Minute Timer Interval
 local perMinuteTimerInterval = 60
+-- number of tier five neutrals awarded
+local tierFivesAwarded = 0
 
 -- Awards neutral items to bots based on Settings 
 function NeutralItemTimer()
@@ -59,69 +61,49 @@ function NeutralItemTimer()
 		print('NeutralItemTimer method registered')
 		inits.neutralItemTimer = true
 	end
-  local gametime = Utilities:GetAbsoluteTime()
+  local gameTime = Utilities:GetAbsoluteTime()
   -- Don't do anything if time is negative
-  if gametime < 0 then return math.ceil(gametime * -1) end
-  -- set tier we're attempting to award
-  tier = award + Settings.neutralItems.tierOffset
-  -- If we hit tier 6 quit and stop the timer
-  if (tier > maxTier) then 
+  if gameTime < 0 then return math.ceil(gameTime * -1) end
+  -- Stop if we've given all bots tier 5 items
+  if (tierFivesAwarded >= #Bots) then 
   	Timers:RemoveTimer(names.neutralItemTimer)
-  	if isDebug then
-  		print('NeutralItemTimer done.  Unregistering.')
-    end
+  	Utilities:Print('NeutralItemTimer done.  Unregistering.', MSG_CONSOLE_GOOD)
   	return nil
   end
   -- Logic to do things here, we'll use this method primarily for giving neutrals to bots  
   local interval = 0
-  if isDebug then
-  	local debugMsg = 
-  	{
-  		Tier = tier,
-  		Award = award,
-  		Time = gametime,
-  		BonusTime = Settings.neutralItems.timings[award]
-  	}
-    Debug:DeepPrint(debugMsg)
+  -- loop over all bots
+  for _, bot in pairs(Bots) do
+    -- if time is greater than stats.neutralTiming, we try to award an item
+    -- negative numbers disable the award
+    Debug:Print(bot.stats.name..': '..bot.stats.neutralTiming..', '..gameTime)
+    if gameTime > bot.stats.neutralTiming and bot.stats.neutralTiming >= 0  and bot.stats.neutralTiming ~= nil then
+    	local tier = bot.stats.neutralTier + 1 
+    	if tier <= 5 then
+    		local isAwarded, itemName = AwardBonus:RandomNeutralItem(bot, tier)
+    		if isAwarded then
+    			-- set current tier of item
+    			bot.stats.neutralTier = tier
+    			-- get next neutral timing
+    			if tier == 5 then
+    				bot.stats.neutralTiming = -1
+    				tierFivesAwarded = tierFivesAwarded + 1
+    			else
+    			bot.stats.neutralTiming = Settings.neutralItems.timings[tier + 1] +
+    										 Utilities:GetIntegerVariance(Settings.neutralItems.variance)
+					end
+					-- announce?
+					if Settings.neutralItems.announce then
+						Utilities:AnnounceNeutral(bot, tier, itemName)
+					end
+    		end
+    	else
+    		-- disable awards
+    		bot.stats.neutralTiming = -1
+    	end
+    end
   end
-  if gametime > Settings.neutralItems.timings[award] and not tiersAwarded[tier] then
-    AwardBonus:GiveTierToBots(tier)
-    tiersAwarded[tier] = true
-    award = award + 1     
-	  -- Required by timers, tells the helper when to rerun this method
-	  local chatMessage
-	  if Settings.neutralItems.timings[award] ~= nil then
-	  	-- if there is another tier, wait for its timing
-	  	interval = math.ceil(Settings.neutralItems.timings[tier+1] - gametime)
-	  	-- sanity check
-	  	if interval < 0 then interval = retryInterval end
-	  	chatMessage = 'Tier '..tostring(tier)..' neutral items awarded. Next award in '..tostring(interval)..' seconds.'
-	  else
-	  	-- if there isn't a next tier, quit
-	  	Timers:RemoveTimer(names.neutralItemTimer)
-	  	chatMessage = 'Tier '..tostring(tier)..' neutral items awarded. NeutralItemTimer exiting.'
-	  end
-	  -- debug message
-	  if isDebug then
-	  	print('NeutralItemTimer complete. Rerunning in ' .. tostring(interval) .. ' seconds.')
-	  end
-	  -- chat message
-	  if isChat then
-	  	Utilities:Print(chatMessage,MSG_WARNING)
-	  end
-	else
-		-- if not awarded, try again
-		-- first try a smart wait
-		if Settings.neutralItems.timings[award] ~= nil then
-			interval = Settings.neutralItems.timings[award]		
-		else
-			interval = retryInterval;  
-		end
-	end 
-	  -- return time until next instance
-	  -- sanity check
-	if interval < 0 then interval = retryInterval end
-  return interval
+  return neutralInterval
 end
 
 -- timer for adjusting gpm/xpm
@@ -211,10 +193,10 @@ function BonusTimers:GameStartBonus()
   end  
   -- neutral
   if Settings.gameStartBonus.neutral  > 0 then
-  	msg = msg .. ' Neutral Tier: '.. Settings.gameStartBonus.neutral
+  	msg = msg .. ' Neutral: '.. Settings.gameStartBonus.neutral
   	awarded = true
     for _, bot in pairs(Bots) do
-    	AwardBonus:RandomNeutralItem(bot, Settings.gameStartBonus.neutral)
+    	AwardBonus:neutral(bot, Settings.gameStartBonus.neutral)
     end
   end     
   if awarded then
