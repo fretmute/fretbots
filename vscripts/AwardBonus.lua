@@ -239,10 +239,44 @@ function AwardBonus:GetNeutralTableForTierAndRole(tier,unit)
   return items, count
 end
 
+-- Returns true if a given item is valid for a given bot
+function AwardBonus:IsNeutralValidForBot(item, bot)
+  local isAttackValid = false
+  local isRoleValid = false
+  -- right attack type?
+  if item.ranged and not unit.stats.isMelee then
+  	isAttackValid = true
+  elseif item.melee and unit.stats.isMelee then
+  	isAttackValid = true
+  end
+  -- right role?
+  isRoleValid = (item.roles[unit.stats.role] ~= 0)
+  return (isAttackValid and isRoleValid)
+end
+
+-- Returns valid items for a given tier
+function AwardBonus:GetNeutralTableForTier(tier)
+	local items = {}
+	local count = 0
+	for _,item in ipairs(allNeutrals) do
+	  if item.tier == tier then
+	  	table.insert(items,item)
+	  	count = count + 1
+	  end
+	end		
+  return items, count
+end
+
 -- selects a random item from the list (by tier and role) and returns the internal item name
 function AwardBonus:SelectRandomNeutralItem(tier, unit)
 	-- Get items that qualify
-	local items,count = AwardBonus:GetNeutralTableForTierAndRole(tier,unit)
+	-- if they didn't pass a unit, go full random
+	local items,count
+	if unit == nil then
+		items,count = AwardBonus:GetNeutralTableForTier(tier)
+  else
+		items,count = AwardBonus:GetNeutralTableForTierAndRole(tier,unit)
+	end
 	if items == nil then return nil end
 	-- pick one at random
 	local item = items[math.random(count)]

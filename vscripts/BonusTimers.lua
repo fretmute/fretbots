@@ -32,7 +32,8 @@ end
 local names = 
 {
 	neutralItemTimer = 'NeutralItemTimer',
-	perMinuteTimer = 'PerMinuteTimer'
+	perMinuteTimer = 'PerMinuteTimer',
+	doleTimer = 'DoleTimer'
 }
 local inits = 
 {
@@ -53,9 +54,11 @@ local maxTier = 5
 local perMinuteTimerInterval = 60
 -- number of tier five neutrals awarded
 local tierFivesAwarded = 0
+local tierAwards = {0,0,0,0,0}
+local neutralStash = {{},{},{},{},{}}
 
 -- Awards neutral items to bots based on Settings 
-function NeutralItemTimer()
+function BonusTimers:NeutralItemTimer()
 	-- inform we've registered
 	if not inits.neutralItemTimer then
 		print('NeutralItemTimer method registered')
@@ -106,7 +109,7 @@ function NeutralItemTimer()
 end
 
 -- timer for adjusting gpm/xpm
-function PerMinuteTimer()
+function BonusTimers:PerMinuteTimer()
 	-- inform we've registered
 	if not inits.perMinuteTimer then
 		print('PerMinuteTimer method registered')
@@ -213,14 +216,14 @@ function BonusTimers:Register()
 			DeepPrintTable(Settings.neutralItems)
 		end
 		print('Registering NeutralItemTimer.')
-		Timers:CreateTimer(names.neutralItemTimer, {callback =  NeutralItemTimer} )
+		Timers:CreateTimer(names.neutralItemTimer, {callback =  BonusTimers['NeutralItemTimer']} )
 		inits.neutralItemTimer = true
 	end
 	-- Register per minute timer (first executed one minute after game start so we're
 	-- not dividing by a decimal and inflating GPM/XPM
 	if not inits.perMinuteTimer then
 		print('Registering PerMinuteTimer.')
-		Timers:CreateTimer(names.perMinuteTimer, {endTime = perMinuteTimerInterval, callback =  PerMinuteTimer} )
+		Timers:CreateTimer(names.perMinuteTimer, {endTime = perMinuteTimerInterval, callback =  BonusTimers['PerMinuteTimer']} )
 		inits.perMinuteTimer = true
 	end			
 end

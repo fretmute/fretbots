@@ -1,4 +1,4 @@
-version = '0.4.1.2'
+version = '0.4.1.3'
 versionString = [[Changelog:
 Reworked neutral item awards.  All bots now have their own neutral
 item timings, and neutral item death bonuses now subtract a number

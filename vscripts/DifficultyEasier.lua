@@ -12,7 +12,7 @@ local settings =
 	{
 		enabled = true,
 		isRemoveUsedItems = true,
-		maxPerTier = 4,
+		maxPerTier = {4,4,4,2,2},
 		tierOffset = 0,
 		timings = {420, 1020, 1620, 2220, 3600}
 	},	

@@ -81,6 +81,8 @@ function DataTables:Initialize()
 	DataTables:PurgeHumanSideBots()
 	-- Assign a support Pos 5
 	DataTables:SetBotPositionFive()
+	-- Sort Bots Table by role for convenience
+	Bots = DataTables:SortBotsByRole()
   -- Set Initialized Flag
   Flags.isStatsInitialized = true;
 	
@@ -191,6 +193,10 @@ function DataTables:GenerateStatsTables(unit)
   	neutralTier = 0,
   	-- Timing for next level of neutral item
   	neutralTiming = Settings.neutralItems.timings[1] + Utilities:GetIntegerVariance(Settings.neutralItems.variance),
+  	-- does this hero really want this neutral (or did he just get it because nothing better was available?)
+  	hasSuitableNeutral = false,
+  	-- current tier of neutralItems found (i.e. spawned by this hero's timer)
+  	neutralsFound = 0,
   	-- Hero isMelee
   	isMelee = role.IsMelee(unit:GetBaseAttackRange()),
   	-- player ID
@@ -463,6 +469,19 @@ end
 function DataTables:IsRealHero(unit)
 	return unit:IsHero() and unit:IsRealHero() and not unit:IsIllusion() and not unit:IsClone()	
 end
+
+-- Sorts a table based on values of a key, low to high
+function DataTables:SortBotsByRole()
+  local sortedData = {}
+  for i = 1,#Bots do
+  	table.insert(sortedData,i)
+  end
+  for _,bot in pairs(Bots) do
+  	sortedData[bot.stats.role] = bot
+  end
+  return sortedData
+end
+
 
 -- Initialize (if Debug)
 if isSoloDebug then 

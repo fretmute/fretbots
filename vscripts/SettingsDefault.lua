@@ -52,16 +52,18 @@
 			-- Max neutrals awarded per tier. You might be tempted to make this less than 5 to hinder the bots
 			-- a bit, but note that the award method doesn't prioritize bot roles, so you might end up with a
 			-- carry that doesn't have an item.
-			maxPerTier = 5,
+			maxPerTier = {4,4,4,4,4},
 			-- adds this number to the awards as they come out (make this positive to give better items early
 			-- make it negative to cause errors, probably.  If you want slower items just change the timings)
 			tierOffset = 0,
 			-- game time (seconds) at which awards are given.  
 			timings = {0, 420, 1020, 2020, 3600},
 			-- variance for timings (this number of seconds added to base timing per bot)
-			variance = {0, 180},
+			variance = {0, 240},
 			-- if true, announce awards to chat
-			announce = true
+			announce = true,
+			-- Assign randomly, or roll specific per role down the line? (former is easier)
+			assignRandomly = true
 		},
 		-- used for awarding bonus gold periodically.  The method that does this award calculates target
 		-- gpm and then adds gold to the bot to attempt to force it to that level of gpm, modified by
