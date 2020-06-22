@@ -8,6 +8,11 @@ rather than immediately reward the item.
 -----------------------------------
 
 -----------------------------------
+0.4.1.1
+-----------------------------------
+Removed Debug:Print() statement from NeutralItemTimer() (too spammy).
+
+-----------------------------------
 0.4.1.0
 -----------------------------------
 Reworked neutral item awards.  All bots now have their own neutral

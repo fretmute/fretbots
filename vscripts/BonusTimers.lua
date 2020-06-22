@@ -76,7 +76,6 @@ function NeutralItemTimer()
   for _, bot in pairs(Bots) do
     -- if time is greater than stats.neutralTiming, we try to award an item
     -- negative numbers disable the award
-    Debug:Print(bot.stats.name..': '..bot.stats.neutralTiming..', '..gameTime)
     if gameTime > bot.stats.neutralTiming and bot.stats.neutralTiming >= 0  and bot.stats.neutralTiming ~= nil then
     	local tier = bot.stats.neutralTier + 1 
     	if tier <= 5 then
