@@ -22,6 +22,9 @@ MSG_BAD 							= 3
 MSG_AWARD							= 4
 MSG_CONSOLE_GOOD			= 5
 MSG_CONSOLE_BAD				= 6
+MSG_NEUTRAL_FIND      = 7
+MSG_NEUTRAL_TAKE      = 8
+MSG_NEUTRAL_RETURN    = 9
 
 -- sound constants
 DISASTAH							= 'soundboard.disastah'
@@ -178,12 +181,18 @@ function Utilities:FormatAwardMessage(awards)
 end
 
 -- Announces neutral item award
-function Utilities:AnnounceNeutral(bot, tier, itemName)
-	-- first artifact: hero name, by color
+function Utilities:AnnounceNeutral(bot, item, msgType)
   local msg = ''
+	-- first artifact: hero name, by color
 	msg = msg..Utilities:ColorString(bot.stats.name..': ', Utilities:GetPlayerColor(bot.stats.id))
-	msg = msg..Utilities:ColorString('Received Neutral Item: ', awardColors.neutral)
-	msg = msg..Utilities:ColorString(itemName, neutralColors[tier])
+	if msgType == MSG_NEUTRAL_FIND then
+		msg = msg..Utilities:ColorString('Found Neutral Item: ', awardColors.neutral)
+	elseif msgType == MSG_NEUTRAL_TAKE then
+		msg = msg..Utilities:ColorString('Took Neutral Item from Stash: ', awardColors.neutral)	
+	elseif msgType == MSG_NEUTRAL_RETURN then
+		msg = msg..Utilities:ColorString('Returned Neutral Item to Stash: ', awardColors.neutral)			
+	end
+	msg = msg..Utilities:ColorString(item.realName, neutralColors[item.tier])
 	-- print the message
 	GameRules:SendCustomMessage(msg, 0, 0)
 end

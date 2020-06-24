@@ -1,16 +1,20 @@
-version = '0.4.1.3'
+version = '0.4.2.0'
 versionString = [[Changelog:
-Reworked neutral item awards.  All bots now have their own neutral
-item timings, and neutral item death bonuses now subtract a number
-of seconds from these timings.  
-
-Implemented a (hopefully) robust random seed generator.
-
-Added I'm Bad's Royal Jelly code so bots actually use it.  Thanks!
-
-Removed Debug:Print() statement from NeutralItemTimer() (too spammy).
-
-Modified OnEntityHurt/DeathUpdate to drop out if the victim has no stats table.
-
-Tweaked settings for Harder and EvenHarder difficulties.
+Further reworked neutral item awards (ideas shanelessly
+stolen from I'm Bad):
+	
+	Split neutral timers; there is now a 'drop' timer that tracks 
+	when items are spawned, and a 'dole' timer that handles assigning.
+	
+	Neutral items now have separate drop amounts per tier.
+	
+	Items that are removed from the bots are returned to a virtual
+	stash so that they can be allocated to a new bot.
+	
+	Added settings for how to assign neutrals: truly randomly, or
+	the old method where each bot gets assigned directly an item
+	it can use.
+	
+	Moved functions for handling neutrals out of AwardBonus and into 
+	a dediciated file (NeutralItems).
 ]]

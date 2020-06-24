@@ -9,7 +9,7 @@ require 'Timers'
 require 'Utilities'
 
 -- local debug flag
-local thisDebug = true; 
+local thisDebug = false; 
 local isDebug = Debug.IsDebug() and thisDebug;
 Settings = nil    
 
@@ -38,7 +38,7 @@ if Settings == nil then
 end
 
 -- neutral item drop settings
-allNeutrals = require 'SettingsNeutralItemTable'
+AllNeutrals = dofile('SettingsNeutralItemTable')
 
 -- Difficulty Table.  Iterated over to set up difficulties
 local validDifficulties = 
@@ -140,12 +140,10 @@ function Settings:ApplyVoteSettings()
 			end
 		end
   end
-  Debug:Print('Winning Difficulty:')
-  Debug:DeepPrint(winner)
+  Debug:Print('Winning Difficulty: '..winner.name)
 	msg = 'Voting closed. Applied difficulty: '..name
   Utilities:Print(msg, winner.color)
   Settings:Initialize(winner)
-  Debug:DeepPrint(Settings)
 end
 
 -- Returns true if voting should close due to game state

@@ -14,6 +14,8 @@ require 'Utilities'
 require 'AwardBonus'
 -- Flags for tracking status
 require 'Flags'
+-- Neutral Item Helpers
+require 'NeutralItems'
 
 -- local debug flag
 local thisDebug = true; 
@@ -31,14 +33,15 @@ end
 -- timer names
 local names = 
 {
-	neutralItemTimer = 'NeutralItemTimer',
+	neutralItemFindTimer = 'NeutralItemFindTimer',
 	perMinuteTimer = 'PerMinuteTimer',
-	doleTimer = 'DoleTimer'
+	neutralItemDoleTimer = 'NeutralItemDoleTimer',
 }
 local inits = 
 {
-	neutralItemTimer = false,
-	perMinuteTimer = false	
+	neutralItemFindTimer	= false,
+	perMinuteTimer 				= false,
+	neutralItemDoleTimer 	= false	
 }
 
 -- Internal flags for flagging if stuff has been done
@@ -46,31 +49,43 @@ local inits =
 local tiersAwarded = {false,false,false,false,false}
 -- current award instance (irrespective of offset). used to index timings
 local award = 1
--- default neutral timer interval
-local neutralInterval = 1
+-- default neutral timer find interval
+local neutralFindInterval = 1
+-- default neutral timer dole interval
+local neutralDolenterval = 10
 -- max tier
 local maxTier = 5
 -- Per Minute Timer Interval
 local perMinuteTimerInterval = 60
--- number of tier five neutrals awarded
-local tierFivesAwarded = 0
+-- amount of neutrals found per tier
 local tierAwards = {0,0,0,0,0}
-local neutralStash = {{},{},{},{},{}}
+-- current neutral items available to dole
+NeutralStash = {{},{},{},{},{}}
+-- all items ever found
+AwardedNeutrals = {}
+
+-- master table (items don't get removed from this one)
+local masterNeutralTable = dofile('SettingsNeutralItemTable')
+
+-- returns true if we've found every item we can
+function BonusTimers:IsFindingDone()
+	for i, count in ipairs(tierAwards) do 
+		if count < Settings.neutralItems.maxPerTier[i] then
+			return false
+		end
+	end
+	return true
+end
 
 -- Awards neutral items to bots based on Settings 
-function BonusTimers:NeutralItemTimer()
-	-- inform we've registered
-	if not inits.neutralItemTimer then
-		print('NeutralItemTimer method registered')
-		inits.neutralItemTimer = true
-	end
+function BonusTimers:NeutralItemFindTimer()
   local gameTime = Utilities:GetAbsoluteTime()
   -- Don't do anything if time is negative
   if gameTime < 0 then return math.ceil(gameTime * -1) end
   -- Stop if we've given all bots tier 5 items
-  if (tierFivesAwarded >= #Bots) then 
-  	Timers:RemoveTimer(names.neutralItemTimer)
-  	Utilities:Print('NeutralItemTimer done.  Unregistering.', MSG_CONSOLE_GOOD)
+  if BonusTimers:IsFindingDone() then 
+  	Timers:RemoveTimer(names.neutralItemFindTimer)
+  	Utilities:Print('NeutralItemFindTimer done.  Unregistering.', MSG_CONSOLE_GOOD)
   	return nil
   end
   -- Logic to do things here, we'll use this method primarily for giving neutrals to bots  
@@ -79,33 +94,136 @@ function BonusTimers:NeutralItemTimer()
   for _, bot in pairs(Bots) do
     -- if time is greater than stats.neutralTiming, we try to award an item
     -- negative numbers disable the award
-    if gameTime > bot.stats.neutralTiming and bot.stats.neutralTiming >= 0  and bot.stats.neutralTiming ~= nil then
-    	local tier = bot.stats.neutralTier + 1 
-    	if tier <= 5 then
-    		local isAwarded, itemName = AwardBonus:RandomNeutralItem(bot, tier)
-    		if isAwarded then
-    			-- set current tier of item
-    			bot.stats.neutralTier = tier
-    			-- get next neutral timing
-    			if tier == 5 then
-    				bot.stats.neutralTiming = -1
-    				tierFivesAwarded = tierFivesAwarded + 1
-    			else
+    local tier =  bot.stats.neutralsFound + 1
+    if gameTime > bot.stats.neutralTiming and
+       bot.stats.neutralTiming >= 0 and 
+       bot.stats.neutralTiming ~= nil and 
+       tierAwards[tier] < Settings.neutralItems.maxPerTier[tier] then	
+    	-- Register NeutralItemDoleTimer (This will only happen once)
+			if not inits.neutralItemDoleTimer then
+				print('Item dropped! Registering NeutralItemDoleTimer.')
+				Timers:CreateTimer(names.neutralItemDoleTimer, {callback =  BonusTimers['NeutralItemDoleTimer']} )
+				inits.neutralItemDoleTimer = true
+			end	
+    	-- Increment tiers 'found' for this bot
+    	bot.stats.neutralsFound = tier
+    	-- Check if tier still has items to award
+    	if tierAwards[tier] < Settings.neutralItems.maxPerTier[tier] then
+    		-- increment awards
+    		tierAwards[tier] = tierAwards[tier] + 1
+    		-- Get the neediest bot
+    		local neediest = NeutralItems:GetNeediestBot(tier)
+    		-- Based on settings, award this bot a suitable item directly, or 
+    		-- just roll one randomly and leave it for the doler
+    		local item
+    		if Settings.neutralItems.assignRandomly then
+    			item = NeutralItems:SelectRandomItem(tier)
+    		-- harder: just get the bot an item we know they like
+    		else
+    			item = NeutralItems:SelectRandomItem(tier, neediest)
+    		end
+    		-- sanity check
+    		if item ~= nil then
+	    		-- perhaps announce the item has been found
+	    		if Settings.neutralItems.announce then
+	    			Utilities:AnnounceNeutral(bot, item, MSG_NEUTRAL_FIND)
+	    		end
+	    		-- put the item in the stash
+	    		table.insert(NeutralStash[tier], item)
+	    		-- add the item to the list of awarded items
+	    		-- ##TODO: Query returns to make sure we only put items in the stash
+	    		-- that we created, rather than items the bot may have picked up
+	    		-- on its own in game.  This would probably have holes anyway, since
+	    		-- we can't tell items apart
+	    		table.insert(AwardedNeutrals, item)
+	    	end
+    		-- Set time for next find
+    		if (tier + 1) <= maxTier then
     			bot.stats.neutralTiming = Settings.neutralItems.timings[tier + 1] +
     										 Utilities:GetIntegerVariance(Settings.neutralItems.variance)
-					end
-					-- announce?
-					if Settings.neutralItems.announce then
-						Utilities:AnnounceNeutral(bot, tier, itemName)
-					end
+    			Debug:Print(bot.stats.name..': Next Neutral Timing: '..bot.stats.neutralTiming)
+    		-- disable if bots has maxed out finds								 
+    		else
+    			bot.stats.neutralTiming = -1
     		end
-    	else
-    		-- disable awards
-    		bot.stats.neutralTiming = -1
-    	end
+    	end  
+  		-- Close the tier if we hit the limit
+  		if tierAwards[tier] >= Settings.neutralItems.maxPerTier[tier] then
+  			NeutralItems:CloseBotFindTier(tier)
+  		end    	  	
     end
-  end
-  return neutralInterval
+	end    	
+  return neutralFindInterval
+end
+
+-- converts an ingame name into an item object.
+function BonusTimers:GetItemFromName(name)
+	for _, item in ipairs(masterNeutralTable) do 
+		if item.name == name then return item end
+	end
+end
+
+-- Manages giving items to bots from the stash
+function BonusTimers:NeutralItemDoleTimer()
+	repeat
+		-- Do we have something to do?
+		local itemToDole = BonusTimers:GetNextItemToDole()
+		if itemToDole ~= nil then
+			-- Items in stash only get one chance to be doled, so remove it whether
+			-- we actually assign it or not
+			BonusTimers:RemoveItemFromStash(itemToDole)		
+			-- try to find a bot that wants it
+			for _, bot in ipairs(Bots) do
+				-- Bot wants?
+				local botWants, newDesire, currentDesire = NeutralItems:DoesBotPreferItem(bot, itemToDole)
+				if botWants then 	
+
+	    		Debug:Print(bot.stats.name..': wants '..itemToDole.realName..': '..newDesire..', '..currentDesire)
+	    		-- update assignment table
+	    		bot.stats.assignedNeutral = itemToDole
+	    		-- Give item, check for replacement 
+					local replacedItemName = NeutralItems:GiveToUnit(bot, itemToDole)
+					-- if bot had an item . . . 
+					if replacedItemName ~= nil then
+						local item = BonusTimers:GetItemFromName(replacedItemName)
+						-- announce, maybe
+			  		if Settings.neutralItems.announce then
+			  			Utilities:AnnounceNeutral(bot, item, MSG_NEUTRAL_RETURN)
+			  		end
+			  		-- return old item to stash
+			  		table.insert(NeutralStash[item.tier], item)				
+					end	
+					-- announce item taking, maybe
+	    		if Settings.neutralItems.announce then
+	    			Utilities:AnnounceNeutral(bot, itemToDole, MSG_NEUTRAL_TAKE)
+	    		end
+					break
+				end					
+			end		
+		end
+	until itemToDole == nil	
+	return neutralDolenterval
+end
+
+-- Returns the next item to dole, or nil
+function BonusTimers:GetNextItemToDole()
+	for tier = maxTier, 1, -1 do 
+		if #NeutralStash[tier] > 0 then
+			return NeutralStash[tier][1]
+		end
+	end
+end
+
+-- removes a specific item from the stash
+function BonusTimers:RemoveItemFromStash(item)
+	for _, tierStash in ipairs(NeutralStash) do
+		for i, stashItem in ipairs(tierStash) do
+			if stashItem == item then 
+				table.remove(tierStash,i)
+				return
+			end
+		end
+	end
 end
 
 -- timer for adjusting gpm/xpm
@@ -205,19 +323,19 @@ function BonusTimers:GameStartBonus()
   	Utilities:Print(msg, MSG_WARNING, ATTENTION)
   end
 end
-  
+   
 -- registers the bonus timner listeners
 function BonusTimers:Register()
 	-- Game start bonus - Special case that happens one time when BonusTimers are registered 
 	BonusTimers:GameStartBonus()		  
-	-- Register NeutralItemTimer
-	if not inits.neutralItemTimer then
+	-- Register NeutralItemFindTimer
+	if not inits.neutralItemFindTimer then
 		if isDebug then
 			DeepPrintTable(Settings.neutralItems)
 		end
-		print('Registering NeutralItemTimer.')
-		Timers:CreateTimer(names.neutralItemTimer, {callback =  BonusTimers['NeutralItemTimer']} )
-		inits.neutralItemTimer = true
+		print('Registering NeutralItemFindTimer.')
+		Timers:CreateTimer(names.neutralItemFindTimer, {callback =  BonusTimers['NeutralItemFindTimer']} )
+		inits.neutralItemFindTimer = true
 	end
 	-- Register per minute timer (first executed one minute after game start so we're
 	-- not dividing by a decimal and inflating GPM/XPM

@@ -16,7 +16,7 @@ local role = require('RoleUtility')
 
 
 -- local debug flags
-local thisDebug = true
+local thisDebug = false
 local isDebug = Debug.IsDebug() and thisDebug
 local isChatDebug = Debug.IsDebug() and false
 local isVerboseDebug = Debug.IsDebug() and false
@@ -193,8 +193,8 @@ function DataTables:GenerateStatsTables(unit)
   	neutralTier = 0,
   	-- Timing for next level of neutral item
   	neutralTiming = Settings.neutralItems.timings[1] + Utilities:GetIntegerVariance(Settings.neutralItems.variance),
-  	-- does this hero really want this neutral (or did he just get it because nothing better was available?)
-  	hasSuitableNeutral = false,
+  	-- how good is this item for the hero?
+  	neutralSuitability = 0,
   	-- current tier of neutralItems found (i.e. spawned by this hero's timer)
   	neutralsFound = 0,
   	-- Hero isMelee

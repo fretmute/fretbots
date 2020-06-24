@@ -128,14 +128,6 @@ function AwardBonus:levels(bot, levels)
 	return false
 end
 
--- XP
-function AwardBonus:Experience(bot, bonus)
-	if bonus > 0 then 
-  	bot:AddExperience(bonus, 0, false, true)
-  	Debug:Print('Awarding experience to '..bot.stats.name..'.')
-  end
-end
-
 -- neutral
 function AwardBonus:neutral(bot, bonus)
 	if bot.stats.awards.neutral < Settings.awardCap.neutral then
@@ -154,156 +146,12 @@ function AwardBonus:neutral(bot, bonus)
 	end
 end
 
--- Gives a random neutral item to a unit
-function AwardBonus:RandomNeutralItem(unit, tier)
-	local role = unit.stats.role
-	-- check if the bot already has an item from this tier (or higher)
-	if unit.stats.neutralTier >= tier then 
-		if isDebug then
-			print('Bot has an item from tier '..unit.stats.neutralTier..'. This is equal to or better than '..tier)
-			return false
-		end
-	end
-	-- check if the unit is at or above the award limit
-	if unit.stats.awards.neutral >= Settings.awardCap.neutral then
-		if isDebug then
-			print('Bot is at the award limit of '..unit.stats.awards.neutral)
-		  return false
-	  end
-	end
-	-- select a new item from the list
-	local item, realName = AwardBonus:SelectRandomNeutralItem(tier, unit)	
-	-- award the new item if one was available
-	if item ~= nil then
-	  -- determine if the unit already has one (neutrals always in slot 16)
-		local currentItem = unit:GetItemInSlot(16)
-		-- remove if so
-		if currentItem ~= nil then
-			unit:RemoveItem(currentItem)
-		end
-		AwardBonus:NeutralItem(unit, item, tier)
-		return true, realName
-	end
-	return false
-end
-
--- Give someone a specific neutral item
-function AwardBonus:NeutralItem(bot, itemName, tier)
-	-- check if the bot already has an item from this tier (or higher)
-	if bot.stats.neutralTier >= tier then 
-		if isDebug then
-			print('Bot has an item from tier '..bot.stats.neutralTier..'. This is equal to or better than '..tier)
-			return false
-		end
-	end
-  if bot:HasRoomForItem(itemName, true, true) then
-  	local item = CreateItem(itemName, bot, bot)
-    item:SetPurchaseTime(0)
-    bot:AddItem(item)
-    bot.stats.neutralTier = tier
-    -- Special handling if it's royal jelly	
-    if itemName == "item_royal_jelly" then		
-    	Say(bot:GetPlayerOwner(), "Spending royal jelly charge on self.", false)		
-    	bot:CastAbilityOnTarget(bot, item, bot:GetPlayerOwnerID())		
-    	for _, unit in pairs(Bots) do			
-    		if unit.stats.isBot and unit.stats.team == bot.stats.team and unit.stats.name ~= bot.stats.name then	
-    			Say(bot:GetPlayerOwner(), "Spending royal jelly charge on "..unit.stats.name..'.', false)				
-    			bot:CastAbilityOnTarget(unit, item, bot:GetPlayerOwnerID())				
-    			break			
-    		end		
-    	end	
-    end
-    return true
+-- XP
+function AwardBonus:Experience(bot, bonus)
+	if bonus > 0 then 
+  	bot:AddExperience(bonus, 0, false, true)
+  	Debug:Print('Awarding experience to '..bot.stats.name..'.')
   end
-  return false
-end
-
--- Returns valid items for a given tier and role
-function AwardBonus:GetNeutralTableForTierAndRole(tier,unit)
-	local items = {}
-	local count = 0
-	for _,item in ipairs(allNeutrals) do
-		-- Melee / Ranged
-		if item.ranged and not unit.stats.isMelee then
-		  if item.tier == tier and item.roles[unit.stats.role] ~= 0 then
-		  	table.insert(items,item)
-		  	count = count + 1
-		  end
-		elseif item.melee and unit.stats.isMelee then
-		  if item.tier == tier and item.roles[unit.stats.role] ~= 0 then
-		  	table.insert(items,item)
-		  	count = count + 1
-		  end
-		end
-	end		
-  return items, count
-end
-
--- Returns true if a given item is valid for a given bot
-function AwardBonus:IsNeutralValidForBot(item, bot)
-  local isAttackValid = false
-  local isRoleValid = false
-  -- right attack type?
-  if item.ranged and not unit.stats.isMelee then
-  	isAttackValid = true
-  elseif item.melee and unit.stats.isMelee then
-  	isAttackValid = true
-  end
-  -- right role?
-  isRoleValid = (item.roles[unit.stats.role] ~= 0)
-  return (isAttackValid and isRoleValid)
-end
-
--- Returns valid items for a given tier
-function AwardBonus:GetNeutralTableForTier(tier)
-	local items = {}
-	local count = 0
-	for _,item in ipairs(allNeutrals) do
-	  if item.tier == tier then
-	  	table.insert(items,item)
-	  	count = count + 1
-	  end
-	end		
-  return items, count
-end
-
--- selects a random item from the list (by tier and role) and returns the internal item name
-function AwardBonus:SelectRandomNeutralItem(tier, unit)
-	-- Get items that qualify
-	-- if they didn't pass a unit, go full random
-	local items,count
-	if unit == nil then
-		items,count = AwardBonus:GetNeutralTableForTier(tier)
-  else
-		items,count = AwardBonus:GetNeutralTableForTierAndRole(tier,unit)
-	end
-	if items == nil then return nil end
-	-- pick one at random
-	local item = items[math.random(count)]
-	-- print selection for debug
-	if isDebug and item ~= nil then
-	--	print('Valid Neutral Items, Tier '..tier..':')
-	--	for _, it in pairs(items) do
-	--		print('  '..it.name)
-	--	end
-		print(unit.stats.name..': Random item selected: ' .. item.realName)
-	end
-	-- if there was a valid item, remove it from the table (if settings tell us to)
-	if item ~= nil and Settings.neutralItems.isRemoveUsedItems then
-		-- note that this loop only works because we only want to remove one item
-		for i,_ in ipairs(allNeutrals) do
-			if item == allNeutrals[i] then
-		  	table.remove(allNeutrals,i)
-		  	break
-			end
-		end
-  end
-  -- return the selected item
-  if item ~= nil then
-	  return item.name, item.realName
-	else
-		return nil
-	end
 end
 
 -- Gives the bot his death awrds, if there are any
