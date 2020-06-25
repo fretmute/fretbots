@@ -11,6 +11,8 @@ require 'BuffUnit'
 require 'Settings'
 -- Convenience Utilities
 require 'Utilities'
+-- Neutral items
+require 'NeutralItems'
 
 local role = require('RoleUtility')
 
@@ -66,7 +68,6 @@ function DataTables:Initialize()
 	Players={};
 	AllUnits = {};
 	for i,unit in pairs(Units) do
-		  Debug:Print(unit:GetName())
   		local id = PlayerResource:GetSteamID(unit:GetMainControllingPlayer());	
   		local isFret = Debug:IsFret(id);
   		-- Buff Fret for Debug purposes
@@ -83,6 +84,8 @@ function DataTables:Initialize()
 	DataTables:SetBotPositionFive()
 	-- Sort Bots Table by role for convenience
 	Bots = DataTables:SortBotsByRole()
+	-- Set all bots to find tier 1 neutrals
+	NeutralItems:InitializeFindTimings()
   -- Set Initialized Flag
   Flags.isStatsInitialized = true;
 	
@@ -192,9 +195,7 @@ function DataTables:GenerateStatsTables(unit)
   	-- current level of neutral item
   	neutralTier = 0,
   	-- Timing for next level of neutral item
-  	neutralTiming = Settings.neutralItems.timings[1] + Utilities:GetIntegerVariance(Settings.neutralItems.variance),
-  	-- how good is this item for the hero?
-  	neutralSuitability = 0,
+  	neutralTiming = 0,
   	-- current tier of neutralItems found (i.e. spawned by this hero's timer)
   	neutralsFound = 0,
   	-- Hero isMelee

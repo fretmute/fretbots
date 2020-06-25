@@ -114,7 +114,7 @@ function DynamicDifficulty:Toggle()
   Settings.dynamicDifficulty.enabled = not Settings.dynamicDifficulty.enabled
 end
 
--- Waits until settings are chosen and then caches them
+-- Waits until settings are chosen and then cache them
 function DynamicDifficulty:SettingsCacheTimer()
   -- check if settings are ready, try again later if not
   if not Flags.isSettingsFinalized then

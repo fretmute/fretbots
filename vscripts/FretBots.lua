@@ -56,12 +56,15 @@ end
 function FretBots:PlayersLoadedTimer()
 	-- if all players are loaded, initialize datatables and stop timer
 	if isAllPlayersSpawned then
-		Debug:Print('Initializing DataTables')
 		DataTables:Initialize()
 		-- Set the host ID for whitelisting settings chat commands
 		Settings:SetHostPlayerID()
 		-- Start bonus timers (they require DataTables to exist)
 		BonusTimers:Initialize()
+		-- Register EntityHurt Listener
+		EntityHurt:RegisterEvents()
+		-- Register EntityKilled Listener
+		EntityKilled:RegisterEvents()
 		Timers:RemoveTimer(playersLoadedTimerName)
 	  return nil
 	end

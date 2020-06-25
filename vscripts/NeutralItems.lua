@@ -77,12 +77,12 @@ function NeutralItems:GetTableForTierAndRole(tier,unit)
 	local count = 0
 	for _,item in ipairs(AllNeutrals) do
 		-- Melee / Ranged
-		if item.ranged and not unit.stats.isMelee then
+		if item.ranged > 0 and not unit.stats.isMelee then
 		  if item.tier == tier and item.roles[unit.stats.role] ~= 0 then
 		  	table.insert(items,item)
 		  	count = count + 1
 		  end
-		elseif item.melee and unit.stats.isMelee then
+		elseif item.melee > 0 and unit.stats.isMelee then
 		  if item.tier == tier and item.roles[unit.stats.role] ~= 0 then
 		  	table.insert(items,item)
 		  	count = count + 1
@@ -118,10 +118,6 @@ function NeutralItems:SelectRandomItem(tier, unit)
 	if items == nil then return nil end
 	-- pick one at random
 	local item = items[math.random(count)]
-	-- print selection for debug
-	if isDebug and item ~= nil then
-		print('Neutral Item Found: ' .. item.realName)
-	end
 	-- if there was a valid item, remove it from the table (if settings tell us to)
 	if item ~= nil and Settings.neutralItems.isRemoveUsedItems then
 		-- note that this loop only works because we only want to remove one item
@@ -172,20 +168,20 @@ end
 
 -- Returns the 'goodness' of an item for a bot, higher is better
 function NeutralItems:GetBotDesireForItem(bot, item)
-  local isAttackValid = false
+  local attackTypeScore = 0
   -- Bots are never willing to take an item of the wrong attack type
-  if item.ranged and not bot.stats.isMelee then
-  	isAttackValid = true
-  elseif item.melee and bot.stats.isMelee then
-  	isAttackValid = true
+  if not bot.stats.isMelee then
+  	attackTypeScore = item.ranged
+  elseif bot.stats.isMelee then
+  	attackTypeScore = item.melee
   end
-	if not isAttackValid then return 0 end
+	if attackTypeScore <= 0 then return 0 end
   -- Get validity from role
   local roleScore = item.roles[bot.stats.role]
   -- ##TODO: Make this less arbitrary
   -- for now we'll just say each tier is worth 10 points
   local tierScore = item.tier * 10
-  return roleScore + tierScore
+  return attackTypeScore + roleScore + tierScore
 end
 
 -- Returns  true if the bot would prefer a specific item 
@@ -205,17 +201,58 @@ end
 -- has had all of its items found
 -- Yes, there's probably an edge case bug where a bot is somehow
 -- two tiers behind.  
+-- This method preserves the previous tier's variance and neutral 
+-- award subtractions.
 function NeutralItems:CloseBotFindTier(tier)
 	for _, bot in ipairs(Bots) do
+		-- if this is the case, the bot is behind and needs to be updated to new tier.
 	  if bot.stats.neutralsFound < tier then
-	  	bot.stats.neutralsFound = tier
-	  	if tier < 5 then
-	  		bot.stats.neutralTiming = bot.stats.neutralTiming + 
-	  														Settings.neutralItems.timings[tier + 1] - 
-	  														Settings.neutralItems.timings[tier]
-	  	else
-	  		bot.stats.neutralTiming = -1													
-	  	end
+	  	NeutralItems:SetBotFindTier(bot, tier + 1)
 	  end
 	end
+end
+
+-- Sets all bots to find tier 1 items.
+function NeutralItems:InitializeFindTimings()
+	for _, bot in ipairs(Bots) do
+  	bot.stats.neutralsFound = 0
+  	bot.stats.neutralTiming = Settings.neutralItems.timings[1] + 
+															Utilities:GetIntegerVariance(Settings.neutralItems.variance)
+		Debug:Print(bot.stats.name..': Neutral Timing for Tier 1: '..bot.stats.neutralTiming)														
+	end
+end
+
+-- sets a particular bot for a timing to find a specific tier
+function NeutralItems:SetBotFindTier(bot, tier)
+	-- Is this a valid tier tier?
+	local nextTiming = Settings.neutralItems.timings[tier]
+	if nextTiming ~= nil then
+		local previousTiming
+		-- this should normally be the case
+		if Settings.neutralItems.timings[tier - 1] ~= nil then
+			previousTiming = Settings.neutralItems.timings[tier - 1]
+		else
+			previousTiming = 0
+		end		
+		-- normal case: bot has found an item one tier below what we're setting it to
+		-- meaning we called this function immediately after finding it.  Get new
+		-- variance, don't preserve neutral awards (might change that via setting someday)
+		if bot.stats.neutralsFound == tier - 1 then		
+			bot.stats.neutralTiming = Settings.neutralItems.timings[tier] + 
+															  Utilities:GetIntegerVariance(Settings.neutralItems.variance)
+	  -- if we're further behind, the bot never found an item.  We want to preserve
+	  -- the existing randomness for the timing (including neutral awards), so we just 
+	  -- add the difference
+	  else
+	  	bot.stats.neutralTiming = bot.stats.neutralTiming + nextTiming - previousTiming
+	  	-- flag them as having found the proper tier of item
+			bot.stats.neutralsFound = tier - 1
+		end
+		-- Sanity check
+		if bot.stats.neutralTiming < 0 then bot.stats.neutralTiming = 0 end
+	-- no next timing: disable the timer.
+	else
+		bot.stats.neutralTiming = -1
+	end
+	Debug:Print(bot.stats.name..': Neutral Timing for Tier '..tier..': '..bot.stats.neutralTiming)													
 end

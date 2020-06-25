@@ -59,7 +59,7 @@
 			-- game time (seconds) at which awards are given.  
 			timings = {0, 420, 1020, 2020, 3600},
 			-- variance for timings (this number of seconds added to base timing per bot)
-			variance = {0, 240},
+			variance = {30, 240},
 			-- if true, announce awards to chat
 			announce = true,
 			-- Assign randomly, or roll specific per role down the line? (former is easier)

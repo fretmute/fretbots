@@ -2,8 +2,15 @@ TODO:
 
 Implement dynamic difficulty adjustment for death awards.
 
-Fix neutralItems.maxPerTier functionality
 -----------------------------------
+
+-----------------------------------
+0.4.2.1
+-----------------------------------
+Modfied neutral item table to use numeric values for most differentiators
+(melee flag, ranged flag, roles) numbered 0-x.  These values are now used
+in the GetBotDesireForItem() function.  This should provide some 
+granularity to this function, whereas before it was pretty basic.
 
 -----------------------------------
 0.4.2.0

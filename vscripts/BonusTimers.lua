@@ -124,6 +124,8 @@ function BonusTimers:NeutralItemFindTimer()
     		end
     		-- sanity check
     		if item ~= nil then
+    			-- Debug
+    			Debug:Print(bot.stats.name..': '..' found item: '..item.realName)
 	    		-- perhaps announce the item has been found
 	    		if Settings.neutralItems.announce then
 	    			Utilities:AnnounceNeutral(bot, item, MSG_NEUTRAL_FIND)
@@ -138,14 +140,7 @@ function BonusTimers:NeutralItemFindTimer()
 	    		table.insert(AwardedNeutrals, item)
 	    	end
     		-- Set time for next find
-    		if (tier + 1) <= maxTier then
-    			bot.stats.neutralTiming = Settings.neutralItems.timings[tier + 1] +
-    										 Utilities:GetIntegerVariance(Settings.neutralItems.variance)
-    			Debug:Print(bot.stats.name..': Next Neutral Timing: '..bot.stats.neutralTiming)
-    		-- disable if bots has maxed out finds								 
-    		else
-    			bot.stats.neutralTiming = -1
-    		end
+    		NeutralItems:SetBotFindTier(bot, tier + 1)
     	end  
   		-- Close the tier if we hit the limit
   		if tierAwards[tier] >= Settings.neutralItems.maxPerTier[tier] then
