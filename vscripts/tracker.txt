@@ -5,6 +5,13 @@ Implement dynamic difficulty adjustment for death awards.
 -----------------------------------
 
 -----------------------------------
+0.4.3.1
+-----------------------------------
+Disabled dynamic levels by default.
+
+Tweaked difficulties a bit more.
+
+-----------------------------------
 0.4.3.0
 -----------------------------------
 Removed Tobi's sound cues.  They're no longer in the game files, but I shouldn't
@@ -27,6 +34,10 @@ Enabled dynamic difficulty by default in standard and role scaled difficulties.
 
 Added timeGate setting to death bonuses that prevents them from being awarded
 until a certain number of seconds of game time have elapsed.
+
+Fixed a bug with awarding levels around 30.
+
+Tweaked difficulty a little bit more.
 
 -----------------------------------
 0.4.2.1

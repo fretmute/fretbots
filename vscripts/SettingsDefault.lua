@@ -318,9 +318,9 @@
  			gold 					= 25000,
 			armor 				= 25,
 			magicResist 	= 25,
-			levels 				= 25,
+			levels 				= 10,
 			neutral 			= 1200,
-			stats 				= 50,   	
+			stats 				= 25,   	
     },		
     -- Settings for dynamically adjusting difficulty
     dynamicDifficulty = 
@@ -356,16 +356,16 @@
 	    },    	
     	xpm = 
     	{
-	    	enabled							= true,
+	    	enabled							= false,
 	    	advantageThreshold 	= 2,
 	    	incrementEvery 			= 1,
-	    	base								= 20,
-	    	increment 					= 10,
+	    	base								= 10,
+	    	increment 					= 5,
 	    	announce 						= false	    	
 	    },    	 
     	levels = 
     	{
-	    	enabled							= true,
+	    	enabled							= false,
 	    	advantageThreshold	= 10,
 	    	incrementEvery			= 2,
 	    	base								= 1,

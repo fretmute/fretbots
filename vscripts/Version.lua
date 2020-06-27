@@ -1,4 +1,4 @@
-version = '0.4.3.0'
+version = '0.4.3.1'
 versionString = [[Changelog:
 Removed Tobi's sound cues.  They're no longer in the game files, but I shouldn't
 be referencing them either.  
@@ -20,4 +20,10 @@ Enabled dynamic difficulty by default in standard and role scaled difficulties.
 
 Added timeGate setting to death bonuses that prevents them from being awarded
 until a certain number of seconds of game time have elapsed.
+
+Fixed a bug with awarding levels around 30.
+
+Disabled dynamic levels by default.
+
+Tweaked difficulty a little bit more.
 ]]

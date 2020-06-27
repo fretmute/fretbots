@@ -120,7 +120,10 @@ function AwardBonus:levels(bot, levels)
 	  local currentXP = bot:GetCurrentXP()
 	  local currentLevelXP = xpPerLevel[currentLevel]
 	  local targetLevel = math.ceil(levels)
-	  local targetLevelXP = xpPerLevel[currentLevel + targetLevel]
+	  -- Sanity check
+	  local target = currentLevel + targetLevel
+	  if target > 30 then target = 30 end
+	  local targetLevelXP = xpPerLevel[target]
 	  -- get the average amount of experience per level difference
 	  local averageXP = (targetLevelXP - currentLevelXP) / targetLevel
 	  -- award average XP per level times levels 
@@ -307,7 +310,7 @@ function AwardBonus:GetValue(bot, award)
 	isLoud = (Settings.deathBonus.isClampLoud[award] and clamped == Settings.deathBonus.clamp[award][2])
 	         or
 	         Settings.deathBonus.isLoud[award]
-  Debug:DeepPrint(debugTable)
+  --Debug:DeepPrint(debugTable)
 	return clamped, isLoud
 end
 
