@@ -27,10 +27,10 @@ function EntityKilled:OnEntityKilled(event)
 	if not isHero then return end;
 	-- Do Table Update
 	DataTables:DoDeathUpdate(victim, killer);	
+	-- Dynamic Adjustment (maybe)
+	DynamicDifficulty:Adjust(victim)	
 	-- Give Awards (maybe)
 	AwardBonus:Death(victim)
-	-- Dynamic Adjustment (maybe)
-	DynamicDifficulty:Adjust(victim)
 	-- Sound if it is a player?
 	if Settings.isPlayerDeathSound then
 	  Utilities:RandomSound(PLAYER_DEATH_LIST)
@@ -69,5 +69,3 @@ function EntityKilled:RegisterEvents()
   end
 end
 
--- Register
-EntityKilled:RegisterEvents()

@@ -53,7 +53,7 @@ LAKAD									= 'soundboard.ta_daaaa'
 JIAYOU								= 'soundboard.jia_you'
                 		
 -- tables for random sounds
-BAD_LIST							= {DISASTAH, RUSSIAN_REKT, GG, OH_MY_LORD, BEAUTIFUL, JIAYOU}
+BAD_LIST							= {RUSSIAN_REKT, GG, BEAUTIFUL, JIAYOU, GROAN}
 PLAYER_DEATH_LIST			= {PATIENCE, DISAPPOINTED, APPLAUSE, PERFECT, QUESTIONABLE, 
 												 SAD_TROMBONE, WHAT_HAPPENED, NEXT_LEVEL, GROAN,
 												 WOW, LAKAD}
@@ -363,7 +363,6 @@ end
 
 -- Copies matching table fields from source to target
 function Utilities:DeepCopy(source, target)
-	
   for key, value in pairs(source) do 
     if target[key] ~= nil then
     	if type(value) == 'table' then 
@@ -456,6 +455,7 @@ function Utilities:IsRealHero(unit)
 	end
 	return false
 end
+
 -- iterates over a table by keys, alphabetically
 function Utilities:PairsByKeys (t, f)
       local a = {}

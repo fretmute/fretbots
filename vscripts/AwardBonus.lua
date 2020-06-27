@@ -112,6 +112,11 @@ function AwardBonus:levels(bot, levels)
 	if bot.stats.awards.levels < Settings.awardCap.levels and levels > 0 then
 	  -- get current level and XP
 	  local currentLevel = PlayerResource:GetLevel(bot.stats.id)
+	  -- if bot is level 30, exit
+	  if currentLevel == 30 then 
+	    Debug:Print(bot.stats.name..': Already level 30, cannot award levels.')
+	  	return
+	  end
 	  local currentXP = bot:GetCurrentXP()
 	  local currentLevelXP = xpPerLevel[currentLevel]
 	  local targetLevel = math.ceil(levels)
@@ -275,7 +280,9 @@ function AwardBonus:GetValue(bot, award)
 		debugTable.roleScale = Settings.deathBonus.scale[award][bot.stats.role]
 		scaled = scaled * Settings.deathBonus.scale[award][bot.stats.role]
 	end
-	debugTable.scaled = scaled
+	-- add offset
+	scaled = scaled + Settings.deathBonus.offset[award]
+	debugTable.scaled = scaled	
 	-- Round and maybe clamp
 	local clamped = 0
 	if Settings.deathBonus.clampOverride[award] then
@@ -300,7 +307,7 @@ function AwardBonus:GetValue(bot, award)
 	isLoud = (Settings.deathBonus.isClampLoud[award] and clamped == Settings.deathBonus.clamp[award][2])
 	         or
 	         Settings.deathBonus.isLoud[award]
-  --Debug:DeepPrint(debugTable)
+  Debug:DeepPrint(debugTable)
 	return clamped, isLoud
 end
 
@@ -311,7 +318,17 @@ function AwardBonus:ShouldAward(bot,award)
 		if isDebug then print(bot.stats.name..': Chance for '..award..' was 1 or greater.') end
 		return true 
 	end
-	-- alsmost as trivial case: check if deathStreakThreshold is enabled
+	-- check timeGate
+	local gameTime = Utilities:GetTime()
+	if gameTime < Settings.deathBonus.timeGate[award] then
+		local msg = ''
+		msg = msg..bot.stats.name..': '..award
+		msg = msg..' bonus not given because the time gate has not been met: '
+		msg = msg..gameTime..', '.. Settings.deathBonus.timeGate[award]	
+		Debug:Print(msg)
+		return false
+	end
+	-- almost as trivial case: check if deathStreakThreshold is enabled
 	if Settings.deathBonus.deathStreakThreshold >= 0 then
 		if bot.stats.deathStreak >= Settings.deathBonus.deathStreakThreshold then
 			if isDebug then print(bot.stats.name..': automatic '..award..' bonus due to death streak of '..bot.stats.deathStreak..'.') end
@@ -397,4 +414,28 @@ function AwardBonus:GetSpecificPerMinuteBonus(bot, pmBot, roleTable, settings)
   debugTable.pmClamped = pmClamped
   debugTable.bonus = bonus
 	return bonus, debugTable
+end
+
+-- Punishes humans for abusing bot AI to get kills before the horn around runes
+function AwardBonus:PunishForAbuse()
+	local state =  GameRules:State_Get()
+	if state == DOTA_GAMERULES_STATE_PRE_GAME then
+		local msg = 'Bot rune AI abuse is a bad idea!'
+		Utilities:Print(msg, MSG_BAD, BAD_LIST)
+		for _, bot in ipairs(Bots) do
+			local awardsTable = {}
+			table.insert(awardsTable, bot)
+	    local isSuccess = AwardBonus['levels'](AwardBonus, bot, 17)
+	    -- if success, set isAwarded, isLoudWarning, Clear chance, Update message
+	    if isSuccess then
+	    	table.insert(awardsTable, {'levels', 17})
+	    end
+	    local isSuccess = AwardBonus['stats'](AwardBonus, bot, 25)
+	    -- if success, set isAwarded, isLoudWarning, Clear chance, Update message
+	    if isSuccess then
+	    	table.insert(awardsTable, {'stats', 25})
+	    end	 
+	    Utilities:Print(awardsTable, MSG_AWARD, BAD_LIST)   
+		end
+	end
 end

@@ -1,27 +1,23 @@
-version = '0.4.2.1'
+version = '0.4.3.0'
 versionString = [[Changelog:
-Further reworked Neutral Item awards:
-	
-	Split neutral timers; there is now a 'drop' timer that tracks 
-	when items are spawned, and a 'dole' timer that handles assigning.
-	
-	Neutral items now have separate drop amounts per tier.
-	
-	Bots now have rudimentary desires for certain items over other ones
-	(or would, if the table values were not currently all ones.)
-	
-	Items that are removed from the bots are returned to a virtual
-	stash so that they can be allocated to a new bot.
-	
-	Added settings for how to assign neutrals: truly randomly, or
-	the old method where each bot gets assigned directly an item
-	it can use.
-	
-	Moved functions for handling neutrals out of AwardBonus and into 
-	a dediciated file (NeutralItems).
-	
-	Modfied neutral item table to use numeric values for most differentiators
-	(melee flag, ranged flag, roles) numbered 0-x.  These values are now used
-	in the GetBotDesireForItem() function.  This should provide some 
-	granularity to this function, whereas before it was pretty basic.
+Removed Tobi's sound cues.  They're no longer in the game files, but I shouldn't
+be referencing them either.  
+
+Adjusted AwardBonus:levels() to return if the target bot is already
+level 30.  I don't recall this ever having been an issue, but it's good
+sense.
+
+Implemented dynamic difficulty adjustments for awards other than GPM and XPM.
+Current settings are experimental.
+
+Added announce setting for various dynamic difficulty knobs.  Set to false
+by default.  If true, knob adjustments are announced to chat.
+
+Fixed DynamicDifficulty:MakeAdjustment() so that it never attempts to
+divide by 0.
+
+Enabled dynamic difficulty by default in standard and role scaled difficulties.
+
+Added timeGate setting to death bonuses that prevents them from being awarded
+until a certain number of seconds of game time have elapsed.
 ]]

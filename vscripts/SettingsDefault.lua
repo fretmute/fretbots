@@ -287,6 +287,16 @@
 				neutral 			= true,
 				stats 				= true
 			},
+	    -- bonuses not awarded if game time is less than this number (seconds)
+	    timeGate = 
+	    {
+	  		gold 					= -100,
+				armor 				= -100,
+				magicResist 	= -100,
+				levels 				=  120,
+				neutral 			= -100,
+				stats 				= -100,     	
+	    },			
       -- sets whether to announce in chat if awards have been given
       announce			= true  
     },
@@ -308,48 +318,91 @@
  			gold 					= 25000,
 			armor 				= 25,
 			magicResist 	= 25,
-			levels 				= 10,
+			levels 				= 25,
 			neutral 			= 1200,
-			stats 				= 25,   	
+			stats 				= 50,   	
     },		
     -- Settings for dynamically adjusting difficulty
     dynamicDifficulty = 
     {
     	-- Set to false to disable completely.
-    	enabled 				= false, 
+    	enabled 				= true, 
+    	-- 'knobs' to turn to adjust difficulty dynamically.
+    	knobs = 
+    	{
+    		'gpm',
+    		'xpm',
+    		'levels',
+    		'stats'
+    	},
     	-- Settings related to kill deficits
     	gpm = 
     	{
 	    	-- Set to false to disable adjustments based on kills.
 	    	enabled				= true,
 	    	-- if the bots are this many kills behind, begin adjusting
-	    	advantageThreshold = 5,
+	    	advantageThreshold = 2,
 	    	-- Awards scaled by scale amount every <this many> kills beyond the threshold
-	    	incrementEvery = 2,
+	    	incrementEvery = 1,
 	    	-- base bonus increased by this much when over threshold
-	    	base					= 50,
+	    	base					= 20,
 				-- incremental amounts are added to the base every time
 				-- the increment amount is reached, i.e. if threshold is 5,
 				-- incrementEvery is 2, and the bots are 9 kills behind,
 				-- then the nudge will be base + (increment * 2)
-	    	increment 		= 25,
+	    	increment 		= 10,
+	    	-- If true, adjustments are announced to chat.
+	    	announce 			= false
 	    },    	
     	xpm = 
     	{
-	    	-- Set to false to disable adjustments based on kills.
-	    	enabled				= true,
-	    	-- if the bots are this many kills behind, begin adjusting
-	    	advantageThreshold = 5,
-	    	-- Awards scaled by scale amount every <this many> kills beyond the threshold
-	    	incrementEvery = 2,
-	    	-- base bonus increased by this much when over threshold
-	    	base					= 50,
-				-- incremental amounts are added to the base every time
-				-- the increment amount is reached, i.e. if threshold is 5,
-				-- incrementEvery is 2, and the bots are 9 kills behind,
-				-- then the nudge will be base + (increment * 2)
-	    	increment 		= 25,
-	    },    	    
+	    	enabled							= true,
+	    	advantageThreshold 	= 2,
+	    	incrementEvery 			= 1,
+	    	base								= 20,
+	    	increment 					= 10,
+	    	announce 						= false	    	
+	    },    	 
+    	levels = 
+    	{
+	    	enabled							= true,
+	    	advantageThreshold	= 10,
+	    	incrementEvery			= 2,
+	    	base								= 1,
+	    	increment 					= 1,
+	    	announce 						= false,
+	    	-- chanceAdjust is optional and will adjust the base chance for 
+	    	-- death awards for each knob. 
+	    	chanceAdjust = 
+	    	{
+		    	enabled							= true,
+		    	advantageThreshold	= 10,
+		    	incrementEvery			= 0,
+		    	base								= 1.0,
+		    	increment 					= 0,
+		    	announce 						= false,	    		
+	    	}
+	    },    		  
+    	stats = 
+    	{
+	    	enabled							= true,
+	    	advantageThreshold	= 7,
+	    	incrementEvery			= 1,
+	    	base								= 1,
+	    	increment 					= 1,
+	    	announce 						= false,
+	    	-- chanceAdjust is optional and will adjust the base chance for 
+	    	-- death awards for each knob. 
+	    	chanceAdjust = 
+	    	{
+		    	enabled							= true,
+		    	advantageThreshold	= 7,
+		    	incrementEvery			= 0,
+		    	base								= 1.0,
+		    	increment 					= 0,
+		    	announce 						= false,	    		
+	    	}
+	    },  	         
     },
   }
   
