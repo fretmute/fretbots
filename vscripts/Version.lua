@@ -1,4 +1,4 @@
-version = '0.4.3.1'
+version = '0.4.3.2'
 versionString = [[Changelog:
 Removed Tobi's sound cues.  They're no longer in the game files, but I shouldn't
 be referencing them either.  
@@ -26,4 +26,10 @@ Fixed a bug with awarding levels around 30.
 Disabled dynamic levels by default.
 
 Tweaked difficulty a little bit more.
+
+Disabled neutral message return to stash chat announcements.
+
+Fixed bug preventing dynamic bonuses form being disabled.
+
+Disabled dynamic bonuses for easier difficulty.
 ]]

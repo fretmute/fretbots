@@ -41,13 +41,15 @@ function DynamicDifficulty:Adjust(victim)
 	-- do not do anything for humans
 	if not victim.stats.isBot then return end
 	for _, knob in ipairs(Settings.dynamicDifficulty.knobs) do
-		if knob == 'xpm' or knob == 'gpm' then	
+		if knob == 'xpm' or knob == 'gpm' and Settings.dynamicDifficulty[knob].enabled then	
 			-- GPM
 			DynamicDifficulty:MakeAdjustment('gpm')
 			-- XPM
 			DynamicDifficulty:MakeAdjustment('xpm')
 		else
-			DynamicDifficulty:AdjustDeathBonus(knob, victim)
+			if Settings.dynamicDifficulty[knob].enabled then 
+				DynamicDifficulty:AdjustDeathBonus(knob, victim)
+			end
 		end
 	end
 end

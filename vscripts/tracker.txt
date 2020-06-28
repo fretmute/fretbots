@@ -5,6 +5,15 @@ Implement dynamic difficulty adjustment for death awards.
 -----------------------------------
 
 -----------------------------------
+0.4.3.2
+-----------------------------------
+Disabled neutral message return to stash chat announcements.
+
+Fixed bug preventing dynamic bonuses form being disabled.
+
+Disabled dynamic bonuses for easier difficulty.
+
+-----------------------------------
 0.4.3.1
 -----------------------------------
 Disabled dynamic levels by default.

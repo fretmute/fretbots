@@ -183,7 +183,8 @@ function BonusTimers:NeutralItemDoleTimer()
 						local item = BonusTimers:GetItemFromName(replacedItemName)
 						-- announce, maybe
 			  		if Settings.neutralItems.announce then
-			  			Utilities:AnnounceNeutral(bot, item, MSG_NEUTRAL_RETURN)
+			  			--##Temporarily disabled because it's annoying
+			  			--Utilities:AnnounceNeutral(bot, item, MSG_NEUTRAL_RETURN)
 			  		end
 			  		-- return old item to stash
 			  		table.insert(NeutralStash[item.tier], item)				

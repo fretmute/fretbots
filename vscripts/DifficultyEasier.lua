@@ -48,6 +48,11 @@ local settings =
 	    stats					= {0, 1},	
 	  },  	
 	}, 
+  dynamicDifficulty = 
+  {
+  	-- Set to false to disable completely.
+  	enabled 				= false,
+  }
 }
 
 return settings
