@@ -1,4 +1,4 @@
-version = '0.4.3.2'
+version = '0.4.3.3'
 versionString = [[Changelog:
 Removed Tobi's sound cues.  They're no longer in the game files, but I shouldn't
 be referencing them either.  
@@ -32,4 +32,6 @@ Disabled neutral message return to stash chat announcements.
 Fixed bug preventing dynamic bonuses form being disabled.
 
 Disabled dynamic bonuses for easier difficulty.
+
+Adjusted base armor from agility formula to reflect new patch.
 ]]

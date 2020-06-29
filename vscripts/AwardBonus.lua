@@ -85,7 +85,7 @@ function AwardBonus:armor(bot, bonus)
 		local armor
 		local base
 		armor = bot:GetPhysicalArmorBaseValue()
-	 	base = bot:GetAgility() * 0.16
+	 	base = bot:GetAgility() * (1/6)
 	 	bot:SetPhysicalArmorBaseValue(armor - base + bonus)
 	 	bot.stats.awards.armor = bot.stats.awards.armor + bonus
 	 	Debug:Print('Awarding armor to '..bot.stats.name..'.')

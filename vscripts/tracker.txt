@@ -1,8 +1,11 @@
 TODO: 
 
-Implement dynamic difficulty adjustment for death awards.
+-----------------------------------
 
 -----------------------------------
+0.4.3.3
+-----------------------------------
+Adjusted base armor from agility formula to reflect new patch.
 
 -----------------------------------
 0.4.3.2
