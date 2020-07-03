@@ -98,6 +98,9 @@ function DynamicDifficulty:GetCurrentAdjustment(settings, victim)
   		increments = 0
   	end
   	bonus = bonus + (increments * incrementValue)
+  	if bonus > settings.cap then
+			bonus = settings.cap
+		end
   	return bonus, advantage, increments
   -- below threshold, return 0
   else

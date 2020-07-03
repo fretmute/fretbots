@@ -84,6 +84,3 @@ function EntityHurt:RegisterEvents()
 		end
   end
 end
-
--- Register
-EntityHurt:RegisterEvents()

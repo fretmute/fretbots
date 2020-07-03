@@ -56,7 +56,7 @@ function AwardBonus:gold(bot, bonus)
 	if bot.stats.awards.gold < Settings.awardCap.gold and bonus > 0 then
 	  PlayerResource:ModifyGold(bot.stats.id, bonus, false, 0)
 	  bot.stats.awards.gold = bot.stats.awards.gold + bonus
-	  Debug:Print('Awarding gold to '..bot.stats.name..'.')
+	  --Debug:Print('Awarding gold to '..bot.stats.name..'.')
 	  return true  
 	end
 	return false
@@ -73,7 +73,7 @@ function AwardBonus:stats(bot, bonus)
 	  stat = bot:GetBaseIntellect()
 	  bot:SetBaseIntellect(stat + bonus)
 	  bot.stats.awards.stats = bot.stats.awards.stats + bonus
-	  Debug:Print('Awarding stats to '..bot.stats.name..'.')
+	  --Debug:Print('Awarding stats to '..bot.stats.name..'.')
 	  return true
 	end
 	return false
@@ -88,7 +88,7 @@ function AwardBonus:armor(bot, bonus)
 	 	base = bot:GetAgility() * (1/6)
 	 	bot:SetPhysicalArmorBaseValue(armor - base + bonus)
 	 	bot.stats.awards.armor = bot.stats.awards.armor + bonus
-	 	Debug:Print('Awarding armor to '..bot.stats.name..'.')
+	 	--Debug:Print('Awarding armor to '..bot.stats.name..'.')
 	 	return true
 	end
 	return false
@@ -101,7 +101,7 @@ function AwardBonus:magicResist(bot, bonus)
 	  resistance = bot:GetBaseMagicalResistanceValue()
 	  bot:SetBaseMagicalResistanceValue(resistance + bonus)
 	  bot.stats.awards.magicResist = bot.stats.awards.magicResist + bonus
-	  Debug:Print('Awarding magic resist to '..bot.stats.name..'.')
+	  --Debug:Print('Awarding magic resist to '..bot.stats.name..'.')
 	  return true
 	end
 	return false
@@ -130,7 +130,7 @@ function AwardBonus:levels(bot, levels)
 	  local awardXP = Utilities:Round(averageXP * levels)
 	  bot:AddExperience(awardXP, 0, false, true)
 	  bot.stats.awards.levels = bot.stats.awards.levels + levels
-	  Debug:Print('Awarding levels  to '..bot.stats.name..'.')
+	  --Debug:Print('Awarding levels  to '..bot.stats.name..'.')
 	  return true
 	end
 	return false
@@ -146,7 +146,7 @@ function AwardBonus:neutral(bot, bonus)
 	  	bot.stats.neutralTiming = 0
 	  end
 	  bot.stats.awards.neutral = bot.stats.awards.neutral + bonus
-	  Debug:Print('Awarding neutral to '..bot.stats.name..'.')
+	  --Debug:Print('Awarding neutral to '..bot.stats.name..'.')
 	  return true, bonus
 	else
 		Debug:Print('Bot has reached the neutral award limit of '..Settings.awardCap.neutral)
@@ -158,7 +158,7 @@ end
 function AwardBonus:Experience(bot, bonus)
 	if bonus > 0 then 
   	bot:AddExperience(bonus, 0, false, true)
-  	Debug:Print('Awarding experience to '..bot.stats.name..'.')
+  	--Debug:Print('Awarding experience to '..bot.stats.name..'.')
   end
 end
 
@@ -181,12 +181,9 @@ function AwardBonus:Death(bot)
 	local awards = 0
 	-- loop over bonuses in order
 	for _, award in ipairs(Settings.deathBonus.order) do
-		-- this event gets fired for humans to, so drop out here if we don't want to give rewards to humans
+		-- this event gets fired for humans too, so drop out here if we don't want to give rewards to humans
 		if not bot.stats.isBot and Settings.deathBonus.isBotsOnly[award] then
-			if isDebug then 
-				print(bot.stats.name..' is a player and does not get death bonuses for '..award..'.') 
-				return
-			end
+			return
 		end		
 		-- check if enabled
 		if Settings.deathBonus.enabled[award] then
@@ -197,7 +194,7 @@ function AwardBonus:Death(bot)
 			end
 			-- if this award is greater than max, then break
 			if awards > Settings.deathBonus.maxAwards then
-				if isDebug then print('Max awards of '..Settings.deathBonus.maxAwards..' reached.') end
+				if isDebug then print(bot.stats.name..': Max awards of '..Settings.deathBonus.maxAwards..' reached.') end
 				break 
 			end			
 			-- make the award
@@ -305,6 +302,10 @@ function AwardBonus:GetValue(bot, award)
 		clamped = Utilities:Clamp(rounded, Settings.deathBonus.clamp[award][1], upperClamp)
 	  debugTable.rounded = rounded
 	end
+	-- Final check: don't award anything that would put them over the cap.
+	if (bot.stats.awards[award] + clamped) >= Settings.awardCap[award] then
+		clamped = Settings.awardCap[award] - bot.stats.awards[award]
+	end
 	debugTable.clamped = clamped
 	-- set isLoud
 	isLoud = (Settings.deathBonus.isClampLoud[award] and clamped == Settings.deathBonus.clamp[award][2])
@@ -330,6 +331,10 @@ function AwardBonus:ShouldAward(bot,award)
 		msg = msg..gameTime..', '.. Settings.deathBonus.timeGate[award]	
 		Debug:Print(msg)
 		return false
+	end
+	-- Don't award if they're already at the cap
+	if bot.stats.awards[award] >= Settings.awardCap[award] then
+	return false
 	end
 	-- almost as trivial case: check if deathStreakThreshold is enabled
 	if Settings.deathBonus.deathStreakThreshold >= 0 then
@@ -441,4 +446,9 @@ function AwardBonus:PunishForAbuse()
 	    Utilities:Print(awardsTable, MSG_AWARD, BAD_LIST)   
 		end
 	end
+end
+
+-- returns true if the award is at or past the award cap for a given bot
+function AwardBonus:IsAwardCapped(bot, award)
+	return Settings.deathBonus.awardCap[award]
 end

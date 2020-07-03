@@ -351,6 +351,8 @@
 				-- incrementEvery is 2, and the bots are 9 kills behind,
 				-- then the nudge will be base + (increment * 2)
 	    	increment 		= 10,
+	    	-- maximum for this bonus
+	    	cap 					= 200, 				
 	    	-- If true, adjustments are announced to chat.
 	    	announce 			= false
 	    },    	
@@ -361,6 +363,7 @@
 	    	incrementEvery 			= 1,
 	    	base								= 10,
 	    	increment 					= 5,
+	    	cap 								= 200,
 	    	announce 						= false	    	
 	    },    	 
     	levels = 
@@ -370,6 +373,7 @@
 	    	incrementEvery			= 2,
 	    	base								= 1,
 	    	increment 					= 1,
+	    	cap 								= 3,
 	    	announce 						= false,
 	    	-- chanceAdjust is optional and will adjust the base chance for 
 	    	-- death awards for each knob. 
@@ -380,6 +384,7 @@
 		    	incrementEvery			= 0,
 		    	base								= 1.0,
 		    	increment 					= 0,
+		    	cap 								= 1,
 		    	announce 						= false,	    		
 	    	}
 	    },    		  
@@ -387,9 +392,10 @@
     	{
 	    	enabled							= true,
 	    	advantageThreshold	= 7,
-	    	incrementEvery			= 1,
+	    	incrementEvery			= 2,
 	    	base								= 1,
 	    	increment 					= 1,
+	    	cap 								= 5,
 	    	announce 						= false,
 	    	-- chanceAdjust is optional and will adjust the base chance for 
 	    	-- death awards for each knob. 
@@ -398,8 +404,9 @@
 		    	enabled							= true,
 		    	advantageThreshold	= 7,
 		    	incrementEvery			= 0,
-		    	base								= 1.0,
+		    	base								= 0.5,
 		    	increment 					= 0,
+		    	cap 								= 1,
 		    	announce 						= false,	    		
 	    	}
 	    },  	         

@@ -1,4 +1,4 @@
-version = '0.4.3.3'
+version = '0.4.3.4'
 versionString = [[Changelog:
 Removed Tobi's sound cues.  They're no longer in the game files, but I shouldn't
 be referencing them either.  
@@ -34,4 +34,9 @@ Fixed bug preventing dynamic bonuses form being disabled.
 Disabled dynamic bonuses for easier difficulty.
 
 Adjusted base armor from agility formula to reflect new patch.
+
+Adjusted dynamic difficulty scaling for stats to be a little
+less punitive.
+
+Adjusted awarding such that awards past the cap will instead award the cap. 
 ]]
