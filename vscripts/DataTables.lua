@@ -483,6 +483,24 @@ function DataTables:SortBotsByRole()
   return sortedData
 end
 
+function DataTables:GetTowers()
+	Units = FindUnitsInRadius(2,
+	                              Vector(0, 0, 0),
+	                              nil,
+	                              FIND_UNITS_EVERYWHERE,
+	                              3,
+	                              DOTA_UNIT_TARGET_BUILDING,
+	                              88,
+	                              FIND_ANY_ORDER,
+	                              false);
+	                              
+	for _, unit in pairs(Units) do
+		if unit:IsTower() then
+			Debug:Print(unit:GetName())
+		end
+	end
+end
+
 
 -- Initialize (if Debug)
 if isSoloDebug then 

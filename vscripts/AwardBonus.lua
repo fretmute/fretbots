@@ -5,6 +5,7 @@ require 'Settings'
 require 'DataTables'
 require 'Debug'
 require 'Flags'
+require 'GameState'
 
 -- local debug flag
 local thisDebug = true; 
@@ -16,7 +17,7 @@ if AwardBonus == nil then
 	AwardBonus = {}
 end
 
--- constants for levelling
+-- constants for leveling
 local xpPerLevel =
 {
 	0,		
@@ -205,6 +206,8 @@ function AwardBonus:Death(bot)
 				local name
 				-- Get value
 				value, isLoud  = AwardBonus:GetValue(bot, award)			
+				-- Sanity check
+				if value <= 0 then break end
         -- Attempt to assign the award
         isSuccess, name = AwardBonus[award](AwardBonus, bot, value)
         -- if success, set isAwarded, isLoudWarning, Clear chance, Update message
@@ -305,6 +308,13 @@ function AwardBonus:GetValue(bot, award)
 	-- Final check: don't award anything that would put them over the cap.
 	if (bot.stats.awards[award] + clamped) >= Settings.awardCap[award] then
 		clamped = Settings.awardCap[award] - bot.stats.awards[award]
+	end
+	-- Great! We did all the work.  Are the bots far enough ahead that we want to throttle?
+	local throttle, botTeam = GameState:GetThrottle()
+	if throttle ~= nil and bot.stats.team == botTeam then
+		clamped = clamped * throttle
+		clamped = Utilities:Round(clamped, Settings.deathBonus.round[award])
+		Debug:Print(bot.stats.name..': Throttled award: '..throttle)
 	end
 	debugTable.clamped = clamped
 	-- set isLoud
@@ -409,6 +419,13 @@ function AwardBonus:GetSpecificPerMinuteBonus(bot, pmBot, roleTable, settings)
   end
   -- Figure out how much gold this is to provide the bump
   local bonus = Utilities:Round(pmClamped * (Utilities:GetTime() / 60))
+	-- New and Improved! Throttle if bots are too far ahead
+	local throttle, botTeam = GameState:GetThrottle()
+	if throttle ~= nil and bot.stats.team == botTeam then	
+		bonus = bonus * throttle 
+		bonus = Utilities:Round(bonus)
+		Debug:Print(bot.stats.name..': Throttled award: '..pmbot..': '..throttle)
+	end	  
   -- debug data
   debugTable.role = bot.stats.role
   debugTable.pmPlayer = pmPlayer

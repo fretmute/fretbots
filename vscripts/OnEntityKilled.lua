@@ -9,6 +9,8 @@ require 'DataTables'
 require 'AwardBonus'
 -- Settings
 require 'Settings'
+-- Game State Tracker
+require 'GameState'
 
 -- local debug flag
 local thisDebug = false; 
@@ -23,6 +25,10 @@ end
 function EntityKilled:OnEntityKilled(event)
   -- Get Event Data
 	isHero, victim, killer = EntityKilled:GetEntityKilledEventData(event);
+	-- Log Tower/Building kills to track game state
+	if victim:IsTower() or victim:IsBuilding() then
+		GameState:Update(victim)
+	end
 	-- Drop out for non hero kills
 	if not isHero then return end;
 	-- Do Table Update
