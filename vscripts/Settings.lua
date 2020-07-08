@@ -66,7 +66,8 @@ local chatCommands =
 	'ddsuspend',
 	'ddtoggle',
 	'ddreset',
-	'difficulty'
+	'difficulty',
+	'stats'
 }
 
 -- Sets difficulty value
@@ -254,9 +255,28 @@ function Settings:DoChatCommandParse(text)
 	-- enable dynamic difficulty
   if command == 'difficulty' then
   	Settings:DoSetDifficultyCommand(tokens)
-  end 	   
+  end 	 
+	-- enable dynamic difficulty
+  if command == 'stats' then
+  	Settings:DoGetStats(tokens)
+  end     
   return true                
 end
+
+-- Gets stats
+function Settings:DoGetStats(tokens)
+	-- tokens[2] will contain the stat to display
+	local stat = tokens[2]
+  for _, bot in ipairs(Bots) do
+	  local value = bot.stats.awards[stat]
+		if value ~= nil then
+			local msg = ''
+			msg = msg..bot.stats.name..': '..stat..': '..value
+		  Utilities:Print(msg,MSG_CONSOLE_GOOD)
+		end
+	end
+end
+
 
 -- Asserts a difficulty level
 function Settings:DoSetDifficultyCommand(tokens)

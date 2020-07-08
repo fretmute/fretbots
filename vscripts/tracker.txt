@@ -3,6 +3,11 @@ TODO:
 -----------------------------------
 
 -----------------------------------
+0.4.3.5
+-----------------------------------
+Added rudimentary stats reporting for public chat.
+
+-----------------------------------
 0.4.3.4
 -----------------------------------
 Adjusted dynamic difficulty scaling for stats to be a little

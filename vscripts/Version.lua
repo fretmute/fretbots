@@ -1,4 +1,4 @@
-version = '0.4.3.4'
+version = '0.4.3.5'
 versionString = [[Changelog:
 Removed Tobi's sound cues.  They're no longer in the game files, but I shouldn't
 be referencing them either.  
@@ -38,5 +38,7 @@ Adjusted base armor from agility formula to reflect new patch.
 Adjusted dynamic difficulty scaling for stats to be a little
 less punitive.
 
-Adjusted awarding such that awards past the cap will instead award the cap. 
+Adjusted awarding such that awards past the cap will instead award the cap. \
+
+Added rudimentary stats reporting for public chat.
 ]]
