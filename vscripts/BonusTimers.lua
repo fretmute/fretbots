@@ -125,7 +125,7 @@ function BonusTimers:NeutralItemFindTimer()
     		-- sanity check
     		if item ~= nil then
     			-- Debug
-    			Debug:Print(bot.stats.name..': '..' found item: '..item.realName)
+    			Debug:Print(bot.stats.name..': '..'Found item: '..item.realName)
 	    		-- perhaps announce the item has been found
 	    		if Settings.neutralItems.announce then
 	    			Utilities:AnnounceNeutral(bot, item, MSG_NEUTRAL_FIND)
@@ -173,7 +173,7 @@ function BonusTimers:NeutralItemDoleTimer()
 				local botWants, newDesire, currentDesire = NeutralItems:DoesBotPreferItem(bot, itemToDole)
 				if botWants then 	
 
-	    		Debug:Print(bot.stats.name..': wants '..itemToDole.realName..': '..newDesire..', '..currentDesire)
+	    		Debug:Print(bot.stats.name..': Wants '..itemToDole.realName..': '..newDesire..', '..currentDesire)
 	    		-- update assignment table
 	    		bot.stats.assignedNeutral = itemToDole
 	    		-- Give item, check for replacement 

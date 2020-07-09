@@ -312,9 +312,10 @@ function AwardBonus:GetValue(bot, award)
 	-- Great! We did all the work.  Are the bots far enough ahead that we want to throttle?
 	local throttle, botTeam = GameState:GetThrottle()
 	if throttle ~= nil and bot.stats.team == botTeam then
+		local preThrottle = clamped
 		clamped = clamped * throttle
 		clamped = Utilities:Round(clamped, Settings.deathBonus.round[award])
-		Debug:Print(bot.stats.name..': Throttled award: '..throttle)
+		Debug:Print(bot.stats.name..': Throttled '..award..' award: '..throttle..' * '..preThrottle)
 	end
 	debugTable.clamped = clamped
 	-- set isLoud

@@ -79,7 +79,11 @@ function GameState:GetThrottle()
 	-- else return the throttle
 	throttle = (throttleMax - botLead) / (throttleMax - throttleThreshold)
 	-- sanity check!
-	if throttle <= 0 then return nil end
+	if throttle < 0 then 
+		throttle = 0
+	elseif throttle > 1 then
+		throttle = 1
+	end
 	return throttle, BotTeam
 end
 
