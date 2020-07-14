@@ -17,6 +17,7 @@ function Flags:Initialize()
 	Flags.isBonusTimersInitialized 				= false
 	Flags.isDynamicDifficultyInitialized 	= false
 	Flags.isDynamicDifficultyFinalized  	= false
+	Flags.isInventoryItemAddedRegistered	= false
 end
 
 -- Create flags

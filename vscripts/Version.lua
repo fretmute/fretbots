@@ -1,4 +1,4 @@
-version = '0.5.0.1'
+version = '0.5.0.2'
 versionString = [[Changelog:
 	Added rudimentary GameState(read: Who is winning?) tracker  to throttle
 	bot awards if they're running down mid despite being behind in kills.
@@ -9,4 +9,6 @@ versionString = [[Changelog:
 	greater than one lane ahead.  
 	
 	Added sanity checks for both bad throttle states (<0, >1).
+	
+	Fixed (maybe) wierdness when the bot team has 1 human.
 ]]

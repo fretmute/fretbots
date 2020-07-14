@@ -19,6 +19,8 @@ require 'Utilities'
 require 'DynamicDifficulty'
 -- Settings
 require 'Settings'
+-- Timers
+require 'Timers'
 
 -- Instantiate ourself
 if FretBots == nil then

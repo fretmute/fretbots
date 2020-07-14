@@ -478,7 +478,9 @@ function DataTables:SortBotsByRole()
   	table.insert(sortedData,i)
   end
   for _,bot in pairs(Bots) do
-  	sortedData[bot.stats.role] = bot
+  	if type(bot) == 'table' then
+  		sortedData[bot.stats.role] = bot
+  	end
   end
   return sortedData
 end
