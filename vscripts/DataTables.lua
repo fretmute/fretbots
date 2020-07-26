@@ -64,6 +64,8 @@ function DataTables:Initialize()
 	                              88,
 	                              FIND_ANY_ORDER,
 	                              false);
+	                              
+	Bots = nil
  	Bots={};
 	Players={};
 	AllUnits = {};
@@ -78,6 +80,8 @@ function DataTables:Initialize()
 		  -- Initialize data tables for this unit
 		  DataTables:GenerateStatsTables(unit);
 	end
+	Debug:Print('There are '..#Bots..' bots!')
+	
 	-- Purge human side bots 
 	DataTables:PurgeHumanSideBots()
 	-- Assign a support Pos 5
@@ -471,7 +475,7 @@ function DataTables:IsRealHero(unit)
 	return unit:IsHero() and unit:IsRealHero() and not unit:IsIllusion() and not unit:IsClone()	
 end
 
--- Sorts a table based on values of a key, low to high
+-- Sorts the bots table by role
 function DataTables:SortBotsByRole()
   local sortedData = {}
   for i = 1,#Bots do
@@ -482,6 +486,12 @@ function DataTables:SortBotsByRole()
   		sortedData[bot.stats.role] = bot
   	end
   end
+  -- ensure all slots are bots
+  for i=5,1,-1 do
+  	if type(sortedData[i]) ~= 'table' then
+  		table.remove(sortedData, i)
+  	end 
+  end  
   return sortedData
 end
 

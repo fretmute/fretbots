@@ -1,4 +1,4 @@
-version = '0.5.0.3'
+version = '0.5.0.4'
 versionString = [[Changelog:
 	Added rudimentary GameState(read: Who is winning?) tracker  to throttle
 	bot awards if they're running down mid despite being behind in kills.
@@ -16,4 +16,6 @@ versionString = [[Changelog:
 	
 	Revamped some debug messages in Fretbots.lua to be less spammy and 
 	more debuggy.
+	
+	Actually fixed weirdness when the bot team has humans.
 ]]

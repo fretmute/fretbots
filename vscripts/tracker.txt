@@ -3,6 +3,11 @@ TODO:
 -----------------------------------
 
 -----------------------------------
+0.5.0.4
+-----------------------------------
+Actually fixed weirdness when the bot team has humans.
+
+-----------------------------------
 0.5.0.3
 -----------------------------------
 Added experimental support for moving Lone Druid's items to his bear.
