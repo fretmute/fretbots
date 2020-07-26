@@ -411,6 +411,14 @@
 	    	}
 	    },  	         
     },
+    -- Settings for hero specific stuff (i.e. experimental LD bear item moving)
+    heroSpecific = 
+    {
+    	loneDruid = 
+    	{
+    		enabled = true
+    	}
+    }
   }
   
   return settings
