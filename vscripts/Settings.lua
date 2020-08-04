@@ -34,27 +34,14 @@ local hostID = -1
 
 -- Instantiate ourself
 if Settings == nil then
-  Settings = require 'SettingsDefault'
+  Settings = dofile('SettingsDefault')
 end
 
 -- neutral item drop settings
 AllNeutrals = dofile('SettingsNeutralItemTable')
 
--- Difficulty Table.  Iterated over to set up difficulties
-local validDifficulties = 
-{
-	'SettingsDefault',
-	'DifficultyEasier',
-	'DifficultyHarder',
-	'DifficultyEvenHarder',
-	'DifficultyRoleScaled',
-}
-
--- Difficulties.  Table entries with matching keys for Settings will overwrite.
-Difficulties = {}
-for i,difficulty in ipairs(validDifficulties) do
-	table.insert(Difficulties, dofile(difficulty))
-end
+-- Difficulty values voted for
+difficulties = {}
 
 -- Valid commands for altering settings from chat
 local chatCommands =
@@ -74,9 +61,14 @@ local chatCommands =
 function Settings:Initialize(difficulty)
 	-- no argument implies default, do nothing
 	if difficulty == nil then return end
-	-- Override settings table entries if found
- 	Utilities:DeepCopy(difficulty, Settings)
- 	-- Cache base offsets for DynamicDifficulty
+	-- Adjust bot skill values by the difficulty value
+	-- 5 is nominal (1.0), and the max swing is +/- 0.50
+	Settings.difficultyScale = 1 + ((difficulty - 5) / 10)
+	Settings.difficultyScale = Utilities:Round(Settings.difficultyScale, 2)
+  -- Print
+  local msg = 'Difficulty Scale: '..Settings.difficultyScale
+  Debug:Print(msg)
+  Utilities:Print(msg, MSG_GOOD)
  	-- Set Flag
  	Flags.isSettingsFinalized = true
 end
@@ -93,21 +85,10 @@ function Settings:DifficultySelectTimer()
 	end
 	-- If voting not yet open, display directions
 	if not isVotingOpen then
-		local msg = 'Difficulty voting is now open! Type a difficulty into chat to vote. Choices follow:'
+		local msg = 'Difficulty voting is now open! '
+		msg = msg..'Difficulty is now a decimal number from 0-10. 5 corresponds to baseline legacy RoleScaled.'
 		Utilities:Print(msg)
-		for key, difficulty in ipairs(Difficulties) do
-			if Settings:IsValidDifficulty(difficulty) then
-				-- Print description to chat for folks to see
-			  msg = difficulty.name..': '..difficulty.description
-				Utilities:Print(msg, difficulty.color)
-				-- Copy the difficulty into the diff. table by name
-				-- in case we ever want to dynamically grab it
-				Difficulties[difficulty.name] = difficulty
-			else
-				print(difficulty.name..' is an invalid difficulty.')
-			end
-		end
-	  isVotingOpen = true
+		isVotingOpen = true
 	end
 	-- set voting closed
 	if numVotes >= maxVotes or Settings:ShouldCloseVoting() then
@@ -119,32 +100,23 @@ end
 
 -- Determine winner of voting and applies settings (or applies default difficulty)
 function Settings:ApplyVoteSettings()
-	local maxVotes = 0
-	local winner = nil
-	local name
-	for _, difficulty in ipairs(Difficulties) do
-		if Settings:IsValidDifficulty(difficulty) then 
-		  if difficulty.votes > maxVotes then
-		  	winner = difficulty
-		  	maxVotes = difficulty.votes 
-		  	name = difficulty.name
-		  end
-		end
-	end
-  -- edge case: no one voted, pick first valid difficulty
-  if winner == nil then
-		for _, difficulty in ipairs(Difficulties) do
-			if Settings:IsValidDifficulty(difficulty) then 
-				winner = difficulty
-				name = difficulty.name
-				break
-			end
-		end
+  local difficulty
+  -- edge case: no one voted
+  if #difficulties == 0 then
+  	difficulty = 5
+  -- otherwise, average the votes
+	else
+		local total = 0
+		for _, value in ipairs(difficulties) do
+			total = total + value
+		end 
+		difficulty = total / #difficulties
+		difficulty = Utilities:Round(difficulty, 1)
   end
-  Debug:Print('Winning Difficulty: '..winner.name)
-	msg = 'Voting closed. Applied difficulty: '..name
-  Utilities:Print(msg, winner.color)
-  Settings:Initialize(winner)
+  msg = 'Difficulty Selected: '..difficulty
+  Debug:Print(msg)
+  Utilities:Print(msg, MSG_GOOD)
+  Settings:Initialize(difficulty)
 end
 
 -- Returns true if voting should close due to game state
@@ -163,28 +135,6 @@ function Settings:ShouldCloseVoting()
   	return true
   end
 	return false
-end
-
--- Returns true if a table is a valid difficulty table
-function Settings:IsValidDifficulty(diff)
-	local isValid = true
-	isValid = isValid and diff.name ~= nil
-  if not isValid then return isValid end
-  isValid = isValid and type(diff.name) == 'string'
-  if not isValid then return isValid end  
-	isValid = isValid and diff.description ~= nil
-  if not isValid then return isValid end
-  isValid = isValid and type(diff.description) == 'string'
-  if not isValid then return isValid end  
-	isValid = isValid and diff.color ~= nil
-  if not isValid then return isValid end
-  isValid = isValid and type(diff.color) == 'string'
-  if not isValid then return isValid end    
-	isValid = isValid and diff.votes ~= nil
-  if not isValid then return isValid end
-  isValid = isValid and type(diff.votes) == 'number'
-  if not isValid then return isValid end    
-  return isValid
 end
 
 -- Register a chat listener for settings voting
@@ -465,21 +415,26 @@ function Settings:DoChatVoteParse(playerID, text)
 	if not Utilities:IsTeamPlayer(playerID) then return end
 	-- if no vote from the player, check if he's voting for a difficulty
 	if playerVoted[tostring(playerID)] == nil then
-	  for _, difficulty in ipairs(Difficulties) do
-  		-- If voted for difficulty, reflect that
-	    if string.lower(text) == string.lower(difficulty.name) then
-	    	-- players can only vote once
-	    	playerVoted[tostring(playerID)] = true
-	    	-- increment votes for diff
-	      difficulty.votes = difficulty.votes + 1
-	      -- increment number of votes
-	      numVotes = numVotes + 1
-	      -- let players know the vote counted
-	      local msg = PlayerResource:GetPlayerName(playerID)..' voted for '..difficulty.name..'.'
-	      msg = msg..difficulty.votes..' total votes for '..difficulty.name..'.'
-	      Utilities:Print(msg, Utilities:GetPlayerColor(playerID))
-	    end
-  	end
+		-- If voted for difficulty, reflect that
+		local difficulty = tonumber(text)
+    if difficulty ~= nil then 
+    	-- players can only vote once
+    	playerVoted[tostring(playerID)] = true
+    	-- coerce (if necessary)
+    	if difficulty > 10 then
+    		 difficulty = 10
+    	elseif difficulty < 0 then 
+    		difficulty = 0
+    	end
+    	difficulty = Utilities:Round(difficulty, 1)
+    	-- save voted value
+    	table.insert(difficulties, difficulty)
+      -- increment number of votes
+      numVotes = numVotes + 1
+      -- let players know the vote counted
+      local msg = PlayerResource:GetPlayerName(playerID)..' voted: '..difficulty..'.'
+      Utilities:Print(msg, Utilities:GetPlayerColor(playerID))
+    end
 	end
 end
 

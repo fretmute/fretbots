@@ -3,6 +3,14 @@ TODO:
 -----------------------------------
 
 -----------------------------------
+0.5.1.0
+-----------------------------------
+Reworked difficulty interface.  Difficulty settings are now just one standard
+version, and players vote on an offset that will be applied to the role scaling.
+
+Disabled test version of Lone Druid timers.
+
+-----------------------------------
 0.5.0.4
 -----------------------------------
 Actually fixed weirdness when the bot team has humans.

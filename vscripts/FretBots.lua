@@ -71,7 +71,8 @@ function FretBots:PlayersLoadedTimer()
 		EntityKilled:RegisterEvents()
 		-- Hero Specific extensions - these will stop themselves if they 
 		-- determine that they are not enabled
-		HeroLoneDruid:Initialize()
+		-- Disabled until this works
+		-- HeroLoneDruid:Initialize()
 		-- Remove this timer
 		Timers:RemoveTimer(playersLoadedTimerName)
 	  return nil

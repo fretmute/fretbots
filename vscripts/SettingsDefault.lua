@@ -21,7 +21,7 @@
   	voteEndTime = 30,  	
   	-- Warning timings for vote ending
   	voteWarnTimes = {10,5},
-  	-- are multipliers multiplicative, or additive (multiplicative is harder)
+  	-- are multipliers multiplicative, or additive 
   	isMultiplicative = true,
   	-- Taunt humans when they die with chatwheel sounds?
   	isPlayerDeathSound = true,
@@ -31,9 +31,9 @@
 			-- percentages, by role (1, 2, 3, 4, 5).  A random number is chosen between the clamps
 			variance = 
 			{
-				{0.9, 1.3},
-				{0.9, 1.3},
-				{0.9, 1.3},
+				{1.0, 1.3},
+				{1.0, 1.3},
+				{1.0, 1.3},
 				{0.9, 1.3},
 				{0.9, 1.3}
 			},
@@ -81,7 +81,7 @@
 			-- ignore clamps?
 			clampOverride = false,
 			-- scales (per role) for multipliers if necessary
-			scale 				= {1, 1, 1, 1, 1},
+			scale 				= {1.2, 1.1, 1.0, 0.8, 0.6},
 			-- Add this to the max clamp per minute
 			perMinuteScale = 1
 		},
@@ -92,7 +92,7 @@
 			variance 			= {1, 1},
 			clamp 				= {0, 50},
 			clampOverride = false,
-			scale 				= {1, 1, 1, 1, 1},
+			scale 				= {1.2, 1.1, 1.0, 0.8, 0.6},
 			perMinuteScale = 1
 		},
 		deathBonus = 
@@ -139,12 +139,12 @@
 			-- clamps are applied to the scaled value
 			range = 
 			{
-      	gold 					= {0, 500},
-        armor 				= {0, 3},
-        magicResist 	= {0, 3},
-        levels 				= {0, 2},
+      	gold 					= {100, 500},
+        armor 				= {1, 3},
+        magicResist 	= {1, 3},
+        levels 				= {0.5, 2},
         neutral 			= {30, 180},
-        stats					= {0, 3}				
+        stats					= {1, 3}				
 			},
 			-- (Seconds) Both ends of the range multiplied by gametime / this value. 
 			-- Adjust this to prevent large awards early.  Note that clamp has its
@@ -167,9 +167,9 @@
       clamp = 
       {
       	gold 					= {100, 1500},
-        armor 				= {0, 3},
-        magicResist 	= {0, 3},
-        levels 				= {0, 2},
+        armor 				= {1, 3},
+        magicResist 	= {1, 3},
+        levels 				= {0.5, 2},
         neutral 			= {30, 180},
         stats					= {1, 3}
       },
@@ -270,13 +270,13 @@
 			-- Awards multiplied by this (per role) if enabled
 			scale = 
 			{
-				gold 					= {1, 1, 1, 1, 1},
-				armor 				= {1, 1, 1, 1, 1},
-				magicResist 	= {1, 1, 1, 1, 1},
-				levels 				= {1, 1, 1, 1, 1},
-				neutral 			= {1, 1, 1, 1, 1},
-				stats 				= {1, 1, 1, 1, 1}
-			},	   
+				gold 					= {1.2, 1.1, 1.0, 0.8, 0.6},
+				armor 				= {1.2, 1.1, 1.0, 0.4, 0.2},
+				magicResist 	= {1.2, 1.1, 1.0, 0.4, 0.2},
+				levels 				= {1.2, 1.1, 1.0, 0.8, 0.6},
+				neutral 			= {1.2, 1.1, 1.0, 0.8, 0.6},
+				stats 				= {1.2, 1.1, 1.0, 0.8, 0.6}
+			},	  
 			-- Enable role scaling?  
 			scaleEnabled = 
 			{

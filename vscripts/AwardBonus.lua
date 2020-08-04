@@ -273,16 +273,14 @@ function AwardBonus:GetValue(bot, award)
   	base = base * Utilities:GetTime() / Settings.deathBonus.rangeTimeScale[award]
   	debugTable.rangeScale = Settings.deathBonus.rangeTimeScale[award]
 	end	
-	--scale base by skill and variance
+	--scale base by multiplier
 	local variance = Utilities:GetVariance(Settings.deathBonus.variance[award])
-	local scaled = base * bot.stats.skill * variance
-	debugTable.skill = bot.stats.skill
-	debugTable.variance = variance
-	-- scale by role if enabled
+	local roleScale = 1
 	if Settings.deathBonus.scaleEnabled[award] then
-		debugTable.roleScale = Settings.deathBonus.scale[award][bot.stats.role]
-		scaled = scaled * Settings.deathBonus.scale[award][bot.stats.role]
+		roleScale = Settings.deathBonus.scale[award][bot.stats.role]
 	end
+  local multiplier = AwardBonus:GetMultiplier(bot.stats.skill, roleScale, variance)
+	local scaled = base * multiplier
 	-- add offset
 	scaled = scaled + Settings.deathBonus.offset[award]
 	debugTable.scaled = scaled	
@@ -363,11 +361,11 @@ end
 
 -- Returns total multiplier for the bonus
 -- this is either strictly multiplicative, or additive
-function AwardBonus:GetPerMinuteMultiplier(skill, scale, variance)
+function AwardBonus:GetMultiplier(skill, scale, variance)
   if Settings.isMultiplicative then
-    return skill * scale * variance
+    return skill * scale * variance * Settings.difficultyScale
   else
-  	return skill + scale + variance - 3
+  	return skill + scale + variance + Settings.difficultyScale - 3
   end
 end
 
@@ -396,7 +394,7 @@ function AwardBonus:GetSpecificPerMinuteBonus(bot, pmBot, roleTable, settings)
   local scale = settings.scale[bot.stats.role]
   local variance = Utilities:GetVariance(settings.variance)
   -- Get total multiplier
-  local multiplier = AwardBonus:GetPerMinuteMultiplier(skill, scale, variance)
+  local multiplier = AwardBonus:GetMultiplier(skill, scale, variance)
   -- multiply
   pmTarget = Utilities:Round(pmTarget * multiplier)
   -- if the bot is already better than this, do not give award
