@@ -77,23 +77,23 @@
 			variance 			= {1, 1},
 			-- awards are clamped to these numbers. Note that if you make the minimum non-zero, then the
 			-- bot's actual GPM will increase by that amount every minute (you don't want to do this)
-			clamp 				= {0, 50},
+			clamp 				= {0, 25},
 			-- ignore clamps?
 			clampOverride = false,
 			-- scales (per role) for multipliers if necessary
 			scale 				= {1.2, 1.1, 1.0, 0.8, 0.6},
 			-- Add this to the max clamp per minute
-			perMinuteScale = 1
+			perMinuteScale = 0.5
 		},
 		-- see gpm, same idea
 		xpm = 
 		{
 			offset 				= 0,
 			variance 			= {1, 1},
-			clamp 				= {0, 50},
+			clamp 				= {0, 25},
 			clampOverride = false,
 			scale 				= {1.2, 1.1, 1.0, 0.8, 0.6},
-			perMinuteScale = 1
+			perMinuteScale = 0.5
 		},
 		deathBonus = 
 		{	

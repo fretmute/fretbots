@@ -3,6 +3,11 @@ TODO:
 -----------------------------------
 
 -----------------------------------
+0.5.1.1
+-----------------------------------
+Adjusted perMinuteScale for Gpm and Xpm to be 0.5 instead of 1.
+
+-----------------------------------
 0.5.1.0
 -----------------------------------
 Reworked difficulty interface.  Difficulty settings are now just one standard
