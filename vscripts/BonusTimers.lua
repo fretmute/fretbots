@@ -173,7 +173,7 @@ function BonusTimers:NeutralItemDoleTimer()
 				local botWants, newDesire, currentDesire = NeutralItems:DoesBotPreferItem(bot, itemToDole)
 				if botWants then 	
 
-	    		Debug:Print(bot.stats.name..': Wants '..itemToDole.realName..': '..newDesire..', '..currentDesire)
+	    		--Debug:Print(bot.stats.name..': Wants '..itemToDole.realName..': '..newDesire..', '..currentDesire)
 	    		-- update assignment table
 	    		bot.stats.assignedNeutral = itemToDole
 	    		-- Give item, check for replacement 

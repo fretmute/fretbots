@@ -226,7 +226,7 @@ function AwardBonus:Death(bot)
 						msg = msg .. ' '..award..': '..name
 					end
 					if isDebug then
-						print(bot.stats.name..': Awarded '..award..': '..value)
+						--print(bot.stats.name..': Awarded '..award..': '..value)
 					end
 					-- Clear the chance for this award (if accrued)
 					if Settings.deathBonus.accrue[award] then
@@ -372,6 +372,7 @@ end
 -- Returns amounts to award to achieve target GPM/XPM
 function AwardBonus:GetPerMinuteBonus(bot, gpm, xpm)
 	local botGPM = Utilities:Round(PlayerResource:GetGoldPerMin(bot.stats.id))
+	bot.stats.netWorth = PlayerResource:GetNetWorth(bot.stats.id)
 	local gpmBonus, debugTable = AwardBonus:GetSpecificPerMinuteBonus(bot, botGPM, gpm, Settings.gpm)
 	local botXPM = Utilities:Round(PlayerResource:GetXPPerMin(bot.stats.id))
 	local xpmBonus, debugTable = AwardBonus:GetSpecificPerMinuteBonus(bot, botXPM, xpm, Settings.xpm)
@@ -423,9 +424,10 @@ function AwardBonus:GetSpecificPerMinuteBonus(bot, pmBot, roleTable, settings)
 	if throttle ~= nil and bot.stats.team == botTeam then	
 		bonus = bonus * throttle 
 		bonus = Utilities:Round(bonus)
-		Debug:Print(bot.stats.name..': Throttled award: '..pmbot..': '..throttle)
+		Debug:Print(bot.stats.name..': Throttled award: '..pmBot..': '..throttle)
 	end	  
   -- debug data
+  debugTable.name = bot.stats.name
   debugTable.role = bot.stats.role
   debugTable.pmPlayer = pmPlayer
   debugTable.pmBot = pmBot
