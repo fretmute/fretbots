@@ -1,4 +1,8 @@
 -- Provides for common utilites
+-- Sound constants
+if Sounds == nil then
+  Sounds = dofile('Soundboard')
+end
 -- Hero Names
 local heroNames = require('HeroNames')
 -- sweet DeepPrint function I cadged from GitHub
@@ -25,42 +29,59 @@ MSG_CONSOLE_BAD				= 6
 MSG_NEUTRAL_FIND      = 7
 MSG_NEUTRAL_TAKE      = 8
 MSG_NEUTRAL_RETURN    = 9
-
--- sound constants
-DISASTAH							= 'soundboard.disastah'
-FIRECRACKER						= 'soundboard.new_year_firecrackers'
-MATCH_READY						= 'Stinger.MatchReady'
-ATTENTION							= 'soundboard.rimshot'
-BEAUTIFUL							= 'soundboard.krasavchik'
-BEEP									= 'DotaSOS.TestBeep'
-ROSHAN								= 'Roshan.Death'
-RUSSIAN_REKT					= 'soundboard.eto_prosto_netchto'
-SAD_TROMBONE					= 'soundboard.sad_bone'
-BRUTAL								= 'soundboard.brutal'
-GG										= 'soundboard.ehto_g_g'
-OH_MY_LORD						= 'soundboard.oh_my_lord'
-QUESTIONABLE					= 'soundboard.that_was_questionable'
-WHAT_HAPPENED					= 'soundboard.what_just_happened'
-NEXT_LEVEL						= 'soundboard.next_level'
-PERFECT								= 'absolutely_perfect'
-DISAPPOINTED					= 'soundboard.glados.disappointed'
-PATIENCE							= 'soundboard.patience'
-HERO									= 'soundboard.youre_a_hero'
-GROAN									= 'soundboard.ti9.crowd_groan'
-APPLAUSE							= 'soundboard.applause'
-WOW										= 'soundboard.wow'
-LAKAD									= 'soundboard.ta_daaaa'
-JIAYOU								= 'soundboard.jia_you'
                 		
--- tables for random sounds
-BAD_LIST							= {RUSSIAN_REKT, GG, BEAUTIFUL, JIAYOU, GROAN}
-PLAYER_DEATH_LIST			= {PATIENCE, DISAPPOINTED, APPLAUSE, PERFECT, QUESTIONABLE, 
-												 SAD_TROMBONE, WHAT_HAPPENED, NEXT_LEVEL, GROAN,
-												 WOW, LAKAD}
+---- tables for random sounds
+--BAD_LIST							= {
+--	                        Sounds.RUSSIAN_REKT, 
+--	                        Sounds.EHTO_GG, 
+--	                        Sounds.JIA_YOU, 
+--	                        Sounds.GROAN, 
+--	                        Sounds.QUESTIONABLE, 
+--	                        Sounds.SAD_TROMBONE, 
+--	                        Sounds.BRUTAL
+--	                      }
+--GOOD_LIST             = {
+--													Sounds.KRASAVCHIK, 
+--													Sounds.NEXT_LEVEL, 
+--													Sounds.PERFECT, 
+--													Sounds.HERO, 
+--													Sounds.APPLAUSE, 
+--													Sounds.LAKAD, 
+--													Sounds.PATIENCE
+--												}
+--PLAYER_DEATH_LIST			= {
+--													Sounds.PATIENCE, 
+--													Sounds.DISAPPOINTED, 
+--													Sounds.APPLAUSE, 
+--													Sounds.PERFECT, 
+--													Sounds.QUESTIONABLE, 
+--													Sounds.SAD_TROMBONE, 
+--													Sounds.WHAT_HAPPENED, 
+--													Sounds.NEXT_LEVEL, 
+--													Sounds.GROAN, 
+--													Sounds.WOW, 
+--													Sounds.LAKAD
+--												}					
+--											
 
+BAD_LIST									= Sounds.BadSounds
+GOOD_LIST									= Sounds.GoodSounds
+PLAYER_DEATH_LIST					= Sounds.BadSounds			
+ASIAN_LIST 								= Sounds.AsianCasters			
+CIS_LIST 									= Sounds.CisCasters			
+ENGLISH_LIST 							= Sounds.EnglishCasters			
+						
 -- duh
 TEAM_RADIANT					= 2
 TEAM_DIRE							= 3
+
+-- Globalize certain sounds to be lazy and avoid a refactor of some other files
+MATCH_READY 		= Sounds.MATCH_READY
+ATTENTION 			= Sounds.ATTENTION
+LAKAD						= Sounds.LAKAD
+KRASAVCHIK			= Sounds.KRASAVCHIK
+EHTO_GG					= Sounds.EHTO_GG
+
 
 -- message colors
 local colors = 
@@ -236,6 +257,13 @@ end
 -- Emits a random sound from a table
 function Utilities:RandomSound(sound)
 	EmitGlobalSound(sound[math.random(#sound)])
+end
+
+-- Plays a specific sound
+function Utilities:PlaySound(sound)
+	if Sounds[sound] ~= nil then
+		EmitGlobalSound(Sounds[sound])
+	end
 end
 
 -- clamps a number

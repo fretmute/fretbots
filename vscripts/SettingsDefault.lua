@@ -416,7 +416,7 @@
     {
     	loneDruid = 
     	{
-    		enabled = true
+    		enabled = false
     	}
     }
   }

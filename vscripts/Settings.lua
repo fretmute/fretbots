@@ -7,6 +7,8 @@ require 'Flags'
 require 'Timers'
  -- Utilities
 require 'Utilities'
+-- Version
+require 'Version'
 
 -- local debug flag
 local thisDebug = false; 
@@ -31,7 +33,8 @@ local maxVotes = DOTA_MAX_PLAYERS
 local votingTimeElapsed = -1
 -- The playerID of the host.  Used to whitelist chat commands.
 local hostID = -1
-
+-- default difficulty if no one votes
+local noVoteDifficulty = 2
 -- Instantiate ourself
 if Settings == nil then
   Settings = dofile('SettingsDefault')
@@ -54,7 +57,13 @@ local chatCommands =
 	'ddtoggle',
 	'ddreset',
 	'difficulty',
-	'stats'
+	'stats',
+	'goodsound',
+	'badsound',
+	'asound',
+	'csound',
+	'esound',	
+	'playsound'
 }
 
 -- Sets difficulty value
@@ -85,10 +94,11 @@ function Settings:DifficultySelectTimer()
 	end
 	-- If voting not yet open, display directions
 	if not isVotingOpen then
-		local msg = 'Difficulty voting is now open! '
-		msg = msg..'Difficulty is now a decimal number from 0-10. 5 corresponds to baseline legacy RoleScaled.'
-		Utilities:Print(msg)
-		isVotingOpen = true
+		local msg = 'Fret Bots! Now with more branding! Version: '..version..'\n'
+		Utilities:Print(msg, MSG_GOOD)
+	  msg = 'Difficulty voting is now open!'..' Default difficulty is currently: '..tostring(noVoteDifficulty)
+		Utilities:Print(msg, MSG_GOOD)
+	  isVotingOpen = true
 	end
 	-- set voting closed
 	if numVotes >= maxVotes or Settings:ShouldCloseVoting() then
@@ -103,7 +113,7 @@ function Settings:ApplyVoteSettings()
   local difficulty
   -- edge case: no one voted
   if #difficulties == 0 then
-  	difficulty = 5
+  	difficulty = noVoteDifficulty
   -- otherwise, average the votes
 	else
 		local total = 0
@@ -117,6 +127,7 @@ function Settings:ApplyVoteSettings()
   Debug:Print(msg)
   Utilities:Print(msg, MSG_GOOD)
   Settings:Initialize(difficulty)
+  Settings.difficulty = difficulty
 end
 
 -- Returns true if voting should close due to game state
@@ -206,10 +217,34 @@ function Settings:DoChatCommandParse(text)
   if command == 'difficulty' then
   	Settings:DoSetDifficultyCommand(tokens)
   end 	 
-	-- enable dynamic difficulty
+	-- print stats
   if command == 'stats' then
   	Settings:DoGetStats(tokens)
   end     
+	-- Random good sound
+  if command == 'goodsound' then
+  	Utilities:RandomSound(GOOD_LIST)
+  end   
+	-- Random bad sound
+  if command == 'badsound' then
+  	Utilities:RandomSound(BAD_LIST)
+  end    
+ 	-- Random Asian soundboard
+  if command == 'asound' then
+  	Utilities:RandomSound(ASIAN_LIST)
+  end     
+ 	-- Random CIS soundboard
+  if command == 'csound' then
+  	Utilities:RandomSound(CIS_LIST)
+  end      
+ 	-- Random English soundboard
+  if command == 'esound' then
+  	Utilities:RandomSound(ENGLISH_LIST)
+  end           
+ 	-- Play Specific Sound
+  if command == 'playsound' then
+  	Utilities:PlaySound(tokens[2])
+  end                          
   return true                
 end
 

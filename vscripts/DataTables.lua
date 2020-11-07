@@ -28,7 +28,7 @@ local isSoloDebug = false
 local isBuff = false
 -- Warn Fret if he left this on
 if isBuff then
-  Utilities:Print('Hey Fret, isBuff is True!', MSG_BAD, DISASTAH)
+  Utilities:Print('Hey Fret, isBuff is True!', MSG_BAD)
 end
 
 -- Globals 
