@@ -1,11 +1,22 @@
-version = '0.5.1.2'
+version = '0.5.2.0'
 versionString = [[Changelog:
-	Reworked difficulty interface.  Difficulty settings are now just one standard
-	version, and players vote on an offset that will be applied to the role scaling.
+	Now with more branding!
 	
-	Disabled test version of Lone Druid timers.
+	Default no-vote difficulty is now 2.
 	
-	Adjusted perMinuteScale for Gpm and Xpm to be 0.5 instead of 1.
+	Added chat parsing for playing chatwheel sounds. Commands as follows:
+		goodsound	: Plays a sound from the good list.
+		badsound	: Plays a sound from the bad list.		 
+		asound		: Plays a random line from an Asian caster.
+		csound		: Plays a random line from a CIS caster.
+		esound		: Plays a random line from an English caster.
+		playsound	: with an argument from Soundboard.lua, plays that specific sound.
+								This will require homework and keybinds, a la
+								bind "kp_6" "say playsound EHTO_GG"
+								
+	Moved soundboard to its own file so as not to pollute the greater
+	project with a bunch of sound constants. Was lazy and globaled some of
+	the usages that were implemented previously (ATTENTION, whatever the 
+	start match gong is)
 	
-	Fixed an extremely minor typo.
 ]]
