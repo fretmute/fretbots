@@ -1,4 +1,4 @@
-version = '0.5.2.0'
+version = '0.5.2.1'
 versionString = [[Changelog:
 	Now with more branding!
 	
@@ -17,6 +17,9 @@ versionString = [[Changelog:
 	Moved soundboard to its own file so as not to pollute the greater
 	project with a bunch of sound constants. Was lazy and globaled some of
 	the usages that were implemented previously (ATTENTION, whatever the 
-	start match gong is)
+	start match gong is).
+	
+	Moved chat wheel command parsing to its own function and made it public 
+	facing (rather than just the lobby host).
 	
 ]]

@@ -169,6 +169,8 @@ function Settings:OnPlayerChat(event)
 	end
  	-- if Settings have been chosen then monitor for commands to change them
  	if Flags.isSettingsFinalized then
+ 		-- Chat wheel commands are available for everyone
+ 		Settings:DoChatWheelCommandParse(text)
  		if playerID == hostID or Debug:IsPlayerIDFret(playerID) then
  			-- check for 'light' commands
 		  local isSuccess = Settings:DoChatCommandParse(text)
@@ -177,6 +179,40 @@ function Settings:OnPlayerChat(event)
 		end
  	end
 end
+
+-- Parse player chats for Settings commands and acts upon them if found
+function Settings:DoChatWheelCommandParse(text)
+ 	local tokens = Utilities:Tokenize(text)
+  local command = Settings:GetCommand(tokens)
+  -- No command, return false
+  if command == nil then return false end
+	-- Random good sound
+  if command == 'goodsound' then
+  	Utilities:RandomSound(GOOD_LIST)
+  end   
+	-- Random bad sound
+  if command == 'badsound' then
+  	Utilities:RandomSound(BAD_LIST)
+  end    
+ 	-- Random Asian soundboard
+  if command == 'asound' then
+  	Utilities:RandomSound(ASIAN_LIST)
+  end     
+ 	-- Random CIS soundboard
+  if command == 'csound' then
+  	Utilities:RandomSound(CIS_LIST)
+  end      
+ 	-- Random English soundboard
+  if command == 'esound' then
+  	Utilities:RandomSound(ENGLISH_LIST)
+  end           
+ 	-- Play Specific Sound
+  if command == 'playsound' then
+  	Utilities:PlaySound(tokens[2])
+  end                          
+  return true                
+end
+
 
 -- Parse player chats for Settings commands and acts upon them if found
 function Settings:DoChatCommandParse(text)
@@ -220,31 +256,7 @@ function Settings:DoChatCommandParse(text)
 	-- print stats
   if command == 'stats' then
   	Settings:DoGetStats(tokens)
-  end     
-	-- Random good sound
-  if command == 'goodsound' then
-  	Utilities:RandomSound(GOOD_LIST)
-  end   
-	-- Random bad sound
-  if command == 'badsound' then
-  	Utilities:RandomSound(BAD_LIST)
-  end    
- 	-- Random Asian soundboard
-  if command == 'asound' then
-  	Utilities:RandomSound(ASIAN_LIST)
-  end     
- 	-- Random CIS soundboard
-  if command == 'csound' then
-  	Utilities:RandomSound(CIS_LIST)
-  end      
- 	-- Random English soundboard
-  if command == 'esound' then
-  	Utilities:RandomSound(ENGLISH_LIST)
-  end           
- 	-- Play Specific Sound
-  if command == 'playsound' then
-  	Utilities:PlaySound(tokens[2])
-  end                          
+  end                           
   return true                
 end
 

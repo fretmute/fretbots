@@ -3,6 +3,13 @@ TODO:
 -----------------------------------
 
 -----------------------------------
+0.5.2.1
+-----------------------------------
+
+	Moved chat wheel command parsing to its own function and made it public 
+	facing (rather than just the lobby host).
+
+-----------------------------------
 0.5.2.0
 -----------------------------------
 
