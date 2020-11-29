@@ -484,6 +484,16 @@ function Utilities:IsRealHero(unit)
 	return false
 end
 
+-- removes the first character from a string if it's a dash
+-- Use this when parsing chat to check for commands that the 
+-- player didn't want printed to chat
+function Utilities:CheckForDash(command)
+	if command:sub(1,1) == '-' then
+		return command:sub(2)
+	end
+	return command
+end
+
 -- iterates over a table by keys, alphabetically
 function Utilities:PairsByKeys (t, f)
       local a = {}

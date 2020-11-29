@@ -63,7 +63,8 @@ local chatCommands =
 	'asound',
 	'csound',
 	'esound',	
-	'playsound'
+	'playsound',
+	'kb'
 }
 
 -- Sets difficulty value
@@ -162,7 +163,9 @@ end
 -- Monitors chat for votes on settings
 function Settings:OnPlayerChat(event)
 	-- Get event data
-	local playerID, text = Settings:GetChatEventData(event)
+	local playerID, rawText = Settings:GetChatEventData(event)
+	-- Remove dashes (potentially)
+	local text = Utilities:CheckForDash(rawText)
 	-- Handle votes if we're still in the voting phase
 	if not isVotingClosed then 
 		Settings:DoChatVoteParse(playerID, text) 
@@ -256,7 +259,11 @@ function Settings:DoChatCommandParse(text)
 	-- print stats
   if command == 'stats' then
   	Settings:DoGetStats(tokens)
-  end                           
+  end       
+  -- Kill a bot
+  if command == 'kb' then
+  	Settings:DoKillBotCommand(tokens)
+  end                        
   return true                
 end
 
@@ -453,6 +460,19 @@ function Settings:DoNudgeCommand(tokens)
 		Settings:SetValue(stringTarget, val) 
 		Utilities:Print(stringTarget..' nudged successfully: '..
 									val, MSG_CONSOLE_GOOD)			
+	end
+end
+
+-- Executes the 'kb' command
+function Settings:DoKillBotCommand(tokens)
+  -- tokens[2] will be the target object string (if it exists)
+	-- trivial case - no tokens[2]
+	if tokens[2] == nil then
+		Debug:KillBot()
+	elseif tonumber(tokens[2]) ~= nil then
+		Debug:KillBot(tonumber(tokens[2]))
+	else
+		Debug:KillBot(tokens[2])
 	end
 end
 

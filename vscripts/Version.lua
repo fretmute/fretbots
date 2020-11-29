@@ -1,4 +1,4 @@
-version = '0.5.2.1'
+version = '0.5.2.2'
 versionString = [[Changelog:
 	Now with more branding!
 	
@@ -21,5 +21,16 @@ versionString = [[Changelog:
 	
 	Moved chat wheel command parsing to its own function and made it public 
 	facing (rather than just the lobby host).
+	
+	Chat monitor now looks for commands prefixed with a dash.  This allows commnads
+	to be parsed that were not actually printed to chat.
+	
+	Added kb shorthand to chat command parser as a macro for Debug:KillBot().
+	
+	Added overloading for Debug:KillBot() to kill by name or position in addition
+	to killing randomly when no argument is present.  
+	
+	Debug:KillBot() random kill is now actually random instead of iterating 
+	over the Bots table by position.
 	
 ]]

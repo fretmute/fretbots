@@ -3,6 +3,20 @@ TODO:
 -----------------------------------
 
 -----------------------------------
+0.5.2.2
+-----------------------------------
+	Chat monitor now looks for commands prefixed with a dash.  This allows commnads
+	to be parsed that were not actually printed to chat.
+
+	Added kb shorthand to chat command parser as a macro for Debug:KillBot().
+	
+	Added overloading for Debug:KillBot() to kill by name or position in addition
+	to killing randomly when no argument is present.  
+	
+	Debug:KillBot() random kill is now actually random instead of iterating 
+	over the Bots table by position.
+
+-----------------------------------
 0.5.2.1
 -----------------------------------
 
