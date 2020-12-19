@@ -1,4 +1,4 @@
-version = '0.5.2.3'
+version = '0.5.2.4'
 versionString = [[Changelog:
 	Now with more branding!
 	

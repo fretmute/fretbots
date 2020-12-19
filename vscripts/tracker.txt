@@ -3,6 +3,12 @@ TODO:
 -----------------------------------
 
 -----------------------------------
+0.5.2.4
+-----------------------------------
+	Added Fairy's Trinket to list now that the DB was updated and I could find the
+	internal name (which is item_mysterious_hat for some insane reason).
+	
+-----------------------------------
 0.5.2.3
 -----------------------------------
 	Added additional chat commands for displaying stats. 

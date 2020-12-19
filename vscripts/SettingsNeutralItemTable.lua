@@ -18,6 +18,8 @@ local	neutrals =
 	{name = 'item_ironwood_tree',					tier = 1, ranged = 1, 	melee = 1,		roles={2,2,2,1,1}, realName = 'Ironwood Tree'},
 	{name = 'item_chipped_vest',					tier = 1, ranged = 1, 	melee = 1,		roles={2,2,3,2,2}, realName = 'Chipped Vest'},	
 	{name = 'item_possessed_mask',				tier = 1, ranged = 1, 	melee = 1,		roles={3,3,2,1,1}, realName = 'Possessed Mask'},	
+	{name = 'item_mysterious_hat',				tier = 1, ranged = 1, 	melee = 1,		roles={1,1,1,1,1}, realName = "Fairy's Trinket"},	
+	
 	-- ?? name = 'item_fairys_trinket',				tier = 1, ranged = 1, 	melee = 1,		roles={1,1,1,4,4}, realName = "Fairy's Trinket"},		
 	-- tier 2                                                                    		
 	{name = 'item_dragon_scale', 					tier = 2, ranged = 1, 	melee = 1,		roles={1,1,3,1,1}, realName = 'Dragon Scale'},
@@ -77,8 +79,8 @@ local	neutrals =
 	{name = 'item_pirate_hat',						tier = 5, ranged = 1, 	melee = 1,		roles={3,3,1,0,0}, realName = 'Pirate Hat'},
 	{name = 'item_seer_stone', 						tier = 5, ranged = 1, 	melee = 1,		roles={1,1,3,5,5}, realName = 'Seer Stong'},
 	{name = 'item_desolator_2',						tier = 5, ranged = 1, 	melee = 1,		roles={4,1,0,0,0}, realName = 'Stygian Desolator'},	
-	{name = 'item_giants_ring',						tier = 5, ranged = 1, 	melee = 1,		roles={5,5,6,1,1}, realName = "Giant's Ring"},	
-	--{name = 'item_book_of_shadows',				tier = 5, ranged = 1, 	melee = 1,		roles={1,1,1,6,6}, realName = 'Book of Shadows'},	
+	{name = 'item_giants_ring',						tier = 5, ranged = 1, 	melee = 1,		roles={3,3,6,1,1}, realName = "Giant's Ring"},	
+	{name = 'item_book_of_shadows',				tier = 5, ranged = 1, 	melee = 1,		roles={1,1,1,6,6}, realName = 'Book of Shadows'},	
 	--{name = 'item_trident',				        tier = 5, ranged = 1, 	melee = 1,		roles={5,5,3,3,3}, realName = 'Trident'},	
 	--{name = 'item_woodland_striders',			tier = 5, ranged = 1, 	melee = 1,		roles={1,1,1,1,1}, realName = 'Woodland Striders'},				
 }
