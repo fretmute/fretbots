@@ -29,7 +29,7 @@ local DIRE								= 3
 -- Yes, I am getting lazier over time.
 local throttle 									= 0
 local botLead										= 0
--- This determine when we want to start throttling the bots 
+-- This determines when we want to start throttling the bots 
 -- (They are this far ahead) 
 local throttleThreshold					= 10
 -- throttle value is (Max - Lead) / (Max - Threshold)

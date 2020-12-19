@@ -1,4 +1,4 @@
-version = '0.5.2.2'
+version = '0.5.2.3'
 versionString = [[Changelog:
 	Now with more branding!
 	
@@ -32,5 +32,9 @@ versionString = [[Changelog:
 	
 	Debug:KillBot() random kill is now actually random instead of iterating 
 	over the Bots table by position.
+	
+	Added additional chat commands for displaying stats. 
+	
+	Added Mistwoods Update neutral items.
 	
 ]]

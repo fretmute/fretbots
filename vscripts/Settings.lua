@@ -64,7 +64,8 @@ local chatCommands =
 	'csound',
 	'esound',	
 	'playsound',
-	'kb'
+	'kb',
+	'networth'
 }
 
 -- Sets difficulty value
@@ -172,19 +173,19 @@ function Settings:OnPlayerChat(event)
 	end
  	-- if Settings have been chosen then monitor for commands to change them
  	if Flags.isSettingsFinalized then
- 		-- Chat wheel commands are available for everyone
- 		Settings:DoChatWheelCommandParse(text)
+ 		-- Some commands are available for everyone
+ 		Settings:DoUserChatCommandParse(text)
  		if playerID == hostID or Debug:IsPlayerIDFret(playerID) then
  			-- check for 'light' commands
-		  local isSuccess = Settings:DoChatCommandParse(text)
+		  local isSuccess = Settings:DoSuperUserChatCommandParse(text)
 		  -- if not that, then try to pcall arbitrary text
 			Utilities:PCallText(text)
 		end
  	end
 end
 
--- Parse player chats for Settings commands and acts upon them if found
-function Settings:DoChatWheelCommandParse(text)
+-- Parse for commands anyone can use
+function Settings:DoUserChatCommandParse(text)
  	local tokens = Utilities:Tokenize(text)
   local command = Settings:GetCommand(tokens)
   -- No command, return false
@@ -212,13 +213,18 @@ function Settings:DoChatWheelCommandParse(text)
  	-- Play Specific Sound
   if command == 'playsound' then
   	Utilities:PlaySound(tokens[2])
-  end                          
-  return true                
+  end    
+  -- Display team net worths
+  if command == 'networth' then
+  	Debug:Print('Net Worth!')
+  	Settings:DoDisplayNetWorth()      
+ 	end       
+  return true                        
 end
 
 
--- Parse player chats for Settings commands and acts upon them if found
-function Settings:DoChatCommandParse(text)
+-- Parse commands for superusers
+function Settings:DoSuperUserChatCommandParse(text)
  	local tokens = Utilities:Tokenize(text)
   local command = Settings:GetCommand(tokens)
   -- No command, return false
@@ -266,6 +272,38 @@ function Settings:DoChatCommandParse(text)
   end                        
   return true                
 end
+
+-- Display net worths
+function Settings:DoDisplayNetWorth()
+	local msg = ''
+	local botMsg = ''
+	local botTeamNetWorth = 0
+	local playerTeamNetWorth = 0
+	local netWorth = 0
+	local roundedNetWorth = 0
+	for _, bot in ipairs(Bots) do
+		netWorth = PlayerResource:GetNetWorth(bot.stats.id)
+		botTeamNetWorth = netWorth + botTeamNetWorth
+		roundedNetWorth = Utilities:Round(netWorth, -2)
+		roundedNetWorth = roundedNetWorth / 1000
+		botMsg = Utilities:ColorString(bot.stats.name ..': '..tostring(roundedNetWorth)..'k', Utilities:GetPlayerColor(bot.stats.id))
+		msg = msg..'  '..botMsg
+	end
+	Utilities:Print(msg)
+	for _, player in ipairs(Players) do
+		netWorth = PlayerResource:GetNetWorth(player.stats.id)
+		playerTeamNetWorth = netWorth + playerTeamNetWorth
+	end
+	roundedNetWorth = Utilities:Round(playerTeamNetWorth, -2)
+	roundedNetWorth = roundedNetWorth / 1000
+	msg = 'Player Team Net Worth: '..tostring(roundedNetWorth)..'k'
+	Utilities:Print(msg, MSG_CONSOLE_GOOD)
+	roundedNetWorth = Utilities:Round(botTeamNetWorth, -2)
+	roundedNetWorth = roundedNetWorth / 1000
+	msg = 'Bot Team Net Worth: '..tostring(roundedNetWorth)..'k'
+	Utilities:Print(msg, MSG_CONSOLE_BAD)
+end
+
 
 -- Gets stats
 function Settings:DoGetStats(tokens)

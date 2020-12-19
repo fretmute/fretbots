@@ -3,6 +3,13 @@ TODO:
 -----------------------------------
 
 -----------------------------------
+0.5.2.3
+-----------------------------------
+	Added additional chat commands for displaying stats. 
+	
+	Added Mistwoods Update neutral items.
+	
+-----------------------------------
 0.5.2.2
 -----------------------------------
 	Chat monitor now looks for commands prefixed with a dash.  This allows commnads

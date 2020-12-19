@@ -30,40 +30,6 @@ MSG_NEUTRAL_FIND      = 7
 MSG_NEUTRAL_TAKE      = 8
 MSG_NEUTRAL_RETURN    = 9
                 		
----- tables for random sounds
---BAD_LIST							= {
---	                        Sounds.RUSSIAN_REKT, 
---	                        Sounds.EHTO_GG, 
---	                        Sounds.JIA_YOU, 
---	                        Sounds.GROAN, 
---	                        Sounds.QUESTIONABLE, 
---	                        Sounds.SAD_TROMBONE, 
---	                        Sounds.BRUTAL
---	                      }
---GOOD_LIST             = {
---													Sounds.KRASAVCHIK, 
---													Sounds.NEXT_LEVEL, 
---													Sounds.PERFECT, 
---													Sounds.HERO, 
---													Sounds.APPLAUSE, 
---													Sounds.LAKAD, 
---													Sounds.PATIENCE
---												}
---PLAYER_DEATH_LIST			= {
---													Sounds.PATIENCE, 
---													Sounds.DISAPPOINTED, 
---													Sounds.APPLAUSE, 
---													Sounds.PERFECT, 
---													Sounds.QUESTIONABLE, 
---													Sounds.SAD_TROMBONE, 
---													Sounds.WHAT_HAPPENED, 
---													Sounds.NEXT_LEVEL, 
---													Sounds.GROAN, 
---													Sounds.WOW, 
---													Sounds.LAKAD
---												}					
---											
-
 BAD_LIST									= Sounds.BadSounds
 GOOD_LIST									= Sounds.GoodSounds
 PLAYER_DEATH_LIST					= Sounds.BadSounds			
@@ -247,7 +213,6 @@ function Utilities:Warn(value, values, warning)
 	end
 end
 
-
 -- clamps a number between two values, returns clamp rounded to nearest integer
 function Utilities:RoundedClamp(number, minimum, maximum)
 	local num = Utilities:Clamp(number, minimum, maximum)
@@ -276,7 +241,7 @@ end
 -- Rounds a number 
 function Utilities:Round(num, decimals)
 	-- if no decimals argument, round to an integer
-	if decimals == nil or decimals <= 0 then
+	if decimals == nil then
 		local decimal = num - math.floor(num)
 		if decimal >= 0.5 then
 		  return math.ceil(num) 
@@ -285,7 +250,8 @@ function Utilities:Round(num, decimals)
 		end
 	-- otherwise round to decimal places
 	else
-	  return Utilities:Round(num * 10 ^ decimals) / (10 ^ decimals)
+		 local mult = 10^(decimals or 0)
+  	return math.floor(num * mult + 0.5) / mult
 	end
 end 
 
@@ -508,7 +474,7 @@ function Utilities:PairsByKeys (t, f)
       end
       return iter
     end
-
+    
 -- Used to register game state listeners (with a generic functionality)
 -- Gets current game state.  If game is over, returns.  If the game is
 -- otherwise in or past initState, immediately runs an initializer.  
