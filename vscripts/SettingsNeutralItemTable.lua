@@ -77,7 +77,7 @@ local	neutrals =
 	{name = 'item_force_boots', 					tier = 5, ranged = 1, 	melee = 1,		roles={1,1,1,1,1}, realName = 'Force Boots'},
 	{name = 'item_mirror_shield',					tier = 5, ranged = 1, 	melee = 1,		roles={2,2,4,0,0}, realName = 'Mirror Shield'},
 	{name = 'item_pirate_hat',						tier = 5, ranged = 1, 	melee = 1,		roles={3,3,1,0,0}, realName = 'Pirate Hat'},
-	{name = 'item_seer_stone', 						tier = 5, ranged = 1, 	melee = 1,		roles={1,1,3,5,5}, realName = 'Seer Stong'},
+	{name = 'item_seer_stone', 						tier = 5, ranged = 1, 	melee = 1,		roles={1,1,3,5,5}, realName = 'Seer Stone'},
 	{name = 'item_desolator_2',						tier = 5, ranged = 1, 	melee = 1,		roles={4,1,0,0,0}, realName = 'Stygian Desolator'},	
 	{name = 'item_giants_ring',						tier = 5, ranged = 1, 	melee = 1,		roles={3,3,6,1,1}, realName = "Giant's Ring"},	
 	{name = 'item_book_of_shadows',				tier = 5, ranged = 1, 	melee = 1,		roles={1,1,1,6,6}, realName = 'Book of Shadows'},	

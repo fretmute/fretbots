@@ -3,6 +3,11 @@ TODO:
 -----------------------------------
 
 -----------------------------------
+0.5.2.5
+-----------------------------------
+	Fixed a typo (Seer Strong).  Not sure how I managed that.
+
+-----------------------------------
 0.5.2.4
 -----------------------------------
 	Added Fairy's Trinket to list now that the DB was updated and I could find the
