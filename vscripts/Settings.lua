@@ -218,7 +218,15 @@ function Settings:DoUserChatCommandParse(text)
   if command == 'networth' then
   	Debug:Print('Net Worth!')
   	Settings:DoDisplayNetWorth()      
- 	end       
+ 	end     
+	-- get prints a setting to chat
+  if command == 'get' then
+		Settings:DoGetCommand(tokens)
+  end 	  
+	-- print stats
+  if command == 'stats' then
+  	Settings:DoGetStats(tokens)
+  end   
   return true                        
 end
 
@@ -230,10 +238,6 @@ function Settings:DoSuperUserChatCommandParse(text)
   -- No command, return false
   if command == nil then return false end
   -- Otherwise process
-	-- get prints a setting to chat
-  if command == 'get' then
-		Settings:DoGetCommand(tokens)
-  end
 	--set writes to something
   if command == 'set' then
   	Settings:DoSetCommand(tokens)
@@ -261,11 +265,7 @@ function Settings:DoSuperUserChatCommandParse(text)
 	-- enable dynamic difficulty
   if command == 'difficulty' then
   	Settings:DoSetDifficultyCommand(tokens)
-  end 	 
-	-- print stats
-  if command == 'stats' then
-  	Settings:DoGetStats(tokens)
-  end       
+  end 	      
   -- Kill a bot
   if command == 'kb' then
   	Settings:DoKillBotCommand(tokens)

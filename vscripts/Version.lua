@@ -1,4 +1,4 @@
-version = '0.5.2.5'
+version = '0.5.2.6'
 versionString = [[Changelog:
 	Now with more branding!
 	
@@ -36,5 +36,7 @@ versionString = [[Changelog:
 	Added additional chat commands for displaying stats. 
 	
 	Added Mistwoods Update neutral items.
+	
+	Added 'get' to the list of all-user chat parses.
 	
 ]]
