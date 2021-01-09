@@ -30,7 +30,7 @@ if FretBots == nil then
 end
 
 -- local debug flag
-local thisDebug = true; 
+local thisDebug = false; 
 -- set true to prevent initialize from returning when it realizes
 -- that it has already been run once
 local isAllowMultipleStarts = true;

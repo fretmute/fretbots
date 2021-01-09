@@ -120,6 +120,7 @@ local heroNames=
 	npc_dota_hero_winter_wyvern					= 'Winter Wyvern',
 	npc_dota_hero_wisp									= 'Io',
 	npc_dota_hero_witch_doctor					= 'Witch Doctor',
+	npc_dota_hero_hoodwink							= 'Hoodwink',
 }
 
 return heroNames

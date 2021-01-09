@@ -84,8 +84,8 @@ function DataTables:Initialize()
 	
 	-- Purge human side bots 
 	DataTables:PurgeHumanSideBots()
-	-- Assign a support Pos 5
-	DataTables:SetBotPositionFive()
+	-- Assign roles to bots
+	DataTables:AssignBotRoles()
 	-- Sort Bots Table by role for convenience
 	Bots = DataTables:SortBotsByRole()
 	-- Set all bots to find tier 1 neutrals
@@ -473,6 +473,62 @@ end
 -- Returns true if the unit is an actual hero and not a hero-like unit
 function DataTables:IsRealHero(unit)
 	return unit:IsHero() and unit:IsRealHero() and not unit:IsIllusion() and not unit:IsClone()	
+end
+
+-- Assigns role positions to bots
+-- Base role positions are determined by 
+function DataTables:AssignBotRoles()
+	local assignedRoles = {false, false, false, false, false}
+	local roleNames = {'', '', '', '', ''}
+	local roleBuckets = { {}, {}, {}, {}, {}}
+  -- Add bots to their preferred role bucket
+	for index, bot in pairs(Bots) do
+		table.insert(roleBuckets[bot.stats.role], bot)
+	end 
+	-- iterate over buckets 
+	for _, bucket in ipairs(roleBuckets) do
+		-- iterate over bucket members and assign best role
+		for _, bot in ipairs(bucket) do
+			local preferredRole = DataTables:GetBestPossibleRole(bot.stats.role, assignedRoles)
+			if preferredRole ~= nil then
+				bot.stats.role = preferredRole
+				roleNames[preferredRole] = bot.stats.name
+				assignedRoles[preferredRole] = true
+				Utilities:Print()
+				-- Print this role to chat
+				local msg = Utilities:ColorString('Position '..preferredRole..': '.. bot.stats.name, Utilities:GetPlayerColor(bot.stats.id))
+				Utilities:Print(msg)
+			end
+		end
+	end
+end
+
+-- Returns the nearest available role to what the bot wants
+-- Note that assignedRoles should be a table of five booleans
+function DataTables:GetBestPossibleRole(preferredRole, assignedRoles)
+	-- Trivial case: role they want is available
+	if not (assignedRoles[preferredRole]) then 
+		return preferredRole
+	end
+	-- Random decision: Cores (1-5) search top down, Supports (4-5) search bottom up
+	if preferredRole <= 3 then
+		for i=1,5 do
+			if not (assignedRoles[i]) then 
+				return i
+			end
+		end
+		-- if we made it this far all the roles are full
+		return nil
+	end		
+	
+	-- Support only can make it this far
+	for i=5,1,-1 do
+		if not (assignedRoles[i]) then 
+			return i
+		end
+	end
+	-- if we made it this far all the roles are full
+	return nil
 end
 
 -- Sorts the bots table by role
