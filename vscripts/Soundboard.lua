@@ -11,6 +11,7 @@ local sounds =
 	SAD_TROMBONE					= 'soundboard.sad_bone',
 	GROAN									= 'soundboard.ti9.crowd_groan',
 	APPLAUSE							= 'soundboard.applause',
+	CHEAT									= 'Loot_Drop_Stinger_Short',
 -- English Casters (or Glados)
 	HOLY_MOLY             = 'soundboard.holy_moly',									  
 	PATIENCE							= 'soundboard.patience',										

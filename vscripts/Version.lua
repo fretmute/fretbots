@@ -1,9 +1,5 @@
-version = '0.5.3.0'
+version = '0.5.4.0'
 versionString = [[Changelog:
-	Reworked selection of bot roles such that the bots can be used with 
-	scripts other than FuriousPuppy's (although preferences are still based
-	on the roles from that script.)
-	
-	Added the barest possible support for Hoodwink (i.e. if she gets picked, 
-	this shouldn't crash.)
+	The chat parser now looks for chat cheats (-refresh, -wtf, etc) and tattles if
+	it notices that you're cheating.
 ]]

@@ -47,7 +47,9 @@ ATTENTION 			= Sounds.ATTENTION
 LAKAD						= Sounds.LAKAD
 KRASAVCHIK			= Sounds.KRASAVCHIK
 EHTO_GG					= Sounds.EHTO_GG
-
+BEEP						= Sounds.BEEP
+ROSHAN					= Sounds.ROSHAN
+SAD_TROMBONE		= Sounds.SAD_TROMBONE
 
 -- message colors
 local colors = 
@@ -227,10 +229,18 @@ end
 -- Plays a specific sound
 function Utilities:PlaySound(sound)
 	if Sounds[sound] ~= nil then
-		EmitGlobalSound(Sounds[sound])
+		EmitGlobalSound(Sounds[sound])          
+	else
+		Utilities:Print('Sound not found: '..sound)
 	end
 end
 
+-- Plays a cheat detected sound
+function Utilities:CheatWarning()
+	if Sounds['CHEAT'] ~= nil then
+		EmitGlobalSound(Sounds['CHEAT'])    
+	end  
+end
 -- clamps a number
 function Utilities:Clamp(number, minimum, maximum)
 	if number < minimum then return minimum end

@@ -43,6 +43,9 @@ end
 -- neutral item drop settings
 AllNeutrals = dofile('SettingsNeutralItemTable')
 
+-- cheat command list
+local cheats = dofile('CheatList') 
+
 -- Difficulty values voted for
 difficulties = {}
 
@@ -165,6 +168,8 @@ end
 function Settings:OnPlayerChat(event)
 	-- Get event data
 	local playerID, rawText = Settings:GetChatEventData(event)
+  -- Check to see if they're cheating
+  Settings:DoChatCheatParse(playerID, rawText)
 	-- Remove dashes (potentially)
 	local text = Utilities:CheckForDash(rawText)
 	-- Handle votes if we're still in the voting phase
@@ -541,6 +546,19 @@ function Settings:DoChatVoteParse(playerID, text)
       Utilities:Print(msg, Utilities:GetPlayerColor(playerID))
     end
 	end
+end
+
+-- Checks to see if a player is entering cheat commands
+function Settings:DoChatCheatParse(playerID, text)
+  local tokens = Utilities:Tokenize(text)
+  for _, cheat in pairs(cheats) do 
+  	-- tokens 1 is the potential cheat code
+  	if tokens[1] == cheat then
+  		local msg = PlayerResource:GetPlayerName(playerID)..' is cheating: '..text
+      Utilities:CheatWarning()
+      Utilities:Print(msg, Utilities:GetPlayerColor(playerID))  
+  	end
+  end
 end
 
 -- returns true if target and value share the same properties, e.g.
