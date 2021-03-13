@@ -1,9 +1,9 @@
 [TOC]
 
-#About
+# About
 The Fretbots scripts are run in conjunction with bot behavioral scripts in order to increase the difficulty of the bots in Dota 2.  Until very recently, most bot scripts ended underfarmed and underleveled, due to their tendency to roam as five past the laning stage.  These scripts attempt to rectify this by adding to the bots GPM and XPM based on their purported role in the game, relative to the corresponding player on the human side.  Furthermore, the bots will receive random bonuses each time they die, as well as being assigned neutral items periodically.  Most settings are user configurable; see `SettingsDefault.lua` for details.
 
-#How To
+# How To
 1. Download the script and extract the files from `vscripts` to your Dota 2 vscripts directory.
 This is typically `<SteamDir>\steamapps\common\dota 2 beta\game\dota\scripts\vscripts`.
 2. Launch Dota 2 with the console enabled. The console can be enabled under `Advanced Options`.
