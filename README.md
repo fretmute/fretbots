@@ -13,5 +13,5 @@ This is typically `<SteamDir>\steamapps\common\dota 2 beta\game\dota\scripts\vsc
 ![](https://github.com/fretmute/fretbots/blob/master/images/FretBotsWelcome.png)
 6. Voting for difficulty will begin when all players have loaded into the game.  Difficulty scales from 0 to 10. To vote, simply type a number into chat. Values beyond the limits will be coerced to the nearest valid value. Each player may only vote once. Note that at higher difficuty levels, the bots will be sigificantly higher level and wealthier than the human players.
 7. That's it! The bots will receive their bonuses once per minute past the sounding of the horn, and potentially when they die.  
-8. The default settings represent what my friends and I consider to be fun; feel free to tinker to your hearts content.  
+8. The default settings represent what my friends and I consider to be fun; feel free to tinker to your heart's content.  
 
