@@ -1,5 +1,4 @@
-version = '0.5.4.0'
+version = '0.5.4.1'
 versionString = [[Changelog:
-	The chat parser now looks for chat cheats (-refresh, -wtf, etc) and tattles if
-	it notices that you're cheating.
+			Adding an image for testing fancy new Readme stuff.
 ]]

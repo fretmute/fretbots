@@ -29,6 +29,9 @@ MSG_CONSOLE_BAD				= 6
 MSG_NEUTRAL_FIND      = 7
 MSG_NEUTRAL_TAKE      = 8
 MSG_NEUTRAL_RETURN    = 9
+
+-- Max neutral item message to print
+local maxNeutralMessage = MSG_NEUTRAL_FIND
                 		
 BAD_LIST									= Sounds.BadSounds
 GOOD_LIST									= Sounds.GoodSounds
@@ -182,8 +185,10 @@ function Utilities:AnnounceNeutral(bot, item, msgType)
 		msg = msg..Utilities:ColorString('Returned Neutral Item to Stash: ', awardColors.neutral)			
 	end
 	msg = msg..Utilities:ColorString(item.realName, neutralColors[item.tier])
-	-- print the message
-	GameRules:SendCustomMessage(msg, 0, 0)
+	-- print the message, maybe
+	if msgType <= maxNeutralMessage then
+		GameRules:SendCustomMessage(msg, 0, 0)
+	end
 end
 
 -- Returns the localized hero name, if there is one
