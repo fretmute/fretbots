@@ -8,7 +8,7 @@ This is typically `<SteamDir>\steamapps\common\dota 2 beta\game\dota\scripts\vsc
 ![](https://github.com/fretmute/fretbots/blob/master/images/EnableConsole.png)
 3. Create a lobby. Use whatever third party bot script that you care to. Ensure that `Enable Cheats` is checked; this is required because the scripts use functions that are considered cheats to give gold, items, stats, and experience to the bots. The scripts monitor player chat, and will announce to chat when any player enters cheat commands.
 ![](https://github.com/fretmute/fretbots/blob/master/images/EnableCheats.png)
-4. After starting the game, open the console, and input `sv_cheats=1; script_reload_code fretbots`.
+4. After starting the game, open the console, and input `sv_cheats 1; script_reload_code fretbots`.
 5. The scripts are now running! You should receive a message in chat with the current version string.  If you did not, you probably received an error message in the console instead.
 ![](https://github.com/fretmute/fretbots/blob/master/images/FretBotsWelcome.png)
 6. Voting for difficulty will begin when all players have loaded into the game.  Difficulty scales from 0 to 10. To vote, simply type a number into chat. Values beyond the limits will be coerced to the nearest valid value. Each player may only vote once. Note that at higher difficuty levels, the bots will be sigificantly higher level and wealthier than the human players.
