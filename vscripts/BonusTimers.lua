@@ -18,7 +18,7 @@ require 'Flags'
 require 'NeutralItems'
 
 -- local debug flag
-local thisDebug = true; 
+local thisDebug = false; 
 local isDebug = Debug.IsDebug() and thisDebug;
 local isDebugChat = isDebug and true
 

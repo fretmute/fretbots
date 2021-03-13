@@ -14,8 +14,9 @@ require 'Utilities'
 -- Neutral items
 require 'NeutralItems'
 
-local role = require('RoleUtility')
-
+local role 	= require('RoleUtility')
+local radiantTowers	= dofile('RadiantTowers')
+local direTowers		= dofile('DireTowers')
 
 -- local debug flags
 local thisDebug = false
@@ -36,6 +37,8 @@ Bots = {}
 Players = {}
 PlayerBots = {}
 AllUnits = {}
+DireTowers = {}
+RadiantTowers = {}
 
 BotTeam = 0
 HumanTeam = 0
@@ -43,6 +46,12 @@ HumanTeam = 0
 -- convenient constants for dumb valve integers
 local RADIANT = 2
 local DIRE = 3
+
+-- globlal constants for lane identification
+LANE_UNKNOWN	= 0
+LANE_SAFE 		= 1
+LANE_MID 			= 2
+LANE_OFF 			= 3
 
 -- Instantiate the class
 if DataTables == nil then
@@ -63,12 +72,12 @@ function DataTables:Initialize()
 	                              DOTA_UNIT_TARGET_HERO,
 	                              88,
 	                              FIND_ANY_ORDER,
-	                              false);
+	                              false)
 	                              
 	Bots = nil
- 	Bots={};
-	Players={};
-	AllUnits = {};
+ 	Bots={}
+	Players={}
+	AllUnits = {}
 	for i,unit in pairs(Units) do
   		local id = PlayerResource:GetSteamID(unit:GetMainControllingPlayer());	
   		local isFret = Debug:IsFret(id);
@@ -78,12 +87,14 @@ function DataTables:Initialize()
         Flags.isDebugBuffed = true
 		  end  			
 		  -- Initialize data tables for this unit
-		  DataTables:GenerateStatsTables(unit);
+		  DataTables:GenerateStatsTables(unit)
 	end
 	Debug:Print('There are '..#Bots..' bots!')
 	
 	-- Purge human side bots 
 	DataTables:PurgeHumanSideBots()
+	-- Get Towers (Used for determining bot role, eventually)
+	DataTables:GetTowers()
 	-- Assign roles to bots
 	DataTables:AssignBotRoles()
 	-- Sort Bots Table by role for convenience
@@ -91,7 +102,7 @@ function DataTables:Initialize()
 	-- Set all bots to find tier 1 neutrals
 	NeutralItems:InitializeFindTimings()
   -- Set Initialized Flag
-  Flags.isStatsInitialized = true;
+  Flags.isStatsInitialized = true
 	
 	-- debug prints
 	if isDebug then
@@ -110,6 +121,77 @@ function DataTables:Initialize()
 	end
 	
 end
+
+-- Gets tower entities
+function DataTables:GetTowers()
+	buildings = FindUnitsInRadius(2,
+	                              Vector(0, 0, 0),
+	                              nil,
+	                              FIND_UNITS_EVERYWHERE,
+	                              3,
+	                              DOTA_UNIT_TARGET_BUILDING,
+	                              88,
+	                              FIND_ANY_ORDER,
+	                              false);
+  for _,building in pairs (buildings) do
+		-- get team
+		local team = building:GetTeam()
+		local name = building:GetName()	
+		-- Compare for the right team
+		if team == RADIANT then
+			-- I'm sure someone fancier than myself would just parse the string, but I am lazy today
+			-- This only happens once anyway
+			if name == radiantTowers.TopTier4 then
+				RadiantTowers.TopTier4 = building
+			elseif name == radiantTowers.TopTier3 then
+				RadiantTowers.TopTier3 = building
+			elseif name == radiantTowers.TopTier2 then
+				RadiantTowers.TopTier2 = building
+			elseif name == radiantTowers.TopTier1 then
+				RadiantTowers.TopTier1 = building
+			elseif name == radiantTowers.BotTier4 then
+				RadiantTowers.BotTier4 = building
+			elseif name == radiantTowers.BotTier3 then
+				RadiantTowers.BotTier3 = building
+			elseif name == radiantTowers.BotTier2 then
+				RadiantTowers.BotTier2 = building
+			elseif name == radiantTowers.BotTier1 then
+				RadiantTowers.BotTier1 = building
+			elseif name == radiantTowers.MidTier3 then
+				RadiantTowers.MidTier3 = building
+			elseif name == radiantTowers.MidTier2 then
+				RadiantTowers.MidTier2 = building
+			elseif name == radiantTowers.MidTier1 then
+				RadiantTowers.MidTier1 = building
+			end	
+		elseif team == DIRE then
+			if name == direTowers.TopTier4 then
+				DireTowers.TopTier4 = building
+			elseif name == direTowers.TopTier3 then
+				DireTowers.TopTier3 = building
+			elseif name == direTowers.TopTier2 then
+				DireTowers.TopTier2 = building
+			elseif name == direTowers.TopTier1 then
+				DireTowers.TopTier1 = building
+			elseif name == direTowers.BotTier4 then
+				DireTowers.BotTier4 = building
+			elseif name == direTowers.BotTier3 then
+				DireTowers.BotTier3 = building
+			elseif name == direTowers.BotTier2 then
+				DireTowers.BotTier2 = building
+			elseif name == direTowers.BotTier1 then
+				DireTowers.BotTier1 = building
+			elseif name == direTowers.MidTier3 then
+				DireTowers.MidTier3 = building
+			elseif name == direTowers.MidTier2 then
+				DireTowers.MidTier2 = building
+			elseif name == direTowers.MidTier1 then
+				DireTowers.MidTier1 = building
+			end				
+		end    
+  end                      
+end		
+
 
 -- Generates various data used to track bot stats
 function DataTables:GenerateStatsTables(unit)
@@ -196,6 +278,17 @@ function DataTables:GenerateStatsTables(unit)
 			neutral	      = 0,
 			stats 				= 0   	
     },	
+    -- Lane weights (lower values indicate bot is probably in that lane)
+    laneWeights = 
+    {
+    	bot = -1,
+    	mid = -1,
+    	top = -1
+    },
+    -- Currently assigned lane
+    lane = LANE_UNKNOWN,
+    -- Has role been assigned? (for dynamic role determination)
+    isRoleAssigned = false,
   	-- current level of neutral item
   	neutralTier = 0,
   	-- Timing for next level of neutral item
@@ -494,10 +587,6 @@ function DataTables:AssignBotRoles()
 				bot.stats.role = preferredRole
 				roleNames[preferredRole] = bot.stats.name
 				assignedRoles[preferredRole] = true
-				Utilities:Print()
-				-- Print this role to chat
-				local msg = Utilities:ColorString('Position '..preferredRole..': '.. bot.stats.name, Utilities:GetPlayerColor(bot.stats.id))
-				Utilities:Print(msg)
 			end
 		end
 	end
@@ -550,25 +639,6 @@ function DataTables:SortBotsByRole()
   end  
   return sortedData
 end
-
-function DataTables:GetTowers()
-	Units = FindUnitsInRadius(2,
-	                              Vector(0, 0, 0),
-	                              nil,
-	                              FIND_UNITS_EVERYWHERE,
-	                              3,
-	                              DOTA_UNIT_TARGET_BUILDING,
-	                              88,
-	                              FIND_ANY_ORDER,
-	                              false);
-	                              
-	for _, unit in pairs(Units) do
-		if unit:IsTower() then
-			Debug:Print(unit:GetName())
-		end
-	end
-end
-
 
 -- Initialize (if Debug)
 if isSoloDebug then 

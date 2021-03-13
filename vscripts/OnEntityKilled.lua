@@ -39,7 +39,7 @@ function EntityKilled:OnEntityKilled(event)
 	AwardBonus:Death(victim)
 	-- Sound if it is a player?
 	if Settings.isPlayerDeathSound then
-	  Utilities:RandomSound(PLAYER_DEATH_LIST)
+	  Utilities:RandomSound(BAD_LIST)
 	end
 	-- Debug Print
 	if isDebug then

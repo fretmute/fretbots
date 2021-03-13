@@ -23,6 +23,8 @@ require 'Settings'
 require 'Timers'
 -- Hero Specifc Extensions
 require 'HeroLoneDruid'
+-- Role Determination
+require 'RoleDetermination'
 
 -- Instantiate ourself
 if FretBots == nil then
@@ -33,7 +35,7 @@ end
 local thisDebug = false; 
 -- set true to prevent initialize from returning when it realizes
 -- that it has already been run once
-local isAllowMultipleStarts = true;
+local isAllowMultipleStarts = false;
 local isDebug = Debug.IsDebug() and thisDebug;
 
 -- other local vars
@@ -42,6 +44,8 @@ local isAllPlayersSpawned = false
 local playerSpawnCount = 0
 -- if game time goes past this point, then assume all players loaded
 local playerLoadFailSafe = -75
+-- Time at which to stop the BotRoleDetermination timer and declare rols
+local BotRoleDeterminationTime = 60
 
 -- Starting this script is largely handled by the requires, as separate pieces start
 -- themselves. DataTables cannot be initialized until all players have loaded, so
@@ -53,7 +57,8 @@ function FretBots:Initialize()
 	FretBots:SetRandomSeed()
 	-- Register the listener that will check for all players spawning and then init datatables
 	ListenToGameEvent('dota_on_hero_finish_spawn', Dynamic_Wrap(FretBots, 'OnPlayerSpawned'), FretBots)
-	Timers:CreateTimer(playersLoadedTimerName, {endTime = 1, callback =  FretBots['PlayersLoadedTimer']} )
+	Timers:CreateTimer(playersLoadedTimerName, {endTime = 1, callback = FretBots['PlayersLoadedTimer']} )
+
 end
 
 -- Runs until all players are loaded in and then initializes the DataTables
@@ -65,6 +70,8 @@ function FretBots:PlayersLoadedTimer()
 		Settings:SetHostPlayerID()
 		-- Start bonus timers (they require DataTables to exist)
 		BonusTimers:Initialize()
+		-- Start bot role determination timer
+		RoleDetermination:Initialize()		
 		-- Register EntityHurt Listener
 		EntityHurt:RegisterEvents()
 		-- Register EntityKilled Listener
@@ -95,7 +102,6 @@ end
 
 function FretBots:OnPlayerSpawned(event)
 	playerSpawnCount = playerSpawnCount + 1
-	--Debug:Print('Spawned Players: '..playerSpawnCount)
 end
 
 -- Sets the random seed for the game, and burns off the initial bad random number
@@ -109,6 +115,7 @@ function FretBots:SetRandomSeed()
 	math.randomseed(seed)
 	local temp = math.random()
 end
+
 -- Start things up (only once)
 if not Flags.isFretBotsInitialized then
 	-- Print version to console 

@@ -25,6 +25,8 @@
   	isMultiplicative = true,
   	-- Taunt humans when they die with chatwheel sounds?
   	isPlayerDeathSound = true,
+  	-- Set to true to enable dynamic role assignment (experimental)
+  	isDynamicRoleAssignment = true,
 		-- this represents a multiplier to all bonuses.  This allows each game to be slightly different
 		skill = 
 		{
