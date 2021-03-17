@@ -1,4 +1,9 @@
 -----------------------------------
+0.6.0.2
+-----------------------------------
+	Added two additional wacky edge cases for Sirius bot laning.
+
+-----------------------------------
 0.6.0.1
 -----------------------------------
 	Fixed bot roles not falling back when finding unhandled lane cases

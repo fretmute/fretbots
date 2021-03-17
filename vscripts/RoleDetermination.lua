@@ -210,7 +210,23 @@ function RoleDetermination:DetermineRoles()
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 3))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_MID, 4))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 5))    
-	  Bots = RoleDeterminationBots         
+	  Bots = RoleDeterminationBots   
+	-- tri off, dual safe
+	elseif laneCounts.off == 3 and laneCounts.safe == 2 then
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 1))
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 2))
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 3))
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 4))
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 5))    
+	  Bots = RoleDeterminationBots   	
+	-- tri safe, dual off
+	elseif laneCounts.safe == 3 and laneCounts.off == 2 then
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 1))
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 2))
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 3))
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 4))
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 5))    
+	  Bots = RoleDeterminationBots   		          
 	else
 		--If we got here, the bots are trying something too strange to bother with.
 		Debug:Print('I consider the current case too edge to bother fixing.  Dynamic roles have not been assigned.')

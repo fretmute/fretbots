@@ -1,5 +1,4 @@
-version = '0.6.0.1'
+version = '0.6.0.2'
 versionString = [[Changelog:
-	Fixed bot roles not falling back when finding unhandled lane cases
-	(i.e. a dual lane, a tri-lane, and no one mid).
+	Added two additional wacky edge cases for Sirius bot laning.
 ]]
