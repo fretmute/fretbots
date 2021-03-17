@@ -161,6 +161,7 @@ function RoleDetermination:DetermineRoles()
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 3))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 4))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 5))
+	  Bots = RoleDeterminationBots
 	-- def. trilane
 	elseif laneCounts.safe == 3 and laneCounts.mid == 1 and laneCounts.off == 1 then
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 1))
@@ -168,6 +169,7 @@ function RoleDetermination:DetermineRoles()
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 3))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 4))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 5))
+	  Bots = RoleDeterminationBots
 	-- off. trilane
 	elseif laneCounts.safe == 1 and laneCounts.mid == 1 and laneCounts.off == 3 then
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 1))
@@ -175,6 +177,7 @@ function RoleDetermination:DetermineRoles()
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 3))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 4))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF,5))
+	  Bots = RoleDeterminationBots
 	-- dual mid, solo off
 	elseif laneCounts.safe == 2 and laneCounts.mid == 2 and laneCounts.off == 1 then
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 1))
@@ -182,6 +185,7 @@ function RoleDetermination:DetermineRoles()
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 3))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_MID, 4))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 5))  
+	  Bots = RoleDeterminationBots
 	-- dual mid, solo safe
 	elseif laneCounts.safe == 2 and laneCounts.mid == 2 and laneCounts.off == 1 then
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 1))
@@ -189,6 +193,7 @@ function RoleDetermination:DetermineRoles()
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 3))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_MID, 4))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 5))
+	  Bots = RoleDeterminationBots
 	-- Things start getting wacky here
 	-- tri safe, dual mid
 	elseif laneCounts.safe == 3 and laneCounts.mid == 2 then
@@ -196,19 +201,20 @@ function RoleDetermination:DetermineRoles()
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_MID, 2))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 3))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_MID, 4))
-	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 5))       
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_SAFE, 5))     
+	  Bots = RoleDeterminationBots  
 	-- tri off, dual mid
 	elseif laneCounts.off == 3 and laneCounts.mid == 2 then
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 1))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_MID, 2))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 3))
 	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_MID, 4))
-	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 5))             
+	  table.insert(RoleDeterminationBots, RoleDetermination:GetBestBot(LANE_OFF, 5))    
+	  Bots = RoleDeterminationBots         
 	else
 		--If we got here, the bots are trying something too strange to bother with.
 		Debug:Print('I consider the current case too edge to bother fixing.  Dynamic roles have not been assigned.')
 	end
-	Bots = RoleDeterminationBots
 end
 
 -- Iterates over the Bots table and finds the best bot for this role

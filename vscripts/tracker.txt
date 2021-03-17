@@ -1,4 +1,10 @@
 -----------------------------------
+0.6.0.1
+-----------------------------------
+	Fixed bot roles not falling back when finding unhandled lane cases
+	(i.e. a dual lane, a tri-lane, and no one mid).
+
+-----------------------------------
 0.6.0.0
 -----------------------------------
 	Added support for more dynamically determining bot positions due to their
