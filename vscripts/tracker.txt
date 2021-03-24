@@ -1,4 +1,9 @@
 -----------------------------------
+0.6.0.3
+-----------------------------------
+Use string.lower() in cheat detection like I should have from the start.
+
+-----------------------------------
 0.6.0.2
 -----------------------------------
 	Added two additional wacky edge cases for Sirius bot laning.

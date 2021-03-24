@@ -1,4 +1,4 @@
-version = '0.6.0.2'
+version = '0.6.0.3'
 versionString = [[Changelog:
-	Added two additional wacky edge cases for Sirius bot laning.
+	Use string.lower() in cheat detection like I should have from the start.
 ]]

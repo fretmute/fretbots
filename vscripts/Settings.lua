@@ -553,7 +553,8 @@ function Settings:DoChatCheatParse(playerID, text)
   local tokens = Utilities:Tokenize(text)
   for _, cheat in pairs(cheats) do 
   	-- tokens 1 is the potential cheat code
-  	if tokens[1] == cheat then
+  	-- I am an idiot use .lower!
+  	if string.lower(tokens[1]) == string.lower(cheat) then
   		local msg = PlayerResource:GetPlayerName(playerID)..' is cheating: '..text
       Utilities:CheatWarning()
       Utilities:Print(msg, Utilities:GetPlayerColor(playerID))  
