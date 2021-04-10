@@ -13,7 +13,7 @@ local	neutrals =
 	--{name = 'item_mango_tree', 						tier = 1, ranged = 1, 	melee = 1,		roles={0,0,0,0,0}, realName = 'Mango Tree'},
 	{name = 'item_ocean_heart',						tier = 1, ranged = 1, 	melee = 1,		roles={1,1,1,1,1}, realName = 'Ocean Heart'},
 	--{name = 'item_poor_mans_shield',			tier = 1, ranged = 1, 	melee = 3,		roles={2,2,3,0,0}, realName = "Poor Man's Shield"},
-	{name = 'item_royal_jelly', 					tier = 1, ranged = 1, 	melee = 1,		roles={1,1,1,1,1}, realName = 'Royal Jelly'},
+	--{name = 'item_royal_jelly', 					tier = 1, ranged = 1, 	melee = 1,		roles={1,1,1,1,1}, realName = 'Royal Jelly'},
 	--{name = 'item_trusty_shovel',					tier = 1, ranged = 1, 	melee = 1,		roles={0,0,0,0,0}, realName = 'Trusty Shovel'},
 	{name = 'item_ironwood_tree',					tier = 1, ranged = 1, 	melee = 1,		roles={2,2,2,1,1}, realName = 'Ironwood Tree'},
 	{name = 'item_chipped_vest',					tier = 1, ranged = 1, 	melee = 1,		roles={2,2,3,2,2}, realName = 'Chipped Vest'},	

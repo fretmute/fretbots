@@ -1,4 +1,4 @@
-version = '0.6.0.3'
+version = '0.6.0.4'
 versionString = [[Changelog:
-	Use string.lower() in cheat detection like I should have from the start.
+	Removed royal jelly from neutral list.
 ]]

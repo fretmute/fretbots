@@ -1,4 +1,9 @@
 -----------------------------------
+0.6.0.4
+-----------------------------------
+Removed royal jelly from neutral list.
+
+-----------------------------------
 0.6.0.3
 -----------------------------------
 Use string.lower() in cheat detection like I should have from the start.
