@@ -1,4 +1,4 @@
-version = '0.6.0.4'
+version = '0.7.0.0'
 versionString = [[Changelog:
-	Removed royal jelly from neutral list.
+	Reconstruct project
 ]]
