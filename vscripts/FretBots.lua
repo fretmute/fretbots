@@ -1,30 +1,30 @@
 -- Dependencies
  -- global debug flag
-require 'Debug'
+require 'resources/Debug'
  -- Other Flags
-require 'Flags'
+require 'resources/Flags'
  -- DataTables has helper functions for generating data structures we consume, and querying/acting on that data
-require 'DataTables'
+require 'resources/DataTables'
  -- Entity Killed monitors kills and provides bonuses (if settings dictate)
-require 'OnEntityKilled'
+require 'resources/OnEntityKilled'
  -- Entity hurt monitors damage and updates stat tables accordingly
-require 'OnEntityHurt'
+require 'resources/OnEntityHurt'
 -- Version information
-require 'Version'
+require 'resources/Version'
 -- Timers for periodic bonuses
-require 'BonusTimers'
+require 'resources/BonusTimers'
 -- Utilities
-require 'Utilities'
+require 'resources/Utilities'
 -- Dynamic Difficulty Adjustor
-require 'DynamicDifficulty'
+require 'resources/DynamicDifficulty'
 -- Settings
-require 'Settings'
+require 'resources/Settings'
 -- Timers
-require 'Timers'
+require 'resources/Timers'
 -- Hero Specifc Extensions
-require 'HeroLoneDruid'
+require 'resources/HeroLoneDruid'
 -- Role Determination
-require 'RoleDetermination'
+require 'resources/RoleDetermination'
 
 -- Instantiate ourself
 if FretBots == nil then
@@ -122,7 +122,7 @@ if not Flags.isFretBotsInitialized then
 	print('Version: ' .. version)
 	print(versionString)
 	-- Welcome Message
-	Utilities:Print('Fret Bots! Version: ' .. version, MSG_GOOD, MATCH_READY)	
+	Utilities:Print('Bots are fatter than you! Version: ' .. version .. '. These bots are absolutely unfair based on the difficulty you choose, so do not feel bad if you lose. Enjoy the game. Credit to Fretmute.', MSG_GOOD, MATCH_READY)	
 	-- Register the listener that will run Initialize() once the game starts
 	Utilities:RegsiterGameStateListener(FretBots, 'Initialize', DOTA_GAMERULES_STATE_PRE_GAME )
 	Flags.isFretBotsInitialized = true
