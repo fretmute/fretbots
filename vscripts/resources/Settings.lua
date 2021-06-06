@@ -71,6 +71,7 @@ local chatCommands = {
     "esound",
     "playsound",
     "kb",
+    "help",
     "networth"
 }
 
@@ -111,7 +112,6 @@ function Settings:DifficultySelectTimer()
         msg = "* Dynamic Difficulty " .. (Settings.dynamicDifficulty.enabled and "" or "not") .. " enabled."
         Utilities:Print(msg, MSG_GOOD)
         msg = "* Dynamic Difficulty means bots get dynamic (instead of static) bonus gold/exp/stats mainly based on the selected difficulty and how much they are behind the players on the other side."
-        Utilities:Print(msg, MSG_GOOD)
         Utilities:Print(msg, MSG_GOOD)
         isVotingOpen = true
     end
@@ -195,13 +195,6 @@ function Settings:OnPlayerChat(event)
             Utilities:PCallText(text)
         end
     end
-
-    if 'help' == string.lower(text) then
-        local msg = "Dynamic Difficulty " .. (Settings.dynamicDifficulty.enabled and "" or "not") .. " enabled."
-        Utilities:Print(msg, MSG_GOOD)
-        msg = "Difficulty Selected: " .. Settings.difficulty
-        Utilities:Print(msg, MSG_GOOD)
-    end
 end
 
 -- Parse for commands anyone can use
@@ -249,6 +242,13 @@ function Settings:DoUserChatCommandParse(text)
     if command == "stats" then
         Settings:DoGetStats(tokens)
     end
+
+    if command == 'help' then
+        local msg = "Dynamic Difficulty " .. (Settings.dynamicDifficulty.enabled and "" or "not") .. " enabled. Difficulty Selected: " .. Settings.difficulty
+        Utilities:Print(msg, MSG_GOOD)
+        Settings:DoDisplayNetWorth()
+    end
+
     return true
 end
 
@@ -327,7 +327,7 @@ function Settings:DoDisplayNetWorth()
     Utilities:Print(msg, MSG_CONSOLE_GOOD)
     roundedNetWorth = Utilities:Round(botTeamNetWorth, -2)
     roundedNetWorth = roundedNetWorth / 1000
-    msg = "Bot Team Net Worth: " .. tostring(roundedNetWorth) .. "k"
+    msg = "AI-Bot Team Net Worth: " .. tostring(roundedNetWorth) .. "k"
     Utilities:Print(msg, MSG_CONSOLE_BAD)
 end
 
