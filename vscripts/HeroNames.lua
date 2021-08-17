@@ -121,6 +121,7 @@ local heroNames=
 	npc_dota_hero_wisp									= 'Io',
 	npc_dota_hero_witch_doctor					= 'Witch Doctor',
 	npc_dota_hero_hoodwink							= 'Hoodwink',
+	npc_dota_hero_dawnbreaker						= 'Dawnbreaker',
 }
 
 return heroNames

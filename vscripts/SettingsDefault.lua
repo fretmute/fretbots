@@ -27,6 +27,10 @@
   	isPlayerDeathSound = true,
   	-- Set to true to enable dynamic role assignment (experimental)
   	isDynamicRoleAssignment = true,
+  	-- Set to true to do annoying things to cheaters when they cheat
+  	isEnableCheatRepurcussions = true,
+    -- Number of times to punish a cheater.  If this is < 0, then they will be punished indefinitely
+    repurcussionsPerInfraction = 3,
 		-- this represents a multiplier to all bonuses.  This allows each game to be slightly different
 		skill = 
 		{

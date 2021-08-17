@@ -35,6 +35,8 @@ local votingTimeElapsed = -1
 local hostID = -1
 -- default difficulty if no one votes
 local noVoteDifficulty = 2
+-- Is repurcussion timer started?
+local isRepurcussionTimerStarted = false
 -- Instantiate ourself
 if Settings == nil then
   Settings = dofile('SettingsDefault')
@@ -87,6 +89,34 @@ function Settings:Initialize(difficulty)
  	Flags.isSettingsFinalized = true
 end
 
+-- Starts timer for cheat repurcussions.  Once started for a player, runs once 
+-- per second indefinitely.
+function Settings:StartRepurcussionTimer()
+	local timerName = 'RepercussionTimer' 
+	Timers:CreateTimer(timerName, {endTime = 1, callback =  Settings['RepurcussionTimer']} )
+end
+
+-- Checks each player to see if they need a repurcussion
+function Settings:RepurcussionTimer()
+	for _, player in ipairs(Players) do
+		if player.stats.repurcussionCount < player.stats.repurcussionTarget then	
+		  if player:IsAlive() then
+		  	player.stats.repurcussionCount = player.stats.repurcussionCount + 1
+		  	player:ForceKill(true)
+		  	local msg = PlayerResource:GetPlayerName(player.stats.id)..' is experiencing repurcussions: '
+		  	msg = msg..player.stats.repurcussionCount..' of '..player.stats.repurcussionTarget 
+	      Utilities:CheatWarning()
+	      Utilities:Print(msg, Utilities:GetPlayerColor(player.stats.id))  
+	      if player.stats.repurcussionCount == player.stats.repurcussionTarget then
+	        msg = PlayerResource:GetPlayerName(player.stats.id)..' has been rehabilitated!'
+	        Utilities:Print(msg, Utilities:GetPlayerColor(player.stats.id))  
+	      end
+		  end
+		end
+	end
+	return 1
+end
+
 -- Periodically checks to see if settings have been chosen
 function Settings:DifficultySelectTimer()
 	-- increment elapsed time
@@ -128,7 +158,7 @@ function Settings:ApplyVoteSettings()
 		difficulty = total / #difficulties
 		difficulty = Utilities:Round(difficulty, 1)
   end
-  msg = 'Difficulty Selected: '..difficulty
+  local msg = 'Difficulty Selected: '..difficulty
   Debug:Print(msg)
   Utilities:Print(msg, MSG_GOOD)
   Settings:Initialize(difficulty)
@@ -549,15 +579,33 @@ function Settings:DoChatVoteParse(playerID, text)
 end
 
 -- Checks to see if a player is entering cheat commands
-function Settings:DoChatCheatParse(playerID, text)
+function Settings:DoChatCheatParse(playerId, text)
   local tokens = Utilities:Tokenize(text)
   for _, cheat in pairs(cheats) do 
   	-- tokens 1 is the potential cheat code
   	-- I am an idiot use .lower!
   	if string.lower(tokens[1]) == string.lower(cheat) then
-  		local msg = PlayerResource:GetPlayerName(playerID)..' is cheating: '..text
+  		local msg = PlayerResource:GetPlayerName(playerId)..' is cheating: '..text
       Utilities:CheatWarning()
-      Utilities:Print(msg, Utilities:GetPlayerColor(playerID))  
+      Utilities:Print(msg, Utilities:GetPlayerColor(playerId))  
+      -- Start repurcussion timer if necessary
+      -- Don't do this before Stats exist
+      if Flags.isStatsInitialized == false then
+      	return
+      end
+      if isRepurcussionTimerStarted == false then
+      	Settings:StartRepurcussionTimer()
+      	isRepurcussionTimerStarted = true
+      end
+      -- Add repurcussions to this player
+      local player = DataTables:GetPlayerById(playerId)
+      if player ~= nil then
+	      if Settings.repurcussionsPerInfraction >= 0 then
+	      	player.stats.repurcussionTarget = player.stats.repurcussionTarget + Settings.repurcussionsPerInfraction
+	      else
+	      	player.stats.repurcussionTarget = 65535
+	      end
+	    end
   	end
   end
 end

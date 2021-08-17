@@ -203,6 +203,8 @@ function DataTables:GenerateStatsTables(unit)
 	local steamId = PlayerResource:GetSteamID(unit:GetMainControllingPlayer())
 	-- Drop out for non-real hero units
 	if not DataTables:IsRealHero(unit) then return end
+	-- name for debug purposes
+ 	local thisName = unit:GetName()
 	-- Is bot?
   if PlayerResource:GetSteamID(unit:GetMainControllingPlayer())==PlayerResource:GetSteamID(100) then
   	thisIsBot = true
@@ -217,13 +219,15 @@ function DataTables:GenerateStatsTables(unit)
 	  thisTeam=PlayerResource:GetTeam(thisId)
 	  thisRole = 0;
 	end
-	-- name for debug purposes
- 	local thisName = unit:GetName()
   thisRole = DataTables:GetRole(thisName)
  	
 	-- create a stats table for the bot
 	local stats = 
   {
+  	-- Number of punishments given to this player so far
+  	repurcussionCount	=	0,
+  	-- Amount of repurcussions earned
+  	repurcussionTarget = 0,
   	-- Number of kills
   	kills 		=			0,
   	-- Number of deaths: There is listener for this, we should register and track there	
@@ -638,6 +642,16 @@ function DataTables:SortBotsByRole()
   	end 
   end  
   return sortedData
+end
+
+-- returns a players Player table by their steam ID
+function DataTables:GetPlayerById(id)
+	for _, player in ipairs(Players) do
+		if player.stats.id == id then
+			return player
+		end
+	end
+	return nil
 end
 
 -- Initialize (if Debug)
