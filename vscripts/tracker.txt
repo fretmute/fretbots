@@ -1,4 +1,12 @@
 -----------------------------------
+0.6.1.1
+-----------------------------------
+	Properly tracking isEnableCheatRepurcussions now.  Whoops!
+	
+	Updated neutral item list to be current.  Bot item desires for new items
+	are complete crapshoots at this point.
+	
+-----------------------------------
 0.6.1.0
 -----------------------------------
 	Added common name for Dawnbreaker. Evidently at some point I also added

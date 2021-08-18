@@ -589,22 +589,24 @@ function Settings:DoChatCheatParse(playerId, text)
       Utilities:CheatWarning()
       Utilities:Print(msg, Utilities:GetPlayerColor(playerId))  
       -- Start repurcussion timer if necessary
-      -- Don't do this before Stats exist
-      if Flags.isStatsInitialized == false then
-      	return
-      end
-      if isRepurcussionTimerStarted == false then
-      	Settings:StartRepurcussionTimer()
-      	isRepurcussionTimerStarted = true
-      end
-      -- Add repurcussions to this player
-      local player = DataTables:GetPlayerById(playerId)
-      if player ~= nil then
-	      if Settings.repurcussionsPerInfraction >= 0 then
-	      	player.stats.repurcussionTarget = player.stats.repurcussionTarget + Settings.repurcussionsPerInfraction
-	      else
-	      	player.stats.repurcussionTarget = 65535
+      if Settings.isEnableCheatRepurcussions then
+	      -- Don't do this before Stats exist
+	      if Flags.isStatsInitialized == false then
+	      	return
 	      end
+	      if isRepurcussionTimerStarted == false then
+	      	Settings:StartRepurcussionTimer()
+	      	isRepurcussionTimerStarted = true
+	      end
+	      -- Add repurcussions to this player
+	      local player = DataTables:GetPlayerById(playerId)
+	      if player ~= nil then
+		      if Settings.repurcussionsPerInfraction >= 0 then
+		      	player.stats.repurcussionTarget = player.stats.repurcussionTarget + Settings.repurcussionsPerInfraction
+		      else
+		      	player.stats.repurcussionTarget = 65535
+		      end
+		    end
 	    end
   	end
   end
