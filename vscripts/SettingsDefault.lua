@@ -58,7 +58,7 @@
 			-- Max neutrals awarded per tier. You might be tempted to make this less than 5 to hinder the bots
 			-- a bit, but note that the award method doesn't prioritize bot roles, so you might end up with a
 			-- carry that doesn't have an item.
-			maxPerTier = {4,4,4,4,4},
+			maxPerTier = {5,5,5,5,5},
 			-- adds this number to the awards as they come out (make this positive to give better items early
 			-- make it negative to cause errors, probably.  If you want slower items just change the timings)
 			tierOffset = 0,

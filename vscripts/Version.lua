@@ -1,4 +1,4 @@
-version = '0.6.1.1'
+version = '0.6.1.2'
 versionString = [[Changelog:
 	Added common name for Dawnbreaker. Evidently at some point I also added
 	Hoodwink and did not mention it.
@@ -13,4 +13,6 @@ versionString = [[Changelog:
 	
 	Updated neutral item list to be current.  Bot item desires for new items
 	are complete crapshoots at this point.	
+	
+	Updated bot neutral item drop count to five per tier.
 ]]
