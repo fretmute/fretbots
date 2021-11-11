@@ -264,7 +264,7 @@ function RoleDetermination:AnnounceRoles()
 	Utilities:Print('Bot Roles have been determined:')
 	for _, bot in ipairs(Bots) do
 		-- Print this role to chat
-		local msg = Utilities:ColorString('Position '..bot.stats.role..': '.. bot.stats.name, Utilities:GetPlayerColor(bot.stats.id))
+		local msg = Utilities:ColorString('Position '..bot.stats.role..': '.. bot.stats.name .. ': ' .. bot.stats.skill, Utilities:GetPlayerColor(bot.stats.id))
 		Utilities:Print(msg)
 	end
 end

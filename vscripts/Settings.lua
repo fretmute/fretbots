@@ -70,7 +70,8 @@ local chatCommands =
 	'esound',	
 	'playsound',
 	'kb',
-	'networth'
+	'networth',
+	'getroles'
 }
 
 -- Sets difficulty value
@@ -262,6 +263,10 @@ function Settings:DoUserChatCommandParse(text)
   if command == 'stats' then
   	Settings:DoGetStats(tokens)
   end   
+  -- dump bot roles
+  if command == 'getroles' then
+  	RoleDetermination:AnnounceRoles()
+  end
   return true                        
 end
 
