@@ -8,7 +8,7 @@ local heroNames = require('HeroNames')
 -- sweet DeepPrint function I cadged from GitHub
 local inspect = require('inspect')
 
-if Utulities == nil then
+if Utilities == nil then
 	Utilities = 
 	{
 		listeners = 
