@@ -1,7 +1,13 @@
 -----------------------------------
+0.6.1.5
+-----------------------------------
+	Typo fix of the word Utilities in the last typo fix.  
+	Super meta.  Should probably not commit on Friday nights.
+
+-----------------------------------
 0.6.1.4
 -----------------------------------
-	Typo fix in in Utlilities right at the top from dashinja. Thanks for the help!
+	Typo fix in in Utilities right at the top from dashinja. Thanks for the help!
 
 -----------------------------------
 0.6.1.3

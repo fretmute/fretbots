@@ -1,4 +1,4 @@
-version = '0.6.1.4'
+version = '0.6.1.5'
 versionString = [[Changelog:
 	Added common name for Dawnbreaker. Evidently at some point I also added
 	Hoodwink and did not mention it.
@@ -19,5 +19,8 @@ versionString = [[Changelog:
 	Added 'getroles' chat command to dump bot positions to chat. 
 	Added bot skill print to RoleDetermination:AnnounceRoles().
 	
-	Typo fix in in Utlilities right at the top from dashinja. Thanks for the help!
+	Typo fix in in Utilities right at the top from dashinja. Thanks for the help!
+	
+	Typo fix of the word Utilities in the last typo fix.  
+	Super meta.  Should probably not commit on Friday nights.
 ]]

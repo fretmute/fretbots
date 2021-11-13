@@ -1,4 +1,4 @@
--- Provides for common utilites
+-- Provides for common Utilities
 -- Sound constants
 if Sounds == nil then
   Sounds = dofile('Soundboard')
