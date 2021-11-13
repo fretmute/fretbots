@@ -1,4 +1,4 @@
-version = '0.6.1.3'
+version = '0.6.1.4'
 versionString = [[Changelog:
 	Added common name for Dawnbreaker. Evidently at some point I also added
 	Hoodwink and did not mention it.
@@ -18,4 +18,6 @@ versionString = [[Changelog:
 	
 	Added 'getroles' chat command to dump bot positions to chat. 
 	Added bot skill print to RoleDetermination:AnnounceRoles().
+	
+	Typo fix in in Utlilities right at the top from dashinja. Thanks for the help!
 ]]
