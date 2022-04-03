@@ -1,4 +1,4 @@
-version = '0.6.1.5'
+version = '0.6.1.6'
 versionString = [[Changelog:
 	Added common name for Dawnbreaker. Evidently at some point I also added
 	Hoodwink and did not mention it.
@@ -23,4 +23,10 @@ versionString = [[Changelog:
 	
 	Typo fix of the word Utilities in the last typo fix.  
 	Super meta.  Should probably not commit on Friday nights.
+	
+	Added some of the 2021 TI announcer voicelines.
+	
+	Changed playsound such that it uses string.upper on the argument so folks
+	don't have to type their sounds in all caps.  They still, of course, have
+	to know exactly what table entry they want.
 ]]

@@ -1,4 +1,13 @@
 -----------------------------------
+0.6.1.6
+-----------------------------------
+	Added some of the 2021 TI announcer voicelines.
+	
+	Changed playsound such that it uses string.upper on the argument so folks
+	don't have to type their sounds in all caps.  They still, of course, have
+	to know exactly what table entry they want.
+
+-----------------------------------
 0.6.1.5
 -----------------------------------
 	Typo fix of the word Utilities in the last typo fix.  

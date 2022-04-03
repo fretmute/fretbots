@@ -81,7 +81,16 @@ local sounds =
 	CHTO_ETO  						= 'soundboard.chto_eto_kakaya_zhest',	
 	ETO_TAKAYA						= 'soundboard.eto_takaya_dushka',	
 	TAKAYA								= 'soundboard.takaya_haliava',		
-	 
+	-- Recent battlepass / fan sounds
+	SLACKS								= 'teamfandom.ti2021.Siractionslacks',
+	EPHEY									= 'teamfandom.ti2021.Ephey',
+	FOGGED								= 'teamfandom.ti2021.Fogged',
+	LYRICAL								= 'teamfandom.ti2021.Lyrical',
+	CAP										= 'teamfandom.ti2021.Cap',
+	ODPIXEL								= 'teamfandom.ti2021.ODPixel',
+	-- Because it's great
+	BLINK									= 'bane_bane_blink_03',
+	
 	AsianCasters = 
 	{
 		'soundboard.tian_huo',
@@ -161,7 +170,8 @@ local sounds =
 		'soundboard.nakupuuu',						
 		'soundboard.ay_ay_ay_cn',					
 		'soundboard.hui_tian_mie',				
-		'soundboard.tiao_zou_le',						
+		'soundboard.tiao_zou_le',				
+		'teamfandom.ti2021.Siractionslacks',		
 	},
 	
 	GoodSounds = 
@@ -207,7 +217,8 @@ local sounds =
 		'soundboard.da_da_da_nyet', 						
 		'soundboard.a_net_net_da',							
 		'soundboard.a_nu_ka_idi_suda',					
-		'soundboard.aaah_aaah_chto',				
+		'soundboard.aaah_aaah_chto',		
+		'teamfandom.ti2021.Siractionslacks',		
 	}		
 }
 

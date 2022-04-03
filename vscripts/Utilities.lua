@@ -233,11 +233,18 @@ end
 
 -- Plays a specific sound
 function Utilities:PlaySound(sound)
-	if Sounds[sound] ~= nil then
-		EmitGlobalSound(Sounds[sound])          
+	s = string.upper(sound)
+	if Sounds[s] ~= nil then
+		EmitGlobalSound(Sounds[s])          
 	else
-		Utilities:Print('Sound not found: '..sound)
+		Utilities:Print('Sound not found: '..s)
 	end
+end
+
+-- Plays an arbitrary sound. Note that if you pass a sound that doesn't exist dota
+-- will crash to desktop.  Use carefully.
+function Utilities:TestSound(sound)
+	EmitGlobalSound(sound)
 end
 
 -- Plays a cheat detected sound
