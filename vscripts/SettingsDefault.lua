@@ -62,8 +62,10 @@
 			-- adds this number to the awards as they come out (make this positive to give better items early
 			-- make it negative to cause errors, probably.  If you want slower items just change the timings)
 			tierOffset = 0,
-			-- game time (seconds) at which awards are given.  
+			-- game time (seconds) at which awards are given.
 			timings = {0, 420, 1020, 2020, 3600},
+			-- default dota values, see NeutralItems:GetTimingDifficultyScaleShift()
+			timingsDefault = {420, 1020, 1620, 2020, 3600},
 			-- variance for timings (this number of seconds added to base timing per bot)
 			variance = {30, 240},
 			-- if true, announce awards to chat
