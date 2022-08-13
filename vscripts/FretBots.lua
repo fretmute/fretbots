@@ -44,7 +44,9 @@ local isAllPlayersSpawned = false
 local playerSpawnCount = 0
 -- if game time goes past this point, then assume all players loaded
 local playerLoadFailSafe = -75
--- Time at which to stop the BotRoleDetermination timer and declare rols
+-- Time at which we force a difficulty scale setting for DataTables:Initialize()
+local dataTablesTimeout = 30
+-- Time at which to stop the BotRoleDetermination timer and declare roles
 local BotRoleDeterminationTime = 60
 
 -- Starting this script is largely handled by the requires, as separate pieces start
@@ -64,8 +66,15 @@ end
 -- Runs until all players are loaded in and then initializes the DataTables
 function FretBots:PlayersLoadedTimer()
 	-- if all players are loaded, initialize datatables and stop timer
-	if isAllPlayersSpawned then
+	if isAllPlayersSpawned then	
+		-- I'm Bad made DataTables:Initialize() depend on difficultyScale existing,
+		-- so idle until that happens or it's been more than 30s		
+		if not Flags.isSettingsFinalized then  
+			Debug:Print('DataTables are not initialized! Waiting.')
+			return 1
+		end
 		DataTables:Initialize()
+		Debug:Print('DataTables initialized.')
 		-- Set the host ID for whitelisting settings chat commands
 		Settings:SetHostPlayerID()
 		-- Start bonus timers (they require DataTables to exist)
