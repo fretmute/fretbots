@@ -1,4 +1,9 @@
 -----------------------------------
+0.6.3.1
+-----------------------------------
+  Adjusted SettingsNeutralItemTable.lua to reflect changes from patch 7.32.
+  
+-----------------------------------
 0.6.3.0
 -----------------------------------
   Attempted to fix the dependency on DataTables.difficultyScale inside of the
