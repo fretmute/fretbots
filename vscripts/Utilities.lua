@@ -20,48 +20,48 @@ if Utilities == nil then
 end
 
 -- constants for use in these methods
-MSG_GOOD 							= 1
-MSG_WARNING 					= 2
-MSG_BAD 							= 3
-MSG_AWARD							= 4
-MSG_CONSOLE_GOOD			= 5
-MSG_CONSOLE_BAD				= 6
+MSG_GOOD 			  = 1
+MSG_WARNING 		  = 2
+MSG_BAD 			  = 3
+MSG_AWARD			  = 4
+MSG_CONSOLE_GOOD	  = 5
+MSG_CONSOLE_BAD       = 6
 MSG_NEUTRAL_FIND      = 7
 MSG_NEUTRAL_TAKE      = 8
 MSG_NEUTRAL_RETURN    = 9
 
 -- Max neutral item message to print
 local maxNeutralMessage = MSG_NEUTRAL_FIND
-                		
-BAD_LIST									= Sounds.BadSounds
-GOOD_LIST									= Sounds.GoodSounds
-PLAYER_DEATH_LIST					= Sounds.BadSounds			
-ASIAN_LIST 								= Sounds.AsianCasters			
-CIS_LIST 									= Sounds.CisCasters			
-ENGLISH_LIST 							= Sounds.EnglishCasters			
+						
+BAD_LIST			= Sounds.BadSounds
+GOOD_LIST			= Sounds.GoodSounds
+PLAYER_DEATH_LIST   = Sounds.BadSounds			
+ASIAN_LIST 			= Sounds.AsianCasters			
+CIS_LIST 			= Sounds.CisCasters			
+ENGLISH_LIST 	    = Sounds.EnglishCasters			
 						
 -- duh
-TEAM_RADIANT					= 2
-TEAM_DIRE							= 3
+TEAM_RADIANT		= 2
+TEAM_DIRE			= 3
 
 -- Globalize certain sounds to be lazy and avoid a refactor of some other files
 MATCH_READY 		= Sounds.MATCH_READY
 ATTENTION 			= Sounds.ATTENTION
-LAKAD						= Sounds.LAKAD
+LAKAD				= Sounds.LAKAD
 KRASAVCHIK			= Sounds.KRASAVCHIK
-EHTO_GG					= Sounds.EHTO_GG
-BEEP						= Sounds.BEEP
-ROSHAN					= Sounds.ROSHAN
+EHTO_GG				= Sounds.EHTO_GG
+BEEP				= Sounds.BEEP
+ROSHAN				= Sounds.ROSHAN
 SAD_TROMBONE		= Sounds.SAD_TROMBONE
 
 -- message colors
 local colors = 
 {
-	good					= '#00ff00', 
-	warning				= '#fbff00',
-	bad						= '#ff0000',
-	consoleGood 	= '#1ce8b5', 
-	consoleBad    = '#e68d39',	
+	good		= '#00ff00', 
+	warning		= '#fbff00',
+	bad			= '#ff0000',
+	consoleGood = '#1ce8b5', 
+	consoleBad  = '#e68d39',	
 }
 -- note that the first index is a blank table because radiant / dire are 2 / 3 
 local playerColors = 
@@ -84,12 +84,12 @@ local playerColors =
 }
 local awardColors = 
 {
-	gold 					= '#DAA520',
-	armor 				= '#B911FC',
+	gold 			= '#DAA520',
+	armor 			= '#B911FC',
 	magicResist 	= '#1A88FC',
-	levels 				= '#eb4b4b',
-	neutral 			= '#5B388F',
-	stats 				= '#CF6A32',	
+	levels 			= '#eb4b4b',
+	neutral 		= '#5B388F',
+	stats 			= '#CF6A32',	
 }
 local neutralColors = 
 {
@@ -273,7 +273,7 @@ function Utilities:Round(num, decimals)
 	-- otherwise round to decimal places
 	else
 		 local mult = 10^(decimals or 0)
-  	return math.floor(num * mult + 0.5) / mult
+	return math.floor(num * mult + 0.5) / mult
 	end
 end 
 
@@ -348,7 +348,7 @@ function Utilities:GetNumberOfHumans()
 	for i = 0, count-1 do
 		local isBot = Utilities:IsPlayerBot(i)
 	  if not isBot then 
-	  	humans = humans + 1
+		humans = humans + 1
 	  end
 	end
 	return humans
@@ -380,13 +380,13 @@ end
 -- Copies matching table fields from source to target
 function Utilities:DeepCopy(source, target)
   for key, value in pairs(source) do 
-    if target[key] ~= nil then
-    	if type(value) == 'table' then 
-    		Utilities:DeepCopy(source[key], target[key])
-      else
-      	target[key] = value
-    	end
-    end
+	if target[key] ~= nil then
+		if type(value) == 'table' then 
+			Utilities:DeepCopy(source[key], target[key])
+	  else
+		target[key] = value
+		end
+	end
   end
 end
 
@@ -484,19 +484,19 @@ end
 
 -- iterates over a table by keys, alphabetically
 function Utilities:PairsByKeys (t, f)
-      local a = {}
-      for n in pairs(t) do table.insert(a, n) end
-      table.sort(a, f)
-      local i = 0      -- iterator variable
-      local iter = function ()   -- iterator function
-        i = i + 1
-        if a[i] == nil then return nil
-        else return a[i], t[a[i]]
-        end
-      end
-      return iter
-    end
-    
+	  local a = {}
+	  for n in pairs(t) do table.insert(a, n) end
+	  table.sort(a, f)
+	  local i = 0      -- iterator variable
+	  local iter = function ()   -- iterator function
+		i = i + 1
+		if a[i] == nil then return nil
+		else return a[i], t[a[i]]
+		end
+	  end
+	  return iter
+	end
+	
 -- Used to register game state listeners (with a generic functionality)
 -- Gets current game state.  If game is over, returns.  If the game is
 -- otherwise in or past initState, immediately runs an initializer.  
@@ -514,8 +514,8 @@ function Utilities:RegsiterGameStateListener(o, initializer, initState)
 		func(o)
 	-- otherwise register a listener that will call init at the proper time.
   else
-  	local name = DoUniqueString('listener')
-  	local gameStateListener = GameStateListener:New()
+	local name = DoUniqueString('listener')
+	local gameStateListener = GameStateListener:New()
 	  table.insert(Utilities.listeners.names,name)
 	  table.insert(Utilities.listeners.objects, gameStateListener)
 	  gameStateListener:Register(o, initializer, initState) 

@@ -18,7 +18,7 @@ if HeroLoneDruid == nil then
   -- Global bear entity
   HeroLoneDruid.Bear					=	nil
   -- LD himself
-  HeroLoneDruid.Hero						=	nil
+  HeroLoneDruid.Hero					=	nil
   -- LD's player index
   HeroLoneDruid.PlayerID			= nil
 end
@@ -114,15 +114,16 @@ end
 
 -- returns the lone druid bear entity if it exists
 function HeroLoneDruid:FindBear()
-	local units = FindUnitsInRadius(2,
-	                              Vector(0, 0, 0),
-	                              nil,
-	                              FIND_UNITS_EVERYWHERE,
-	                              3,
-	                              DOTA_UNIT_TARGET_HERO,
-	                              88,
-	                              FIND_ANY_ORDER,
-	                              false);                             
+	local units = FindUnitsInRadius(
+		2,
+	  Vector(0, 0, 0),
+	  nil,
+	  FIND_UNITS_EVERYWHERE,
+	  3,
+	  DOTA_UNIT_TARGET_HERO,
+	  88,
+	  FIND_ANY_ORDER,
+	  false);                             
 	for _, unit in pairs(units) do
 		if unit:GetName() == 'npc_dota_lone_druid_bear' then
 			return unit

@@ -1,4 +1,22 @@
 -----------------------------------
+0.6.4.0
+-----------------------------------
+
+  Adjusted SettingsNeutralItemTable.lua to reflect changes from patch 7.33.
+  
+  Reworked the neutral item award methodology to reflect the 7.33 system.
+  When a bot 'finds' an item, the greediest bot (by role) will now select
+  the item it most wants from a list of five. Unfortunately, this change
+  has revealed holes in my desire system, which was passable when there
+  were only five distinct items to choose from, but is now less good
+  when each bot can pick the best item it wants from its own list. So, if
+  you hate what items bots are picking, feel free to create an issue and 
+  offer your own suggestions for SettingsNeutralItemTable.lua.
+  
+  Eventually I ought to create a desire list per tier for each hero, but
+  that's an awful lot of typing.
+
+-----------------------------------
 0.6.3.1
 -----------------------------------
   Adjusted SettingsNeutralItemTable.lua to reflect changes from patch 7.32.
@@ -13,58 +31,58 @@
 -----------------------------------
 0.6.2.0
 -----------------------------------
-	Merged PR#15. Rescaled timings for bot neutral items.
-	
+  Merged PR#15. Rescaled timings for bot neutral items.
+  
 -----------------------------------
 0.6.1.6
 -----------------------------------
-	Added some of the 2021 TI announcer voicelines.
-	
-	Changed playsound such that it uses string.upper on the argument so folks
-	don't have to type their sounds in all caps.  They still, of course, have
-	to know exactly what table entry they want.
+  Added some of the 2021 TI announcer voicelines.
+  
+  Changed playsound such that it uses string.upper on the argument so folks
+  don't have to type their sounds in all caps.  They still, of course, have
+  to know exactly what table entry they want.
 
 -----------------------------------
 0.6.1.5
 -----------------------------------
-	Typo fix of the word Utilities in the last typo fix.  
-	Super meta.  Should probably not commit on Friday nights.
+  Typo fix of the word Utilities in the last typo fix.  
+  Super meta.  Should probably not commit on Friday nights.
 
 -----------------------------------
 0.6.1.4
 -----------------------------------
-	Typo fix in in Utilities right at the top from dashinja. Thanks for the help!
+  Typo fix in in Utilities right at the top from dashinja. Thanks for the help!
 
 -----------------------------------
 0.6.1.3
 -----------------------------------
-	Added 'getroles' chat command to dump bot positions to chat. 
-	Added bot skill print to RoleDetermination:AnnounceRoles().
+  Added 'getroles' chat command to dump bot positions to chat. 
+  Added bot skill print to RoleDetermination:AnnounceRoles().
 
 -----------------------------------
 0.6.1.2
 -----------------------------------
-	Updated bot neutral item drop count to five per tier.
+  Updated bot neutral item drop count to five per tier.
 
 -----------------------------------
 0.6.1.1
 -----------------------------------
-	Properly tracking isEnableCheatRepurcussions now.  Whoops!
-	
-	Updated neutral item list to be current.  Bot item desires for new items
-	are complete crapshoots at this point.
-	
+  Properly tracking isEnableCheatRepurcussions now.  Whoops!
+  
+  Updated neutral item list to be current.  Bot item desires for new items
+  are complete crapshoots at this point.
+  
 -----------------------------------
 0.6.1.0
 -----------------------------------
-	Added common name for Dawnbreaker. Evidently at some point I also added
-	Hoodwink and did not mention it.
-	
-	Added options and methods for punishing cheaters.  At the moment this will 
-	kill them if they are alive (or when they become alive) three times per
-	cheat. This is mostly due to the fact that the cheaters into which I've run
-	typically use -refresh and -respawn.  If they start giving themselves XP
-	or gold I'll have to be less lazy.
+  Added common name for Dawnbreaker. Evidently at some point I also added
+  Hoodwink and did not mention it.
+  
+  Added options and methods for punishing cheaters.  At the moment this will 
+  kill them if they are alive (or when they become alive) three times per
+  cheat. This is mostly due to the fact that the cheaters into which I've run
+  typically use -refresh and -respawn.  If they start giving themselves XP
+  or gold I'll have to be less lazy.
 
 -----------------------------------
 0.6.0.4
@@ -79,107 +97,107 @@ Use string.lower() in cheat detection like I should have from the start.
 -----------------------------------
 0.6.0.2
 -----------------------------------
-	Added two additional wacky edge cases for Sirius bot laning.
+  Added two additional wacky edge cases for Sirius bot laning.
 
 -----------------------------------
 0.6.0.1
 -----------------------------------
-	Fixed bot roles not falling back when finding unhandled lane cases
-	(i.e. a dual lane, a tri-lane, and no one mid).
+  Fixed bot roles not falling back when finding unhandled lane cases
+  (i.e. a dual lane, a tri-lane, and no one mid).
 
 -----------------------------------
 0.6.0.0
 -----------------------------------
-	Added support for more dynamically determining bot positions due to their
-	lane placement, rather than the legacy tables.  This should result in 
-	better performance for bot scripts that do unusual things (for bots anyway)
-	like trilaning, dual mid, etc.  As of now I only parse for the scenarios
-	that I consider reasonable (i.e. not four guys in one lane). Also note that
-	this is not done if there are any humans on the bot team. 
-	
-	Finally got around to disabling the debug flag for releases. 
-	
-	Updated the ReadMe per Forest0xia's request. 
-	
-	Removed now superfluous setting files.
-	
-	Limited bot neutral item juggling message spam.
+  Added support for more dynamically determining bot positions due to their
+  lane placement, rather than the legacy tables.  This should result in 
+  better performance for bot scripts that do unusual things (for bots anyway)
+  like trilaning, dual mid, etc.  As of now I only parse for the scenarios
+  that I consider reasonable (i.e. not four guys in one lane). Also note that
+  this is not done if there are any humans on the bot team. 
+  
+  Finally got around to disabling the debug flag for releases. 
+  
+  Updated the ReadMe per Forest0xia's request. 
+  
+  Removed now superfluous setting files.
+  
+  Limited bot neutral item juggling message spam.
 
 -----------------------------------
 0.5.4.0
 -----------------------------------
-	The chat parser now looks for chat cheats (-refresh, -wtf, etc) and tattles if
-	it notices that you're cheating.
+  The chat parser now looks for chat cheats (-refresh, -wtf, etc) and tattles if
+  it notices that you're cheating.
 
 -----------------------------------
 0.5.3.0
 -----------------------------------
-	Reworked selection of bot roles such that the bots can be used with 
-	scripts other than FuriousPuppy's (although preferences are still based
-	on the roles from that script.)
+  Reworked selection of bot roles such that the bots can be used with 
+  scripts other than FuriousPuppy's (although preferences are still based
+  on the roles from that script.)
 
 -----------------------------------
 0.5.2.6
 -----------------------------------
-	Moved 'get' and 'stats' to the list of all-user chat parses.
+  Moved 'get' and 'stats' to the list of all-user chat parses.
 
 -----------------------------------
 0.5.2.5
 -----------------------------------
-	Fixed a typo (Seer Strong).  Not sure how I managed that.
+  Fixed a typo (Seer Strong).  Not sure how I managed that.
 
 -----------------------------------
 0.5.2.4
 -----------------------------------
-	Added Fairy's Trinket to list now that the DB was updated and I could find the
-	internal name (which is item_mysterious_hat for some insane reason).
-	
+  Added Fairy's Trinket to list now that the DB was updated and I could find the
+  internal name (which is item_mysterious_hat for some insane reason).
+  
 -----------------------------------
 0.5.2.3
 -----------------------------------
-	Added additional chat commands for displaying stats. 
-	
-	Added Mistwoods Update neutral items.
-	
+  Added additional chat commands for displaying stats. 
+  
+  Added Mistwoods Update neutral items.
+  
 -----------------------------------
 0.5.2.2
 -----------------------------------
-	Chat monitor now looks for commands prefixed with a dash.  This allows commnads
-	to be parsed that were not actually printed to chat.
+  Chat monitor now looks for commands prefixed with a dash.  This allows commnads
+  to be parsed that were not actually printed to chat.
 
-	Added kb shorthand to chat command parser as a macro for Debug:KillBot().
-	
-	Added overloading for Debug:KillBot() to kill by name or position in addition
-	to killing randomly when no argument is present.  
-	
-	Debug:KillBot() random kill is now actually random instead of iterating 
-	over the Bots table by position.
+  Added kb shorthand to chat command parser as a macro for Debug:KillBot().
+  
+  Added overloading for Debug:KillBot() to kill by name or position in addition
+  to killing randomly when no argument is present.  
+  
+  Debug:KillBot() random kill is now actually random instead of iterating 
+  over the Bots table by position.
 
 -----------------------------------
 0.5.2.1
 -----------------------------------
 
-	Moved chat wheel command parsing to its own function and made it public 
-	facing (rather than just the lobby host).
+  Moved chat wheel command parsing to its own function and made it public 
+  facing (rather than just the lobby host).
 
 -----------------------------------
 0.5.2.0
 -----------------------------------
 
-	Now with more branding!
-	
-	Default no-vote difficulty is now 2.
-	
-	Added chat parsing for playing chatwheel sounds. Commands as follows:
-		goodsound	: Plays a sound from the good list.
-		badsound	: Plays a sound from the bad list.		 
-		asound		: Plays a random line from an Asian caster.
-		csound		: Plays a random line from a CIS caster.
-		esound		: Plays a random line from an English caster.
-		playsound	: with an argument from Soundboard.lua, plays that specific sound.
-								This will require homework and keybinds, a la
-								bind "kp_6" "say playsound EHTO_GG"
-								
+  Now with more branding!
+  
+  Default no-vote difficulty is now 2.
+  
+  Added chat parsing for playing chatwheel sounds. Commands as follows:
+    goodsound : Plays a sound from the good list.
+    badsound  : Plays a sound from the bad list.     
+    asound    : Plays a random line from an Asian caster.
+    csound    : Plays a random line from a CIS caster.
+    esound    : Plays a random line from an English caster.
+    playsound : with an argument from Soundboard.lua, plays that specific sound.
+                This will require homework and keybinds, a la
+                bind "kp_6" "say playsound EHTO_GG"
+                
 
 
 -----------------------------------
@@ -229,7 +247,7 @@ Added sanity checks for both bad throttle states (<0, >1).
 Added rudimentary GameState(read: Who is winning?) tracker  to throttle
 bot awards if they're running down mid despite being behind in kills.
 Note: This is way more game designer experimental than I ever planned 
-to be an is probably way off.  Apologies.	
+to be an is probably way off.  Apologies. 
 The current intent is that the bot bonues will scale somewhere from 
 full if they are less than one lane ahead, to stop if they are slightly
 greater than one lane ahead.  
@@ -308,25 +326,25 @@ granularity to this function, whereas before it was pretty basic.
 0.4.2.0
 -----------------------------------
 Further reworked Neutral Item awards:
-	
-	Split neutral timers; there is now a 'drop' timer that tracks 
-	when items are spawned, and a 'dole' timer that handles assigning.
-	
-	Neutral items now have separate drop amounts per tier.
-	
-	Bots now have rudimentary desires for certain items over other ones
-	(or would, if the table values were not currently all ones.)
-	
-	Items that are removed from the bots are returned to a virtual
-	stash so that they can be allocated to a new bot.
-	
-	Added settings for how to assign neutrals: truly randomly, or
-	the old method where each bot gets assigned directly an item
-	it can use.
-	
-	Moved functions for handling neutrals out of AwardBonus and into 
-	a dediciated file (NeutralItems).
-	
+  
+  Split neutral timers; there is now a 'drop' timer that tracks 
+  when items are spawned, and a 'dole' timer that handles assigning.
+  
+  Neutral items now have separate drop amounts per tier.
+  
+  Bots now have rudimentary desires for certain items over other ones
+  (or would, if the table values were not currently all ones.)
+  
+  Items that are removed from the bots are returned to a virtual
+  stash so that they can be allocated to a new bot.
+  
+  Added settings for how to assign neutrals: truly randomly, or
+  the old method where each bot gets assigned directly an item
+  it can use.
+  
+  Moved functions for handling neutrals out of AwardBonus and into 
+  a dediciated file (NeutralItems).
+  
 -----------------------------------
 0.4.1.3
 -----------------------------------
@@ -450,13 +468,13 @@ Disabled isBuff flag.
 -----------------------------------
 Improved Settings chat listener functionality. Settings can now be manipulated via chat:
 
-	'get'				:		Prints the apprpriate Settings table value to chat.
-	'set'				:		Modifes the appropriate Settings table value.
-	'nudge'			:		Adds the nudge value to all values of a Settings table entry.
-	'ddenable'	:		Enables Dynamic Difficulty.
-	'ddsuspend' :		Suspends dynamic difficulty.  Current offset bonuses remain.
-	'ddreset'		:   Restores offset bonuses to the default of the current settings.
-	'ddtoggle'	:		Toggles the enable state of Dynamic Difficulty.
+  'get'       :   Prints the apprpriate Settings table value to chat.
+  'set'       :   Modifes the appropriate Settings table value.
+  'nudge'     :   Adds the nudge value to all values of a Settings table entry.
+  'ddenable'  :   Enables Dynamic Difficulty.
+  'ddsuspend' :   Suspends dynamic difficulty.  Current offset bonuses remain.
+  'ddreset'   :   Restores offset bonuses to the default of the current settings.
+  'ddtoggle'  :   Toggles the enable state of Dynamic Difficulty.
 
 Note that only the host or Fret can currently issue these commands.
 
@@ -471,18 +489,18 @@ the limits rather than integers; this will result in more granular awards
 for those awards that were adjusted to round to decimals.
 
 Adjusted Level Award logic:
-	
-	Previously	:		An award of 2 levels would place a bot at the zero experience point
-									of the level 2 levels higher than it currently is, which could,
-									in theory, mean that it gets basically 1.1 levels if it is already
-									near to levelling.  Awards were in integer format.
-	Now					:		Awards are rounded to two decimal places.  The XP for the 
-									difference between the current level and the ceiling of the bonus
-									is calculated.  This value is then averaged by the ceiling of 
-									the bonus in order to determine the average amount of XP per
-									level awarded.  This average number is then multiplied by the
-									levels bonus.  tldr: level awards are now more granular and 
-									consistent.  
+  
+  Previously  :   An award of 2 levels would place a bot at the zero experience point
+                  of the level 2 levels higher than it currently is, which could,
+                  in theory, mean that it gets basically 1.1 levels if it is already
+                  near to levelling.  Awards were in integer format.
+  Now         :   Awards are rounded to two decimal places.  The XP for the 
+                  difference between the current level and the ceiling of the bonus
+                  is calculated.  This value is then averaged by the ceiling of 
+                  the bonus in order to determine the average amount of XP per
+                  level awarded.  This average number is then multiplied by the
+                  levels bonus.  tldr: level awards are now more granular and 
+                  consistent.  
 
 Implemented first attempt at dynamic difficulty adjustment.  Currently alters
 GPM / XPM target offsets based on human kill advantage.  WIP.
