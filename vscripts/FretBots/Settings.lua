@@ -1,14 +1,14 @@
 -- Dependencies
  -- global debug flag
-require 'Debug'
+require 'Fretbots.Debug'
  -- Other Flags
-require 'Flags'
+require 'Fretbots.Flags'
  -- Timers
-require 'Timers'
+require 'Fretbots.Timers'
  -- Utilities
-require 'Utilities'
+require 'Fretbots.Utilities'
 -- Version
-require 'Version'
+require 'Fretbots.Version'
 
 -- local debug flag
 local thisDebug = false;
@@ -39,14 +39,14 @@ noVoteDifficulty = 2
 local isRepurcussionTimerStarted = false
 -- Instantiate ourself
 if Settings == nil then
-	Settings = dofile('SettingsDefault')
+	Settings = dofile('Fretbots.SettingsDefault')
 end
 
 -- neutral item drop settings
-AllNeutrals = dofile('SettingsNeutralItemTable')
+AllNeutrals = dofile('Fretbots.SettingsNeutralItemTable')
 
 -- cheat command list
-local cheats = dofile('CheatList')
+local cheats = dofile('Fretbots.CheatList')
 
 -- Difficulty values voted for
 difficulties = {}

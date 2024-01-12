@@ -26,7 +26,7 @@ local neutrals =
 	--{name="item_poor_mans_shield",		tier=1,		ranged=1,		melee=3,		roles={2,2,3,0,0},		realName="Poor Man's Shield"},
 	--{name="item_possessed_mask",			tier=1,		ranged=1,		melee=1,		roles={3,3,2,1,1},		realName="Possessed Mask"},
 	--{name="item_trusty_shovel",			tier=1,		ranged=1,		melee=1,		roles={0,0,0,0,0},		realName="Trusty Shovel"},
-	--{name="item_pogo_stick",			tier=1,		ranged=1,		melee=1,		roles={3,3,3,3,3},		realName="Tumbler's Toy"},
+	--{name="item_pogo_stick",				tier=1,		ranged=1,		melee=1,		roles={3,3,3,3,3},		realName="Tumbler's Toy"},
 
 	-- tier 2
 	{name="item_bullwhip",				tier=2,		ranged=1,		melee=1,		roles={1,1,1,1,1},		realName="Bullwhip"},
@@ -50,10 +50,10 @@ local neutrals =
 	--{name="item_nether_shawl",			tier=2,		ranged=1,		melee=1,		roles={0,0,0,0,0},		realName="Nether Shawl"},
 	--{name="item_philosophers_stone",		tier=2,		ranged=1,		melee=1,		roles={0,0,0,0,0},		realName="Philosopher's Stone"},
 	--{name="item_quicksilver_amulet",		tier=2,		ranged=1,		melee=1,		roles={2,2,1,1,1},		realName="Quicksilver Amulet"},
-	--{name="item_ring_of_aquila",		tier=2,		ranged=1,		melee=1,		roles={3,2,1,0,0},		realName="Ring of Aquila"},
+	--{name="item_ring_of_aquila",			tier=2,		ranged=1,		melee=1,		roles={3,2,1,0,0},		realName="Ring of Aquila"},
 
 	-- tier 3
-	{name="item_ceremonial_robe",		tier=3,		ranged=1,		melee=1,		roles={1,1,1,5,5},		realName="Ceremonia lRobe"},
+	{name="item_ceremonial_robe",		tier=3,		ranged=1,		melee=1,		roles={1,1,1,5,5},		realName="Ceremonial Robe"},
 	{name="item_cloak_of_flames",		tier=3,		ranged=1,		melee=2,		roles={2,2,6,2,2},		realName="Cloak of Flames"},
 	{name="item_craggy_coat",			tier=3,		ranged=1,		melee=1,		roles={0,0,4,1,1},		realName="Craggy Coat"},
 	{name="item_dandelion_amulet",		tier=3,		ranged=1,		melee=2,		roles={2,2,6,2,2},		realName="Dandelion Amulet"},
@@ -110,8 +110,8 @@ local neutrals =
 	{name="item_desolator_2",			tier=5,		ranged=1,		melee=1,		roles={5,1,0,0,0},		realName="Stygian Desolator"},
 	{name="item_unwavering_condition",	tier=5,		ranged=1,		melee=1,		roles={1,1,1,1,1},		realName="Unwavering Condition"},
 	--{name="item_ballista",				tier=5,		ranged=5,		melee=0,		roles={1,1,1,0,0},		realName="Ballista"},
-	--{name="item_ex_machina",			tier=5,		ranged=1,		melee=1,		roles={1,1,1,1,1},		realName="Ex Machina"},
-	--{name="item_fallen_sky",			tier=5,		ranged=1,		melee=1,		roles={1,1,5,0,0},		realName="Fallen Sky"},
+	--{name="item_ex_machina",				tier=5,		ranged=1,		melee=1,		roles={1,1,1,1,1},		realName="Ex Machina"},
+	--{name="item_fallen_sky",				tier=5,		ranged=1,		melee=1,		roles={1,1,5,0,0},		realName="Fallen Sky"},
 	--{name="item_trident",					tier=5,		ranged=1,		melee=1,		roles={5,5,3,3,3},		realName="Trident"},
 	--{name="item_woodland_striders",		tier=5,		ranged=1,		melee=1,		roles={1,1,1,1,1},		realName="Woodland Striders"},
 

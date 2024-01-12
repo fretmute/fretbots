@@ -1,12 +1,12 @@
 -- Dependencies
  -- global debug flag
-require 'Debug'
+require 'FretBots.Debug'
  -- Global flags
- require 'Flags'
+ require 'FretBots.Flags'
  -- Data Tables and helper functions
-require 'DataTables'
+require 'FretBots.DataTables'
  -- This registers the Timer helpers
-require 'Timers'
+require 'FretBots.Timers'
 
 -- local debug flag
 local thisDebug = false

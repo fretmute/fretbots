@@ -1,11 +1,11 @@
 -- Helpers to add bonuses to bots
 
 -- Dependencies
-require 'Settings'
-require 'DataTables'
-require 'Debug'
-require 'Flags'
-require 'GameState'
+require 'FretBots.Settings'
+require 'FretBots.DataTables'
+require 'FretBots.Debug'
+require 'FretBots.Flags'
+require 'FretBots.GameState'
 
 -- local debug flag
 local thisDebug = true;

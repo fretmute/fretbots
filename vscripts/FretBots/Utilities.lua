@@ -1,12 +1,12 @@
 -- Provides for common Utilities
 -- Sound constants
 if Sounds == nil then
-	Sounds = dofile('Soundboard')
+	Sounds = dofile('FretBots.Soundboard')
 end
 -- Hero Names
-local heroNames = require('HeroNames')
+local heroNames = require('FretBots.HeroNames')
 -- sweet DeepPrint function I cadged from GitHub
-local inspect = require('inspect')
+local inspect = require('FretBots.inspect')
 
 if Utilities == nil then
 	Utilities =

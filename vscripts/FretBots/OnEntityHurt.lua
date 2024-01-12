@@ -1,10 +1,10 @@
 -- Dependencies
  -- global debug flag
-require "Debug"
+require "FretBots.Debug"
  -- Global flags
- require "Flags"
+ require "FretBots.Flags"
  -- Data Tables and helper functions
-require "DataTables"
+require "FretBots.DataTables"
 
 -- local debug flag
 local thisDebug = false;

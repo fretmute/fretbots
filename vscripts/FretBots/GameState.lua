@@ -1,12 +1,12 @@
 -- Dependencies
  -- global debug flag
-require 'Debug'
+require 'Fretbots.Debug'
  -- Other Flags
-require 'Flags'
+require 'Fretbots.Flags'
  -- Utilities
-require 'Utilities'
+require 'Fretbots.Utilities'
 -- DataTables
-require 'DataTables'
+require 'Fretbots.DataTables'
 
 -- local debug flag
 local thisDebug = false;
@@ -19,8 +19,8 @@ GameState = nil
 -- team that killed it (well, not actually, since they could be denied.
 -- The other team, anyway).  As such, there is no need for these to be
 -- named, we'll just iterate ipairs over the whole table in OnEntityKilled.
-local radiantBuildings 	= dofile('RadiantBuildings')
-local direBuildings		= dofile('DireBuildings')
+local radiantBuildings 	= dofile('Fretbots.RadiantBuildings')
+local direBuildings		= dofile('Fretbots.DireBuildings')
 local RADIANT			= 2
 local DIRE				= 3
 

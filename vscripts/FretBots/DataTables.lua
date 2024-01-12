@@ -2,21 +2,21 @@
 -- containts helper functions for manipulating data
 
 -- Global Debug flag
-require 'Debug';
+require 'FretBots.Debug';
 -- Other Flags
-require 'Flags'
+require 'FretBots.Flags'
 -- Makes a unit strong
-require 'BuffUnit'
+require 'FretBots.BuffUnit'
 -- Settings
-require 'Settings'
+require 'FretBots.Settings'
 -- Convenience Utilities
-require 'Utilities'
+require 'FretBots.Utilities'
 -- Neutral items
-require 'NeutralItems'
+require 'FretBots.NeutralItems'
 
-local role 	= require('RoleUtility')
-local radiantTowers	= dofile('RadiantTowers')
-local direTowers		= dofile('DireTowers')
+local role 	= require('FretBots.RoleUtility')
+local radiantTowers	= dofile('FretBots.RadiantTowers')
+local direTowers		= dofile('FretBots.DireTowers')
 
 -- local debug flags
 local thisDebug = false
