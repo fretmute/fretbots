@@ -12,6 +12,7 @@ local sounds =
 	GROAN						= 'soundboard.ti9.crowd_groan',
 	APPLAUSE					= 'soundboard.applause',
 	CHEAT						= 'Loot_Drop_Stinger_Short',
+	MOUSE 						= 'soundboard.ddb_run_little_mouse',
 
 	--English Casters (or Glados)
 	HOLY_MOLY					= 'soundboard.holy_moly',

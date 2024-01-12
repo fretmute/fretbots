@@ -114,7 +114,6 @@ local neutrals =
 	--{name="item_fallen_sky",				tier=5,		ranged=1,		melee=1,		roles={1,1,5,0,0},		realName="Fallen Sky"},
 	--{name="item_trident",					tier=5,		ranged=1,		melee=1,		roles={5,5,3,3,3},		realName="Trident"},
 	--{name="item_woodland_striders",		tier=5,		ranged=1,		melee=1,		roles={1,1,1,1,1},		realName="Woodland Striders"},
-
 }
 
 return neutrals
