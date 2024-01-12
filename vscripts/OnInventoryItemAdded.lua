@@ -14,16 +14,16 @@ local isDebug = Debug.IsDebug() and thisDebug
 
 -- Instantiate ourself
 if HeroLoneDruid == nil then
-  HeroLoneDruid = {}
-  -- Global bear entity
-  HeroLoneDruid.Bear = nil
+	HeroLoneDruid = {}
+	-- Global bear entity
+	HeroLoneDruid.Bear = nil
 end
 
 -- if they don't summon the bear before two minutes, then they don't get items
-local bearSpawnCount					= 	0
-local bearSpawnInterval				=		5
-local bearSpawnFailSafe 			=   120
-local bearSpawnTimerName 			= 'bearSpawnTimerName'
+local bearSpawnCount		= 	0
+local bearSpawnInterval		=	5
+local bearSpawnFailSafe 	=   120
+local bearSpawnTimerName 	=	'bearSpawnTimerName'
 
 -- Event Listener
 function HeroLoneDruid:OnEventCallback(event)
@@ -33,48 +33,49 @@ end
 
 -- Returns event data
 function HeroLoneDruid:GetItem(event)
-  local itemname = nil
-  local playerID = nil
-  if event.itemname  ~= nil then
-	  itemname = event.itemname
+	local itemname = nil
+	local playerID = nil
+	if event.itemname  ~= nil then
+		itemname = event.itemname
 	end
 	if event.PlayerID ~= nil then
 		playerID = event.PlayerID
 	end
-  return itemname, playerID
+	return itemname, playerID
 end
 
 -- returns the lone druid bear entity if it exists
 function HeroLoneDruid:FindBear()
-	local units = FindUnitsInRadius(2,
-	                              Vector(0, 0, 0),
-	                              nil,
-	                              FIND_UNITS_EVERYWHERE,
-	                              3,
-	                              DOTA_UNIT_TARGET_HERO,
-	                              88,
-	                              FIND_ANY_ORDER,
-	                              false);                             
+	local units = FindUnitsInRadius(
+		2,
+		Vector(0, 0, 0),
+		nil,
+		FIND_UNITS_EVERYWHERE,
+		3,
+		DOTA_UNIT_TARGET_HERO,
+		88,
+		FIND_ANY_ORDER,
+		false);
 	for _, unit in pairs(units) do
 		if unit:GetName() == 'npc_dota_lone_druid_bear' then
 			Debug:Print('Found lone druid bear.')
 			return unit
 		end
-	end	      
-	-- nil if not found   
+	end
+	-- nil if not found
 	return nil
-end    
+end
 
 
--- Registers Event Listener    
+-- Registers Event Listener
 function HeroLoneDruid:RegisterEvents()
 	if not Flags.isHeroLoneDruidRegistered then
-	  ListenToGameEvent("dota_item_picked_up", Dynamic_Wrap(HeroLoneDruid, 'OnEventCallback'), HeroLoneDruid)
-    Flags.isHeroLoneDruidRegistered = true;
-    if isDebug then
-  		print("HeroLoneDruid Event Listener Registered.")
+		ListenToGameEvent("dota_item_picked_up", Dynamic_Wrap(HeroLoneDruid, 'OnEventCallback'), HeroLoneDruid)
+		Flags.isHeroLoneDruidRegistered = true;
+		if isDebug then
+			print("HeroLoneDruid Event Listener Registered.")
 		end
-  end
+	end
 end
 
 -- Waits for lone druid to summon his bear.  Caches bear entity when this is done.

@@ -14,40 +14,40 @@ local isDebug = Debug.IsDebug() and thisDebug
 
 -- Instantiate ourself
 if HeroLoneDruid == nil then
-  HeroLoneDruid = {}
-  -- Global bear entity
-  HeroLoneDruid.Bear					=	nil
-  -- LD himself
-  HeroLoneDruid.Hero					=	nil
-  -- LD's player index
-  HeroLoneDruid.PlayerID			= nil
+	HeroLoneDruid = {}
+	-- Global bear entity
+	HeroLoneDruid.Bear = nil
+	-- LD himself
+	HeroLoneDruid.Hero = nil
+	-- LD's player index
+	HeroLoneDruid.PlayerID = nil
 end
 
 -- if they don't summon the bear before two minutes, then they don't get items
-local bearSpawnCount					= 	0
-local bearSpawnInterval				=		5
-local bearSpawnFailSafe 			=   120
+local bearSpawnCount				= 0
+local bearSpawnInterval				= 5
+local bearSpawnFailSafe 			= 120
 local bearSpawnTimerName 			= 'bearSpawnTimerName'
 -- LD Inventory watcher settings.  Initially I tried making this event driven,
 -- but the dota inventory events are too disparate to be really useful (e.g.
 -- they don't all give the hero as an argument to the event).  So instead we'll
--- be low tech and just check Ld's inventory every so often and see if 
--- we need to swap anything to the bear.  
+-- be low tech and just check Ld's inventory every so often and see if
+-- we need to swap anything to the bear.
 local itemCheckInterval				=	10
 -- Table of things to move.  At the time of this comment I haven't gotten to
--- test this, but my assumption is that if LD were building say, radiance, 
+-- test this, but my assumption is that if LD were building say, radiance,
 -- and we moved the relic to the bear when he got it, he would buy another
 -- relic instead of buying the recipe.  So if we ever move something to the bear,
 -- it has to be something we're pretty sure won't screw up LD's buying.
 local itemCheckMoveList =
 {
-	
+
 }
 local itemCheckTimerName			= 'itemCheckTimerName'
 
 -- watches for items in LD's possession and moves them to the bear as appropriate.
 function HeroLoneDruid:ItemCheckTimer()
-	for i = 1,16 do	
+	for i = 1,16 do
 		local currentItem = unit:GetItemInSlot(i)
 		-- anything?
 		if currentItem ~= nil then
@@ -75,7 +75,7 @@ function HeroLoneDruid:BearSpawnTimer()
 	-- bear not found, try again some time later
 	bearSpawnCount = bearSpawnCount + bearSpawnInterval
 	if bearSpawnCount < bearSpawnFailSafe then
-		return bearSpawnInterval	
+		return bearSpawnInterval
 	else
 		Debug:Print('Bear not found before fail safe timer reached.')
 		Timers:RemoveTimer(bearSpawnTimerName)
@@ -84,7 +84,7 @@ function HeroLoneDruid:BearSpawnTimer()
 end
 
 -- Performs initialization activies
--- Right now this whole object is just used to force items onto the lone druid bear, so 
+-- Right now this whole object is just used to force items onto the lone druid bear, so
 -- if a lone druid isn't in the game, this will do nothing
 function HeroLoneDruid:Initialize()
 	-- If settings aren't enabled, do nothing
@@ -103,7 +103,7 @@ function HeroLoneDruid:Initialize()
 		end
 	end
 	-- Drop out if lone druid not found
-	if HeroLoneDruid.Hero == nil then 
+	if HeroLoneDruid.Hero == nil then
 			Debug:Print('Lone Druid Specific Extensions are enabled, but Lone Druid is not present.  HeroLoneDruid Exiting.')
 		return
 	end
@@ -116,20 +116,20 @@ end
 function HeroLoneDruid:FindBear()
 	local units = FindUnitsInRadius(
 		2,
-	  Vector(0, 0, 0),
-	  nil,
-	  FIND_UNITS_EVERYWHERE,
-	  3,
-	  DOTA_UNIT_TARGET_HERO,
-	  88,
-	  FIND_ANY_ORDER,
-	  false);                             
+		Vector(0, 0, 0),
+		nil,
+		FIND_UNITS_EVERYWHERE,
+		3,
+		DOTA_UNIT_TARGET_HERO,
+		88,
+		FIND_ANY_ORDER,
+		false);
 	for _, unit in pairs(units) do
 		if unit:GetName() == 'npc_dota_lone_druid_bear' then
 			return unit
 		end
-	end	      
-	-- nil if not found   
+	end
+	-- nil if not found
 	return nil
-end    
+end
 

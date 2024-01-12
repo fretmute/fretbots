@@ -47,17 +47,17 @@ function Debug:KillBot(index)
 	-- Kill a specific bot (by position)
 	if index ~= nil then
 		-- check by index
-		if Bots[index] ~= nil then 
-			if Bots[index]:IsAlive() then 
+		if Bots[index] ~= nil then
+			if Bots[index]:IsAlive() then
 				Bots[index]:ForceKill(true)
 			end
 		-- Check by name
-		else	 
+		else
 			for _, bot in pairs(Bots) do
-				if bot:IsAlive() and string.lower(bot.stats.name) == string.lower(index) then 
+				if bot:IsAlive() and string.lower(bot.stats.name) == string.lower(index) then
 					bot:ForceKill(true)
 					break
-				end			
+				end
 			end
 		end
   -- otherwise kill one at random
@@ -65,13 +65,13 @@ function Debug:KillBot(index)
 		local numBots = 0
 		local aliveBots = {}
 		for _, bot in pairs(Bots) do
-			if bot:IsAlive() then 
+			if bot:IsAlive() then
 				numBots = numBots + 1
 				table.insert(aliveBots,bot)
 			end
 		end
 		if numBots > 0 then
 			aliveBots[math.random(numBots)]:ForceKill(true)
-		end		
+		end
 	end
 end

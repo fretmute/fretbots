@@ -1,0 +1,260 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Fretbots.sublime-project",
+			"settings":
+			{
+				"buffer_size": 46,
+				"line_ending": "Windows"
+			},
+			"undo_stack":
+			[
+				[
+					1,
+					1,
+					"revert",
+					null,
+					"AgAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAewp9CgAAAAAAAAAALgAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/Git/FretBots/vscripts"
+	],
+	"file_history":
+	[
+		"/D/Git/FretBots/vscripts/AwardBonus.lua",
+		"/D/Git/FretBots/vscripts/BonusTimers.lua",
+		"/D/Git/FretBots/vscripts/BuffUnit.lua",
+		"/D/Git/FretBots/vscripts/CheatList.lua",
+		"/D/Git/FretBots/vscripts/DataTables.lua",
+		"/D/Git/FretBots/vscripts/Debug.lua",
+		"/D/Git/FretBots/vscripts/DireBuildings.lua",
+		"/D/Git/FretBots/vscripts/DireTowers.lua",
+		"/D/Git/FretBots/vscripts/DynamicDifficulty.lua",
+		"/D/Git/FretBots/vscripts/Flags.lua",
+		"/D/Git/FretBots/vscripts/FretBots.lua",
+		"/D/Git/FretBots/vscripts/GameState.lua",
+		"/D/Git/FretBots/vscripts/HeroLoneDruid.lua",
+		"/D/Git/FretBots/vscripts/HeroNames.lua",
+		"/D/Git/FretBots/vscripts/Inspect.lua",
+		"/D/Git/FretBots/vscripts/NeutralItems.lua",
+		"/D/Git/FretBots/vscripts/OnInventoryItemAdded.lua",
+		"/D/Git/FretBots/vscripts/OnEntityHurt.lua",
+		"/D/Git/FretBots/vscripts/OnEntityKilled.lua",
+		"/D/Git/FretBots/vscripts/RadiantBuildings.lua",
+		"/D/Git/FretBots/vscripts/RadiantTowers.lua",
+		"/D/Git/FretBots/vscripts/RoleDetermination.lua",
+		"/D/Git/FretBots/vscripts/RoleUtility.lua",
+		"/D/Git/FretBots/vscripts/Settings.lua",
+		"/D/Git/FretBots/vscripts/SettingsDefault.lua",
+		"/D/Git/FretBots/vscripts/SettingsNeutralItemTable.lua",
+		"/D/Git/FretBots/vscripts/Soundboard.lua",
+		"/D/Git/FretBots/vscripts/Timers.lua",
+		"/D/Git/FretBots/vscripts/Test.lua",
+		"/D/Git/FretBots/vscripts/tracker.txt",
+		"/D/Git/FretBots/vscripts/Utilities.lua",
+		"/D/Git/FretBots/vscripts/Version.lua",
+		"/?Rtx-2080/e/_Lua Funzone/FretBots/vscripts/BonusTimers.lua"
+	],
+	"find":
+	{
+		"height": 27.0
+	},
+	"find_in_files":
+	{
+		"height": 101.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"[^\\S\\r\\n]+$",
+			"([\\t ]+\\n|\\s+\\z)",
+			"[ \\t]+$",
+			"[ \\t]+\\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"\\n",
+			"",
+			"\\n"
+		],
+		"reverse": false,
+		"scrollbar_highlights": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"use_gitignore": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Fretbots.sublime-project",
+					"selected": true,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 46,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JSON/JSON.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"stack_multiselect": false,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 27.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "Fretbots.sublime-project",
+	"replace":
+	{
+		"height": 50.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

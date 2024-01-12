@@ -1,12 +1,12 @@
 local X = {}
 
 -- Handy Global Constants
-X.ROLE_CARRY							= 1
-X.ROLE_MID								= 2
-X.ROLE_OFFLANE						= 3
-X.ROLE_SUPPORT						= 4
-X.ROLE_HARDSUPPORT        = 5
-X.ROLE_UNDEFINED          = 6
+X.ROLE_CARRY		= 1
+X.ROLE_MID			= 2
+X.ROLE_OFFLANE		= 3
+X.ROLE_SUPPORT		= 4
+X.ROLE_HARDSUPPORT	= 5
+X.ROLE_UNDEFINED	= 6
 
 
 function X.IsMelee(attackRange)
@@ -40,7 +40,8 @@ X['off'] = {
 	'npc_dota_hero_tidehunter',
 	'npc_dota_hero_tusk',
 	'npc_dota_hero_venomancer',
-	'npc_dota_hero_windrunner'
+	'npc_dota_hero_windrunner',
+	'npc_dota_hero_dawnbreaker',
 }
 
 X['mid'] = {
@@ -101,7 +102,8 @@ X['safe'] = {
 	'npc_dota_hero_terrorblade',
 	'npc_dota_hero_troll_warlord',
 	'npc_dota_hero_ursa',
-	'npc_dota_hero_weaver'
+	'npc_dota_hero_weaver',
+	'npc_dota_hero_muerta',
 }
 
 X['supp'] = {
@@ -145,45 +147,44 @@ X['supp'] = {
 	'npc_dota_hero_hoodwink',
 }
 
-
 --OFFLANER
 function X.CanBeOfflaner(hero)
 	for i = 1, #X['off'] do
 		if X['off'][i] == hero then
-			return true;	
-		end	
+			return true;
+		end
 	end
-	return false;	
-end	
+	return false;
+end
 
 --MIDLANER
 function X.CanBeMidlaner(hero)
 	for i = 1, #X['mid'] do
 		if X['mid'][i] == hero then
-			return true;	
-		end	
+			return true;
+		end
 	end
-	return false;	
-end	
+	return false;
+end
 
 --SAFELANER
 function X.CanBeSafeLaneCarry(hero)
 	for i = 1, #X['safe'] do
 		if X['safe'][i] == hero then
-			return true;	
-		end	
+			return true;
+		end
 	end
-	return false;	
-end	
+	return false;
+end
 
 --SUPPORT
 function X.CanBeSupport(hero)
 	for i = 1, #X['supp'] do
 		if X['supp'][i] == hero then
-			return true;	
-		end	
+			return true;
+		end
 	end
-	return false;	
-end	
+	return false;
+end
 
 return X

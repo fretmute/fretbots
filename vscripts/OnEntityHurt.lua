@@ -7,17 +7,17 @@ require "Debug"
 require "DataTables"
 
 -- local debug flag
-local thisDebug = false; 
+local thisDebug = false;
 local isDebug = Debug.IsDebug() and thisDebug;
 
 -- Instantiate ourself
 if EntityHurt == nil then
-  EntityHurt = {}
+	EntityHurt = {}
 end
 
 -- Event Listener
 function EntityHurt:OnEntityHurt(event)
-  -- Get Event Data
+	-- Get Event Data
 	isHero = EntityHurt:GetIsHero(event)
 	-- Drop out for non hero damage
 	if not isHero then return end
@@ -33,7 +33,7 @@ function EntityHurt:OnEntityHurt(event)
 	if isDebug then
 		print('Damage Table for ' .. victim.stats.name)
 		DeepPrintTable(victim.stats.damageTable)
-  end
+	end
 end
 
 -- returns true if the victim was a hero
@@ -44,17 +44,17 @@ function EntityHurt:GetIsHero(event)
 	if victim:IsHero() and victim:IsRealHero() and not victim:IsIllusion() and not victim:IsClone() then
 		isHero = true;
 	end
-  return isHero;
+	return isHero;
 end
 
 -- returns other useful data from the event
 function EntityHurt:GetEntityHurtEventData(event)
 
-  local attacker = nil;
-  local victim = nil;	
-  if event.entindex_attacker ~= nil and event.entindex_killed ~= nil then
-	  attacker = EntIndexToHScript(event.entindex_attacker)
-	  victim = EntIndexToHScript(event.entindex_killed)
+	local attacker = nil;
+	local victim = nil;
+	if event.entindex_attacker ~= nil and event.entindex_killed ~= nil then
+		attacker = EntIndexToHScript(event.entindex_attacker)
+		victim = EntIndexToHScript(event.entindex_killed)
 	end
 	-- Lifted from Anarchy. Props!
 	-- Damage Type
@@ -69,18 +69,18 @@ function EntityHurt:GetEntityHurtEventData(event)
 	else
 		damageType=tostring('DAMAGE_TYPE_PHYSICAL')
 	end
-  -- get damage value
+	-- get damage value
 	local damage=event.damage
-  return victim, attacker, damage, damageType;
+	return victim, attacker, damage, damageType;
 end
 
--- Registers Event Listener    
+-- Registers Event Listener
 function EntityHurt:RegisterEvents()
 	if not Flags.isEntityHurtRegistered then
-	  ListenToGameEvent("entity_hurt", Dynamic_Wrap(EntityHurt, 'OnEntityHurt'), EntityHurt)
-    Flags.isEntityHurtRegistered = true;
-    if isDebug then
-  		print("EntityHurt Event Listener Registered.")
+		ListenToGameEvent("entity_hurt", Dynamic_Wrap(EntityHurt, 'OnEntityHurt'), EntityHurt)
+		Flags.isEntityHurtRegistered = true;
+		if isDebug then
+			print("EntityHurt Event Listener Registered.")
 		end
-  end
+	end
 end

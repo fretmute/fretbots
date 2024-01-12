@@ -1,7 +1,7 @@
 -- Provides for common Utilities
 -- Sound constants
 if Sounds == nil then
-  Sounds = dofile('Soundboard')
+	Sounds = dofile('Soundboard')
 end
 -- Hero Names
 local heroNames = require('HeroNames')
@@ -9,9 +9,9 @@ local heroNames = require('HeroNames')
 local inspect = require('inspect')
 
 if Utilities == nil then
-	Utilities = 
+	Utilities =
 	{
-		listeners = 
+		listeners =
 		{
 			names = {},
 			objects = {}
@@ -32,14 +32,14 @@ MSG_NEUTRAL_RETURN    = 9
 
 -- Max neutral item message to print
 local maxNeutralMessage = MSG_NEUTRAL_FIND
-						
+
 BAD_LIST			= Sounds.BadSounds
 GOOD_LIST			= Sounds.GoodSounds
-PLAYER_DEATH_LIST   = Sounds.BadSounds			
-ASIAN_LIST 			= Sounds.AsianCasters			
-CIS_LIST 			= Sounds.CisCasters			
-ENGLISH_LIST 	    = Sounds.EnglishCasters			
-						
+PLAYER_DEATH_LIST   = Sounds.BadSounds
+ASIAN_LIST 			= Sounds.AsianCasters
+CIS_LIST 			= Sounds.CisCasters
+ENGLISH_LIST 	    = Sounds.EnglishCasters
+
 -- duh
 TEAM_RADIANT		= 2
 TEAM_DIRE			= 3
@@ -55,16 +55,16 @@ ROSHAN				= Sounds.ROSHAN
 SAD_TROMBONE		= Sounds.SAD_TROMBONE
 
 -- message colors
-local colors = 
+local colors =
 {
-	good		= '#00ff00', 
+	good		= '#00ff00',
 	warning		= '#fbff00',
 	bad			= '#ff0000',
-	consoleGood = '#1ce8b5', 
-	consoleBad  = '#e68d39',	
+	consoleGood = '#1ce8b5',
+	consoleBad  = '#e68d39',
 }
--- note that the first index is a blank table because radiant / dire are 2 / 3 
-local playerColors = 
+-- note that the first index is a blank table because radiant / dire are 2 / 3
+local playerColors =
 {
 	{},
 	{
@@ -82,16 +82,16 @@ local playerColors =
 		'#a46900',
 	}
 }
-local awardColors = 
+local awardColors =
 {
 	gold 			= '#DAA520',
 	armor 			= '#B911FC',
 	magicResist 	= '#1A88FC',
 	levels 			= '#eb4b4b',
 	neutral 		= '#5B388F',
-	stats 			= '#CF6A32',	
+	stats 			= '#CF6A32',
 }
-local neutralColors = 
+local neutralColors =
 {
 	'#A9A9A9',
 	'#008000',
@@ -110,9 +110,9 @@ function View(object)
 end
 
 -- Evidently dota lua doesn't like ... arguments and you just have to overload and check for nil. Whatever.
--- This method will print a message to the players, with optional color and sound.   
+-- This method will print a message to the players, with optional color and sound.
 function Utilities:Print(msg, msgType, sound)
-  local color
+	local color
 	local isColor = false
 	local message = ''
 	-- invalid arguments
@@ -137,8 +137,8 @@ function Utilities:Print(msg, msgType, sound)
 	elseif msgType == MSG_CONSOLE_GOOD then
 		message = Utilities:ColorString(msg, colors.consoleGood)
 	elseif msgType == MSG_CONSOLE_BAD then
-		message = Utilities:ColorString(msg, colors.consoleBad)		
-	-- check if they passed what we think is a valid color 
+		message = Utilities:ColorString(msg, colors.consoleBad)
+	-- check if they passed what we think is a valid color
 	-- I'm aware this is not a full check, but this is good enough for now
 	elseif string.find(msgType, '#') ~= nil and string.len(msgType) == 7 then
 		message = Utilities:ColorString(msg, msgType)
@@ -149,7 +149,7 @@ function Utilities:Print(msg, msgType, sound)
 	if sound == nil then return end
 	-- play sound
 	if type(sound) == 'string' then
-	  EmitGlobalSound(sound)
+		EmitGlobalSound(sound)
 	else
 		EmitGlobalSound(sound[math.random(#sound)])
 	end
@@ -164,25 +164,25 @@ function Utilities:FormatAwardMessage(awards)
 	msg = msg..Utilities:ColorString('Bonus:', colors.good)
 	-- Loop over table entries
 	for i = 2, #awards do
-	  local awardType = awards[i][1]
-	  local awardValue = awards[i][2]  	
-	  local awardMsg = ' '..Utilities:FirstToUpper(awardType)..': '..awardValue
-	  msg = msg..Utilities:ColorString(awardMsg, awardColors[awardType])  
+		local awardType = awards[i][1]
+		local awardValue = awards[i][2]
+		local awardMsg = ' '..Utilities:FirstToUpper(awardType)..': '..awardValue
+		msg = msg..Utilities:ColorString(awardMsg, awardColors[awardType])
 	end
 	return msg
 end
 
 -- Announces neutral item award
 function Utilities:AnnounceNeutral(bot, item, msgType)
-  local msg = ''
+	local msg = ''
 	-- first artifact: hero name, by color
 	msg = msg..Utilities:ColorString(bot.stats.name..': ', Utilities:GetPlayerColor(bot.stats.id))
 	if msgType == MSG_NEUTRAL_FIND then
 		msg = msg..Utilities:ColorString('Found Neutral Item: ', awardColors.neutral)
 	elseif msgType == MSG_NEUTRAL_TAKE then
-		msg = msg..Utilities:ColorString('Took Neutral Item from Stash: ', awardColors.neutral)	
+		msg = msg..Utilities:ColorString('Took Neutral Item from Stash: ', awardColors.neutral)
 	elseif msgType == MSG_NEUTRAL_RETURN then
-		msg = msg..Utilities:ColorString('Returned Neutral Item to Stash: ', awardColors.neutral)			
+		msg = msg..Utilities:ColorString('Returned Neutral Item to Stash: ', awardColors.neutral)
 	end
 	msg = msg..Utilities:ColorString(item.realName, neutralColors[item.tier])
 	-- print the message, maybe
@@ -194,7 +194,7 @@ end
 -- Returns the localized hero name, if there is one
 function Utilities:GetName(name)
 	if heroNames[name] ~= nil then
-		return heroNames[name] 
+		return heroNames[name]
 	end
 	return name
 end
@@ -209,7 +209,7 @@ function Utilities:GetSound(list)
 	return list[math.random(1,table.getn(list))]
 end
 
--- Prints a warning to chat if the first argument is equal to any values in the 
+-- Prints a warning to chat if the first argument is equal to any values in the
 -- table of the second argument
 function Utilities:Warn(value, values, warning)
 	for _,tableValue in ipairs(values) do
@@ -224,7 +224,7 @@ end
 function Utilities:RoundedClamp(number, minimum, maximum)
 	local num = Utilities:Clamp(number, minimum, maximum)
 	return Utilities:Round(num)
-end 
+end
 
 -- Emits a random sound from a table
 function Utilities:RandomSound(sound)
@@ -235,7 +235,7 @@ end
 function Utilities:PlaySound(sound)
 	s = string.upper(sound)
 	if Sounds[s] ~= nil then
-		EmitGlobalSound(Sounds[s])          
+		EmitGlobalSound(Sounds[s])
 	else
 		Utilities:Print('Sound not found: '..s)
 	end
@@ -250,8 +250,8 @@ end
 -- Plays a cheat detected sound
 function Utilities:CheatWarning()
 	if Sounds['CHEAT'] ~= nil then
-		EmitGlobalSound(Sounds['CHEAT'])    
-	end  
+		EmitGlobalSound(Sounds['CHEAT'])
+	end
 end
 -- clamps a number
 function Utilities:Clamp(number, minimum, maximum)
@@ -260,13 +260,13 @@ function Utilities:Clamp(number, minimum, maximum)
 	return number
 end
 
--- Rounds a number 
+-- Rounds a number
 function Utilities:Round(num, decimals)
 	-- if no decimals argument, round to an integer
 	if decimals == nil then
 		local decimal = num - math.floor(num)
 		if decimal >= 0.5 then
-		  return math.ceil(num) 
+			return math.ceil(num)
 		else
 			return math.floor(num)
 		end
@@ -275,24 +275,24 @@ function Utilities:Round(num, decimals)
 		 local mult = 10^(decimals or 0)
 	return math.floor(num * mult + 0.5) / mult
 	end
-end 
+end
 
 -- Returns a random decimal number between two numbers
 function Utilities:RandomDecimal(low, high)
-  local percentage = math.random()
-  local range = high - low
-  local scaled = range * percentage
-  return scaled + low
+	local percentage = math.random()
+	local range = high - low
+	local scaled = range * percentage
+	return scaled + low
 end
 
 -- Returns a variance multipler (picks a random number between the two numbers (both integers) then divides by 100
 function Utilities:GetVariance(data)
 	-- sanity check
-	if data == nil then 
-		return 0 
+	if data == nil then
+		return 0
 	end
-	if data[1] == nil or data[2] == nil then 
-		return 0 
+	if data[1] == nil or data[2] == nil then
+		return 0
 	end
 	-- remember math.Random only returns integers, so multiply / divide by 100
 	local percentage = math.random(data[1] * 100, data[2] * 100) / 100
@@ -302,32 +302,32 @@ end
 -- Returns a random integer between two numbers in a variance table
 function Utilities:GetIntegerVariance(data)
 		-- sanity check
-	if data == nil then 
-		return 0 
+	if data == nil then
+		return 0
 	end
-	if data[1] == nil or data[2] == nil then 
-		return 0 
+	if data[1] == nil or data[2] == nil then
+		return 0
 	end
 	return math.random(data[1],data[2])
 end
 
 -- Gets game time
 function Utilities:GetTime()
-  local dotaTime = GameRules:GetDOTATime(false, false)
-  if dotaTime == nil or dotaTime < 0 then return 0 end
-  return dotaTime
+	local dotaTime = GameRules:GetDOTATime(false, false)
+	if dotaTime == nil or dotaTime < 0 then return 0 end
+	return dotaTime
 end
 
 -- Get absolute time
 function Utilities:GetAbsoluteTime()
-  local dotaTime = GameRules:GetDOTATime(false, true)
-  return dotaTime
+	local dotaTime = GameRules:GetDOTATime(false, true)
+	return dotaTime
 end
 
 -- Sorts a table
 function Utilities:SortHighToLow(data)
-  table.sort(data, function(x,y) return x > y end)
-  return data
+	table.sort(data, function(x,y) return x > y end)
+	return data
 end
 
 -- Returns true if a player (by ID) is a bot
@@ -336,7 +336,7 @@ function Utilities:IsPlayerBot(playerID)
 end
 
 -- Returns the number of players in the game
--- note that PlayerResource:GetPlayerCount() also returns coaches etc 
+-- note that PlayerResource:GetPlayerCount() also returns coaches etc
 function Utilities:GetPlayerCount()
 	return PlayerResource:GetPlayerCountForTeam(TEAM_RADIANT) +  PlayerResource:GetPlayerCountForTeam(TEAM_DIRE)
 end
@@ -347,9 +347,9 @@ function Utilities:GetNumberOfHumans()
 	local humans = 0
 	for i = 0, count-1 do
 		local isBot = Utilities:IsPlayerBot(i)
-	  if not isBot then 
+		if not isBot then
 		humans = humans + 1
-	  end
+		end
 	end
 	return humans
 end
@@ -365,7 +365,7 @@ function Utilities:GetPlayerColor(playerID)
 	end
 end
 
--- returns true if the playerID is assigned to a team.  
+-- returns true if the playerID is assigned to a team.
 -- Use this to filter out coaches / observers
 function Utilities:IsTeamPlayer(playerID)
 	for team = TEAM_RADIANT, TEAM_DIRE do
@@ -379,15 +379,15 @@ end
 
 -- Copies matching table fields from source to target
 function Utilities:DeepCopy(source, target)
-  for key, value in pairs(source) do 
+	for key, value in pairs(source) do
 	if target[key] ~= nil then
-		if type(value) == 'table' then 
+		if type(value) == 'table' then
 			Utilities:DeepCopy(source[key], target[key])
-	  else
+		else
 		target[key] = value
 		end
 	end
-  end
+	end
 end
 
 -- return a string with the first letter capitalized
@@ -424,7 +424,7 @@ end
 
 -- Returns a table from the string version thereof
 function Utilities:TableFromString(text)
-  return (loadstring or load)("return "..text)()
+	return (loadstring or load)("return "..text)()
 end
 
 -- Applies an offset to a table
@@ -473,7 +473,7 @@ function Utilities:IsRealHero(unit)
 end
 
 -- removes the first character from a string if it's a dash
--- Use this when parsing chat to check for commands that the 
+-- Use this when parsing chat to check for commands that the
 -- player didn't want printed to chat
 function Utilities:CheckForDash(command)
 	if command:sub(1,1) == '-' then
@@ -484,41 +484,41 @@ end
 
 -- iterates over a table by keys, alphabetically
 function Utilities:PairsByKeys (t, f)
-	  local a = {}
-	  for n in pairs(t) do table.insert(a, n) end
-	  table.sort(a, f)
-	  local i = 0      -- iterator variable
-	  local iter = function ()   -- iterator function
+		local a = {}
+		for n in pairs(t) do table.insert(a, n) end
+		table.sort(a, f)
+		local i = 0      -- iterator variable
+		local iter = function ()   -- iterator function
 		i = i + 1
 		if a[i] == nil then return nil
 		else return a[i], t[a[i]]
 		end
-	  end
-	  return iter
+		end
+		return iter
 	end
-	
+
 -- Used to register game state listeners (with a generic functionality)
 -- Gets current game state.  If game is over, returns.  If the game is
--- otherwise in or past initState, immediately runs an initializer.  
+-- otherwise in or past initState, immediately runs an initializer.
 -- Prior to that state, registers a listener function that should
 -- handle further game state changes (and call initializer) itself.
 function Utilities:RegsiterGameStateListener(o, initializer, initState)
 	-- Determine where we are
 	local state =  GameRules:State_Get()
 	-- various ways to implement based on game state
-  if state == DOTA_GAMERULES_STATE_POST_GAME or state == DOTA_GAMERULES_STATE_DISCONNECT then
+	if state == DOTA_GAMERULES_STATE_POST_GAME or state == DOTA_GAMERULES_STATE_DISCONNECT then
 		return
 	-- are we at or past the init state? Then init
 	elseif state >= initState then
 		local func = o[initializer]
 		func(o)
 	-- otherwise register a listener that will call init at the proper time.
-  else
+	else
 	local name = DoUniqueString('listener')
 	local gameStateListener = GameStateListener:New()
-	  table.insert(Utilities.listeners.names,name)
-	  table.insert(Utilities.listeners.objects, gameStateListener)
-	  gameStateListener:Register(o, initializer, initState) 
+		table.insert(Utilities.listeners.names,name)
+		table.insert(Utilities.listeners.objects, gameStateListener)
+		gameStateListener:Register(o, initializer, initState)
 	end
 end
 
@@ -530,10 +530,10 @@ end
 
 -- Returns an object of the class
 function GameStateListener:New (o)
-  o = o or {} 
-  setmetatable(o, self)
-  self.__index = self
-  return o
+	o = o or {}
+	setmetatable(o, self)
+	self.__index = self
+	return o
 end
 
 -- This function is called when the game event occurs
@@ -549,7 +549,7 @@ end
 function GameStateListener:Register(o, initializer, initState)
 	print('Registering GameStateListener')
 	-- set internal pointers
-  self.object = o
+	self.object = o
 	self.initializer = initializer
 	self.initState = initState
 	-- Register listener

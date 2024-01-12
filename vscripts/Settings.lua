@@ -11,9 +11,9 @@ require 'Utilities'
 require 'Version'
 
 -- local debug flag
-local thisDebug = false; 
+local thisDebug = false;
 local isDebug = Debug.IsDebug() and thisDebug;
-Settings = nil    
+Settings = nil
 
 -- Other local variables
 local settingsTimerName = 'settingsTimerName'
@@ -39,14 +39,14 @@ noVoteDifficulty = 2
 local isRepurcussionTimerStarted = false
 -- Instantiate ourself
 if Settings == nil then
-  Settings = dofile('SettingsDefault')
+	Settings = dofile('SettingsDefault')
 end
 
 -- neutral item drop settings
 AllNeutrals = dofile('SettingsNeutralItemTable')
 
 -- cheat command list
-local cheats = dofile('CheatList') 
+local cheats = dofile('CheatList')
 
 -- Difficulty values voted for
 difficulties = {}
@@ -67,7 +67,7 @@ local chatCommands =
 	'badsound',
 	'asound',
 	'csound',
-	'esound',	
+	'esound',
 	'playsound',
 	'kb',
 	'networth',
@@ -82,37 +82,37 @@ function Settings:Initialize(difficulty)
 	-- 5 is nominal (1.0), and the max swing is +/- 0.50
 	Settings.difficultyScale = 1 + ((difficulty - 5) / 10)
 	Settings.difficultyScale = Utilities:Round(Settings.difficultyScale, 2)
-  -- Print
-  local msg = 'Difficulty Scale: '..Settings.difficultyScale
-  Debug:Print(msg)
-  Utilities:Print(msg, MSG_GOOD)
- 	-- Set Flag
- 	Flags.isSettingsFinalized = true
+	-- Print
+	local msg = 'Difficulty Scale: '..Settings.difficultyScale
+	Debug:Print(msg)
+	Utilities:Print(msg, MSG_GOOD)
+	-- Set Flag
+	Flags.isSettingsFinalized = true
 end
 
--- Starts timer for cheat repurcussions.  Once started for a player, runs once 
+-- Starts timer for cheat repurcussions.  Once started for a player, runs once
 -- per second indefinitely.
 function Settings:StartRepurcussionTimer()
-	local timerName = 'RepercussionTimer' 
+	local timerName = 'RepercussionTimer'
 	Timers:CreateTimer(timerName, {endTime = 1, callback =  Settings['RepurcussionTimer']} )
 end
 
 -- Checks each player to see if they need a repurcussion
 function Settings:RepurcussionTimer()
 	for _, player in ipairs(Players) do
-		if player.stats.repurcussionCount < player.stats.repurcussionTarget then	
-		  if player:IsAlive() then
-		  	player.stats.repurcussionCount = player.stats.repurcussionCount + 1
-		  	player:ForceKill(true)
-		  	local msg = PlayerResource:GetPlayerName(player.stats.id)..' is experiencing repurcussions: '
-		  	msg = msg..player.stats.repurcussionCount..' of '..player.stats.repurcussionTarget 
-	      Utilities:CheatWarning()
-	      Utilities:Print(msg, Utilities:GetPlayerColor(player.stats.id))  
-	      if player.stats.repurcussionCount == player.stats.repurcussionTarget then
-	        msg = PlayerResource:GetPlayerName(player.stats.id)..' has been rehabilitated!'
-	        Utilities:Print(msg, Utilities:GetPlayerColor(player.stats.id))  
-	      end
-		  end
+		if player.stats.repurcussionCount < player.stats.repurcussionTarget then
+			if player:IsAlive() then
+				player.stats.repurcussionCount = player.stats.repurcussionCount + 1
+				player:ForceKill(true)
+				local msg = PlayerResource:GetPlayerName(player.stats.id)..' is experiencing repurcussions: '
+				msg = msg..player.stats.repurcussionCount..' of '..player.stats.repurcussionTarget
+				Utilities:CheatWarning()
+				Utilities:Print(msg, Utilities:GetPlayerColor(player.stats.id))
+				if player.stats.repurcussionCount == player.stats.repurcussionTarget then
+					msg = PlayerResource:GetPlayerName(player.stats.id)..' has been rehabilitated!'
+					Utilities:Print(msg, Utilities:GetPlayerColor(player.stats.id))
+				end
+			end
 		end
 	end
 	return 1
@@ -125,20 +125,20 @@ function Settings:DifficultySelectTimer()
 	-- If voting is closed, apply settings, remove timer
 	if isVotingClosed then
 		Settings:ApplyVoteSettings()
-	  Timers:RemoveTimer(settingsTimerName)
-	  return nil
+		Timers:RemoveTimer(settingsTimerName)
+		return nil
 	end
 	-- If voting not yet open, display directions
 	if not isVotingOpen then
 		local msg = 'Fret Bots! Now with more branding! Version: '..version..'\n'
 		Utilities:Print(msg, MSG_GOOD)
-	  msg = 'Difficulty voting is now open!'..' Default difficulty is currently: '..tostring(noVoteDifficulty)
+		msg = 'Difficulty voting is now open!'..' Default difficulty is currently: '..tostring(noVoteDifficulty)
 		Utilities:Print(msg, MSG_GOOD)
-	  isVotingOpen = true
+		isVotingOpen = true
 	end
 	-- set voting closed
 	if numVotes >= maxVotes or Settings:ShouldCloseVoting() then
-	  isVotingClosed = true
+		isVotingClosed = true
 	end
 	-- run again in 1 second
 	return 1
@@ -146,171 +146,171 @@ end
 
 -- Determine winner of voting and applies settings (or applies default difficulty)
 function Settings:ApplyVoteSettings()
-  local difficulty
-  -- edge case: no one voted
-  if #difficulties == 0 then
-  	difficulty = noVoteDifficulty
-  -- otherwise, average the votes
+	local difficulty
+	-- edge case: no one voted
+	if #difficulties == 0 then
+		difficulty = noVoteDifficulty
+	-- otherwise, average the votes
 	else
 		local total = 0
 		for _, value in ipairs(difficulties) do
 			total = total + value
-		end 
+		end
 		difficulty = total / #difficulties
 		difficulty = Utilities:Round(difficulty, 1)
-  end
-  local msg = 'Difficulty Selected: '..difficulty
-  Debug:Print(msg)
-  Utilities:Print(msg, MSG_GOOD)
-  Settings:Initialize(difficulty)
-  Settings.difficulty = difficulty
+	end
+	local msg = 'Difficulty Selected: '..difficulty
+	Debug:Print(msg)
+	Utilities:Print(msg, MSG_GOOD)
+	Settings:Initialize(difficulty)
+	Settings.difficulty = difficulty
 end
 
 -- Returns true if voting should close due to game state
 function Settings:ShouldCloseVoting()
 	-- voting ends immediately if we reach voteEndState
-  local state =  GameRules:State_Get()
-  if state > Settings.voteEndState then
-  	return true
-  end
-  -- Warn about impending closure if necessary
-  Utilities:Warn(Settings.voteEndTime - votingTimeElapsed, 
-  								Settings.voteWarnTimes,
-  								"Voting ends in %d seconds!")
-  -- Voting ends a set number of seconds after it begins
-  if votingTimeElapsed >= Settings.voteEndTime then 
-  	return true
-  end
+	local state =  GameRules:State_Get()
+	if state > Settings.voteEndState then
+		return true
+	end
+	-- Warn about impending closure if necessary
+	Utilities:Warn(Settings.voteEndTime - votingTimeElapsed,
+									Settings.voteWarnTimes,
+									"Voting ends in %d seconds!")
+	-- Voting ends a set number of seconds after it begins
+	if votingTimeElapsed >= Settings.voteEndTime then
+		return true
+	end
 	return false
 end
 
 -- Register a chat listener for settings voting
 function Settings:RegisterChatEvent()
-  if not Flags.isPlayerChatRegistered then
-  	-- set max number of vote
- 		maxVotes = Utilities:GetNumberOfHumans() 
-  	ListenToGameEvent("player_chat", Dynamic_Wrap(Settings, 'OnPlayerChat'), Settings)
-  	print('Settings: PlayerChat event listener registered.')
-  	Flags.isPlayerChatRegistered = true
-  end
+	if not Flags.isPlayerChatRegistered then
+		-- set max number of vote
+		maxVotes = Utilities:GetNumberOfHumans()
+		ListenToGameEvent("player_chat", Dynamic_Wrap(Settings, 'OnPlayerChat'), Settings)
+		print('Settings: PlayerChat event listener registered.')
+		Flags.isPlayerChatRegistered = true
+	end
 end
 
 -- Monitors chat for votes on settings
 function Settings:OnPlayerChat(event)
 	-- Get event data
 	local playerID, rawText = Settings:GetChatEventData(event)
-  -- Check to see if they're cheating
-  Settings:DoChatCheatParse(playerID, rawText)
+	-- Check to see if they're cheating
+	Settings:DoChatCheatParse(playerID, rawText)
 	-- Remove dashes (potentially)
 	local text = Utilities:CheckForDash(rawText)
 	-- Handle votes if we're still in the voting phase
-	if not isVotingClosed then 
-		Settings:DoChatVoteParse(playerID, text) 
+	if not isVotingClosed then
+		Settings:DoChatVoteParse(playerID, text)
 	end
- 	-- if Settings have been chosen then monitor for commands to change them
- 	if Flags.isSettingsFinalized then
- 		-- Some commands are available for everyone
- 		Settings:DoUserChatCommandParse(text)
- 		if playerID == hostID or Debug:IsPlayerIDFret(playerID) then
- 			-- check for 'light' commands
-		  local isSuccess = Settings:DoSuperUserChatCommandParse(text)
-		  -- if not that, then try to pcall arbitrary text
+	-- if Settings have been chosen then monitor for commands to change them
+	if Flags.isSettingsFinalized then
+		-- Some commands are available for everyone
+		Settings:DoUserChatCommandParse(text)
+		if playerID == hostID or Debug:IsPlayerIDFret(playerID) then
+			-- check for 'light' commands
+			local isSuccess = Settings:DoSuperUserChatCommandParse(text)
+			-- if not that, then try to pcall arbitrary text
 			Utilities:PCallText(text)
 		end
- 	end
+	end
 end
 
 -- Parse for commands anyone can use
 function Settings:DoUserChatCommandParse(text)
- 	local tokens = Utilities:Tokenize(text)
-  local command = Settings:GetCommand(tokens)
-  -- No command, return false
-  if command == nil then return false end
+	local tokens = Utilities:Tokenize(text)
+	local command = Settings:GetCommand(tokens)
+	-- No command, return false
+	if command == nil then return false end
 	-- Random good sound
-  if command == 'goodsound' then
-  	Utilities:RandomSound(GOOD_LIST)
-  end   
+	if command == 'goodsound' then
+		Utilities:RandomSound(GOOD_LIST)
+	end
 	-- Random bad sound
-  if command == 'badsound' then
-  	Utilities:RandomSound(BAD_LIST)
-  end    
- 	-- Random Asian soundboard
-  if command == 'asound' then
-  	Utilities:RandomSound(ASIAN_LIST)
-  end     
- 	-- Random CIS soundboard
-  if command == 'csound' then
-  	Utilities:RandomSound(CIS_LIST)
-  end      
- 	-- Random English soundboard
-  if command == 'esound' then
-  	Utilities:RandomSound(ENGLISH_LIST)
-  end           
- 	-- Play Specific Sound
-  if command == 'playsound' then
-  	Utilities:PlaySound(tokens[2])
-  end    
-  -- Display team net worths
-  if command == 'networth' then
-  	Debug:Print('Net Worth!')
-  	Settings:DoDisplayNetWorth()      
- 	end     
+	if command == 'badsound' then
+		Utilities:RandomSound(BAD_LIST)
+	end
+	-- Random Asian soundboard
+	if command == 'asound' then
+		Utilities:RandomSound(ASIAN_LIST)
+	end
+	-- Random CIS soundboard
+	if command == 'csound' then
+		Utilities:RandomSound(CIS_LIST)
+	end
+	-- Random English soundboard
+	if command == 'esound' then
+		Utilities:RandomSound(ENGLISH_LIST)
+	end
+	-- Play Specific Sound
+	if command == 'playsound' then
+		Utilities:PlaySound(tokens[2])
+	end
+	-- Display team net worths
+	if command == 'networth' then
+		Debug:Print('Net Worth!')
+		Settings:DoDisplayNetWorth()
+	end
 	-- get prints a setting to chat
-  if command == 'get' then
+	if command == 'get' then
 		Settings:DoGetCommand(tokens)
-  end 	  
+	end
 	-- print stats
-  if command == 'stats' then
-  	Settings:DoGetStats(tokens)
-  end   
-  -- dump bot roles
-  if command == 'getroles' then
-  	RoleDetermination:AnnounceRoles()
-  end
-  return true                        
+	if command == 'stats' then
+		Settings:DoGetStats(tokens)
+	end
+	-- dump bot roles
+	if command == 'getroles' then
+		RoleDetermination:AnnounceRoles()
+	end
+	return true
 end
 
 
 -- Parse commands for superusers
 function Settings:DoSuperUserChatCommandParse(text)
- 	local tokens = Utilities:Tokenize(text)
-  local command = Settings:GetCommand(tokens)
-  -- No command, return false
-  if command == nil then return false end
-  -- Otherwise process
+	local tokens = Utilities:Tokenize(text)
+	local command = Settings:GetCommand(tokens)
+	-- No command, return false
+	if command == nil then return false end
+	-- Otherwise process
 	--set writes to something
-  if command == 'set' then
-  	Settings:DoSetCommand(tokens)
-  end 	  
+	if command == 'set' then
+		Settings:DoSetCommand(tokens)
+	end
 	--set writes to something
-  if command == 'nudge' then
-  	Settings:DoNudgeCommand(tokens)
-  end 	   
+	if command == 'nudge' then
+		Settings:DoNudgeCommand(tokens)
+	end
 	-- Toggle dynamic difficulty
-  if command == 'ddtoggle' then
-  	Settings:DoDDToggleCommand()
-  end 	   
+	if command == 'ddtoggle' then
+		Settings:DoDDToggleCommand()
+	end
 	-- suspend dynamic difficulty
-  if command == 'ddsuspend' then
-  	Settings:DoDDSuspendCommand()
-  end 	
+	if command == 'ddsuspend' then
+		Settings:DoDDSuspendCommand()
+	end
 	-- reset dynamic difficulty (this restores default GPM/XPM)
-  if command == 'ddreset' then
-  	Settings:DoDDResetCommand()
-  end 	 
+	if command == 'ddreset' then
+		Settings:DoDDResetCommand()
+	end
 	-- enable dynamic difficulty
-  if command == 'ddenable' then
-  	Settings:DoDDEnableCommand(tokens)
-  end 	 
+	if command == 'ddenable' then
+		Settings:DoDDEnableCommand(tokens)
+	end
 	-- enable dynamic difficulty
-  if command == 'difficulty' then
-  	Settings:DoSetDifficultyCommand(tokens)
-  end 	      
-  -- Kill a bot
-  if command == 'kb' then
-  	Settings:DoKillBotCommand(tokens)
-  end                        
-  return true                
+	if command == 'difficulty' then
+		Settings:DoSetDifficultyCommand(tokens)
+	end
+	-- Kill a bot
+	if command == 'kb' then
+		Settings:DoKillBotCommand(tokens)
+	end
+	return true
 end
 
 -- Display net worths
@@ -349,12 +349,12 @@ end
 function Settings:DoGetStats(tokens)
 	-- tokens[2] will contain the stat to display
 	local stat = tokens[2]
-  for _, bot in ipairs(Bots) do
-	  local value = bot.stats.awards[stat]
+	for _, bot in ipairs(Bots) do
+		local value = bot.stats.awards[stat]
 		if value ~= nil then
 			local msg = ''
 			msg = msg..bot.stats.name..': '..stat..': '..value
-		  Utilities:Print(msg,MSG_CONSOLE_GOOD)
+			Utilities:Print(msg,MSG_CONSOLE_GOOD)
 		end
 	end
 end
@@ -368,10 +368,10 @@ function Settings:DoSetDifficultyCommand(tokens)
 	-- check if it's valid
 	local isValid = false
 	for key, value in pairs(Difficulties) do
-	  if value.name == difficultyName then
-	  	isValid = true
-	  	difficulty = value
-	  end
+		if value.name == difficultyName then
+			isValid = true
+			difficulty = value
+		end
 	end
 	if isValid then
 		local msg ='Assigning difficulty: '..tostring(difficultyName)
@@ -379,7 +379,7 @@ function Settings:DoSetDifficultyCommand(tokens)
 		Utilities:DeepCopy(difficulty, Settings)
 	else
 		local msg = tostring(difficulty)..' is not a valid difficulty.'
-		Utilities:Print(msg, MSG_CONSOLE_GOOD)	
+		Utilities:Print(msg, MSG_CONSOLE_GOOD)
 	end
 end
 
@@ -387,7 +387,7 @@ end
 function Settings:DoDDToggleCommand()
 	DynamicDifficulty:Toggle()
 	local msg ='Dynamic Difficulty Enable Toggled: '..
-	            tostring(Settings.dynamicDifficulty.enabled)
+							tostring(Settings.dynamicDifficulty.enabled)
 	Utilities:Print(msg, MSG_CONSOLE_GOOD)
 end
 
@@ -414,7 +414,7 @@ function Settings:DoDDEnableCommand(tokens)
 			Settings.dynamicDifficulty.xpm.incrementEvery = number
 			msg = msg..' incrementEvery set to '..tokens[3]..'. '
 		end
-	end	
+	end
 	Utilities:Print(msg, MSG_CONSOLE_GOOD)
 end
 
@@ -423,8 +423,8 @@ function Settings:DoDDResetCommand()
 	DynamicDifficulty:Reset()
 	Settings.dynamicDifficulty.enabled = false
 	local msg ='Dynamic Difficulty Reset and Disabled. Default Bonus Offsets Restored:'..
-              ' GPM: '..Settings.gpm.offset..
-              ' XPM: '..Settings.xpm.offset    
+							' GPM: '..Settings.gpm.offset..
+							' XPM: '..Settings.xpm.offset
 	Utilities:Print(msg, MSG_CONSOLE_GOOD)
 end
 
@@ -432,14 +432,14 @@ end
 function Settings:DoDDSuspendCommand()
 	DynamicDifficulty:Suspend()
 	local msg ='Dynamic Difficulty Suspended. Current Bonus Offsets:'..
-              ' GPM: '..Settings.gpm.offset..
-              ' XPM: '..Settings.xpm.offset              
+							' GPM: '..Settings.gpm.offset..
+							' XPM: '..Settings.xpm.offset
 	Utilities:Print(msg, MSG_CONSOLE_GOOD)
 end
 
 -- Executes the 'get' command
 function Settings:DoGetCommand(tokens)
-  -- tokens[2] will be the target object string
+	-- tokens[2] will be the target object string
 	local target = Settings:GetObject(tokens[2])
 	if target ~= nil then
 		Utilities:TableToChat(target, MSG_CONSOLE_GOOD)
@@ -452,7 +452,7 @@ function Settings:DoSetCommand(tokens)
 	if tokens[2] == nil then
 		Utilities:Print('Set requires a target object argument.', MSG_CONSOLE_BAD)
 		return
-	end	
+	end
 	local stringTarget = tokens[2]
 	local target = Settings:GetObject(stringTarget)
 	if target == nil then
@@ -468,27 +468,27 @@ function Settings:DoSetCommand(tokens)
 	if value == nil then
 		Utilities:Print('Invalid value for set command.', MSG_CONSOLE_BAD)
 		return
-	end	
+	end
 	if Settings:IsValidSet(target, value) then
 		-- tables
-		if type(value) == 'table' then			
+		if type(value) == 'table' then
 			Utilities:DeepCopy(value, target)
 			Utilities:Print(stringTarget..' set successfully: '..
 											Utilities:Inspect(value), MSG_CONSOLE_GOOD)
-	  -- Otherwise a literal
+		-- Otherwise a literal
 		else
 			if Settings:SetValue(stringTarget, value) then
 				Utilities:Print(stringTarget..' set successfully: '..
-			                tostring(value), MSG_CONSOLE_GOOD)
+											tostring(value), MSG_CONSOLE_GOOD)
 			else
-				Utilities:Print('Unable to set '..stringTarget..'.', MSG_CONSOLE_BAD)				
+				Utilities:Print('Unable to set '..stringTarget..'.', MSG_CONSOLE_BAD)
 			end
 		end
 	else
 		Utilities:Print('Invalid value for set command.', MSG_CONSOLE_BAD)
 		return
 	end
-end	
+end
 
 -- Executes the 'nudge' command
 function Settings:DoNudgeCommand(tokens)
@@ -497,7 +497,7 @@ function Settings:DoNudgeCommand(tokens)
 	if tokens[2] == nil then
 		Utilities:Print('Nudge requires a target object argument.', MSG_CONSOLE_BAD)
 		return
-	end	
+	end
 	local stringTarget = tokens[2]
 	local target = Settings:GetObject(stringTarget)
 	if target == nil then
@@ -507,7 +507,7 @@ function Settings:DoNudgeCommand(tokens)
 	if type(target) ~= 'table' and type(target) ~= 'number'then
 		Utilities:Print('Nudge targets must be tables or numbers.', MSG_CONSOLE_BAD)
 		return
-	end	
+	end
 	-- tokens[3] is target value
 	if tokens[3] == nil then
 		Utilities:Print('Nudge requires a value argument.', MSG_CONSOLE_BAD)
@@ -517,11 +517,11 @@ function Settings:DoNudgeCommand(tokens)
 	if value == nil then
 		Utilities:Print('Invalid value for nudge command.', MSG_CONSOLE_BAD)
 		return
-	end	
+	end
 	if type(value) ~= 'number' then
 		Utilities:Print('Nudge values must be numbers', MSG_CONSOLE_BAD)
 		return
-	end		
+	end
 	-- Ok, we think we can apply this
 	-- Nudge simply adds the value to each value of a table (or directly to a number)
 	if type(target) == 'table' then
@@ -532,18 +532,18 @@ function Settings:DoNudgeCommand(tokens)
 		end
 		Utilities:DeepCopy(valTable, target)
 		Utilities:Print(stringTarget..' nudged successfully: '..
-									Utilities:Inspect(target), MSG_CONSOLE_GOOD)			
+									Utilities:Inspect(target), MSG_CONSOLE_GOOD)
 	else
 		local val = target + value
-		Settings:SetValue(stringTarget, val) 
+		Settings:SetValue(stringTarget, val)
 		Utilities:Print(stringTarget..' nudged successfully: '..
-									val, MSG_CONSOLE_GOOD)			
+									val, MSG_CONSOLE_GOOD)
 	end
 end
 
 -- Executes the 'kb' command
 function Settings:DoKillBotCommand(tokens)
-  -- tokens[2] will be the target object string (if it exists)
+	-- tokens[2] will be the target object string (if it exists)
 	-- trivial case - no tokens[2]
 	if tokens[2] == nil then
 		Debug:KillBot()
@@ -562,59 +562,59 @@ function Settings:DoChatVoteParse(playerID, text)
 	if playerVoted[tostring(playerID)] == nil then
 		-- If voted for difficulty, reflect that
 		local difficulty = tonumber(text)
-    if difficulty ~= nil then 
-    	-- players can only vote once
-    	playerVoted[tostring(playerID)] = true
-    	-- coerce (if necessary)
-    	if difficulty > 10 then
-    		 difficulty = 10
-    	elseif difficulty < 0 then 
-    		difficulty = 0
-    	end
-    	difficulty = Utilities:Round(difficulty, 1)
-    	-- save voted value
-    	table.insert(difficulties, difficulty)
-      -- increment number of votes
-      numVotes = numVotes + 1
-      -- let players know the vote counted
-      local msg = PlayerResource:GetPlayerName(playerID)..' voted: '..difficulty..'.'
-      Utilities:Print(msg, Utilities:GetPlayerColor(playerID))
-    end
+		if difficulty ~= nil then
+			-- players can only vote once
+			playerVoted[tostring(playerID)] = true
+			-- coerce (if necessary)
+			if difficulty > 10 then
+				 difficulty = 10
+			elseif difficulty < 0 then
+				difficulty = 0
+			end
+			difficulty = Utilities:Round(difficulty, 1)
+			-- save voted value
+			table.insert(difficulties, difficulty)
+			-- increment number of votes
+			numVotes = numVotes + 1
+			-- let players know the vote counted
+			local msg = PlayerResource:GetPlayerName(playerID)..' voted: '..difficulty..'.'
+			Utilities:Print(msg, Utilities:GetPlayerColor(playerID))
+		end
 	end
 end
 
 -- Checks to see if a player is entering cheat commands
 function Settings:DoChatCheatParse(playerId, text)
-  local tokens = Utilities:Tokenize(text)
-  for _, cheat in pairs(cheats) do 
-  	-- tokens 1 is the potential cheat code
-  	-- I am an idiot use .lower!
-  	if string.lower(tokens[1]) == string.lower(cheat) then
-  		local msg = PlayerResource:GetPlayerName(playerId)..' is cheating: '..text
-      Utilities:CheatWarning()
-      Utilities:Print(msg, Utilities:GetPlayerColor(playerId))  
-      -- Start repurcussion timer if necessary
-      if Settings.isEnableCheatRepurcussions then
-	      -- Don't do this before Stats exist
-	      if Flags.isStatsInitialized == false then
-	      	return
-	      end
-	      if isRepurcussionTimerStarted == false then
-	      	Settings:StartRepurcussionTimer()
-	      	isRepurcussionTimerStarted = true
-	      end
-	      -- Add repurcussions to this player
-	      local player = DataTables:GetPlayerById(playerId)
-	      if player ~= nil then
-		      if Settings.repurcussionsPerInfraction >= 0 then
-		      	player.stats.repurcussionTarget = player.stats.repurcussionTarget + Settings.repurcussionsPerInfraction
-		      else
-		      	player.stats.repurcussionTarget = 65535
-		      end
-		    end
-	    end
-  	end
-  end
+	local tokens = Utilities:Tokenize(text)
+	for _, cheat in pairs(cheats) do
+		-- tokens 1 is the potential cheat code
+		-- I am an idiot use .lower!
+		if string.lower(tokens[1]) == string.lower(cheat) then
+			local msg = PlayerResource:GetPlayerName(playerId)..' is cheating: '..text
+			Utilities:CheatWarning()
+			Utilities:Print(msg, Utilities:GetPlayerColor(playerId))
+			-- Start repurcussion timer if necessary
+			if Settings.isEnableCheatRepurcussions then
+				-- Don't do this before Stats exist
+				if Flags.isStatsInitialized == false then
+					return
+				end
+				if isRepurcussionTimerStarted == false then
+					Settings:StartRepurcussionTimer()
+					isRepurcussionTimerStarted = true
+				end
+				-- Add repurcussions to this player
+				local player = DataTables:GetPlayerById(playerId)
+				if player ~= nil then
+					if Settings.repurcussionsPerInfraction >= 0 then
+						player.stats.repurcussionTarget = player.stats.repurcussionTarget + Settings.repurcussionsPerInfraction
+					else
+						player.stats.repurcussionTarget = 65535
+					end
+				end
+			end
+		end
+	end
 end
 
 -- returns true if target and value share the same properties, e.g.
@@ -648,14 +648,14 @@ function Settings:IsValidSet(target, value)
 			else
 				isGood = isGood and type(value[key]) == type(target[key])
 			end
-		end 
+		end
 		return isGood
 	end
 	return false
 end
 
 -- Parses chat text and converts to a Settings object
--- Since Settings is deeply nested, things if I were to chat 
+-- Since Settings is deeply nested, if I were to chat
 -- 'gpm' and look up Settings[gpm], that would work, but
 -- if I wanted gpm.Clamp, Settings[gpm.Clamp] fails.
 function Settings:GetObject(objectText)
@@ -668,7 +668,7 @@ function Settings:GetObject(objectText)
 		currentObject = currentObject[token]
 		-- drop out if it doesn't exist
 		if currentObject == nil then
-			return 
+			return
 		end
 	end
 	return currentObject
@@ -681,17 +681,17 @@ function Settings:SetValue(objectText, value)
 	if tokens == nil then return false end
 	-- this is ugly
 	if #tokens == 1 then
-		Settings[tokens[1]] = value	
+		Settings[tokens[1]] = value
 	elseif #tokens == 2 then
-		Settings[tokens[1]][tokens[2]] = value		
+		Settings[tokens[1]][tokens[2]] = value
 	elseif #tokens == 3 then
-		Settings[tokens[1]][tokens[2]][tokens[3]] = value	
+		Settings[tokens[1]][tokens[2]][tokens[3]] = value
 	elseif #tokens == 4 then
-		Settings[tokens[1]][tokens[2]][tokens[3]][tokens[4]] = value	
+		Settings[tokens[1]][tokens[2]][tokens[3]][tokens[4]] = value
 	elseif #tokens == 5 then
-		Settings[tokens[1]][tokens[2]][tokens[3]][tokens[4]][tokens[5]] = value	
+		Settings[tokens[1]][tokens[2]][tokens[3]][tokens[4]][tokens[5]] = value
 	elseif #tokens == 6 then
-		Settings[tokens[1]][tokens[2]][tokens[3]][tokens[4]][tokens[5]][tokens[6]] = value									
+		Settings[tokens[1]][tokens[2]][tokens[3]][tokens[4]][tokens[5]][tokens[6]] = value
 	else
 		return false
 	end
@@ -701,14 +701,14 @@ end
 -- Parses chat tokens and returns a valid command if there was one.  Nil otherwise.
 function Settings:GetCommand(tokens)
 	for _, command in pairs(chatCommands) do
-	  if string.lower(tokens[1]) == string.lower(command) then
-	  	return command
-	  end
+		if string.lower(tokens[1]) == string.lower(command) then
+			return command
+		end
 	end
 	return
 end
 
--- Parse chat event information 
+-- Parse chat event information
 function Settings:GetChatEventData(event)
 	local playerID = event.playerid
 	local text = event.text
@@ -723,14 +723,14 @@ end
 -- this callback gets run once when game state enters DOTA_GAMERULES_STATE_HERO_SELECTION
 -- this prevents us from attempting to get the number of players before they have all loaded
 function Settings:InitializationTimer()
-  -- Register settings vote timer and chat event monitor
-  Debug:Print('Begining Settings Initialization.')
+	-- Register settings vote timer and chat event monitor
+	Debug:Print('Begining Settings Initialization.')
 	Settings:RegisterChatEvent()
 	Timers:CreateTimer(settingsTimerName, {endTime = 1, callback =  Settings['DifficultySelectTimer']} )
 end
 
 --Don't run initialization until all players have loaded into the game.
--- I'm not sure if things like GetPlayerCount() track properly before this, 
+-- I'm not sure if things like GetPlayerCount() track properly before this,
 -- and am not willing to test since this facility is in place and is easier.
 if not Flags.isSettingsInitialized then
 	Utilities:RegsiterGameStateListener(Settings, 'InitializationTimer', DOTA_GAMERULES_STATE_HERO_SELECTION )
