@@ -9,6 +9,8 @@ require 'Fretbots.Timers'
 require 'Fretbots.Utilities'
 -- Version
 require 'Fretbots.Version'
+-- HeroSounds
+require('Fretbots.HeroSounds')
 
 -- local debug flag
 local thisDebug = false;
@@ -71,7 +73,8 @@ local chatCommands =
 	'playsound',
 	'kb',
 	'networth',
-	'getroles'
+	'getroles',
+	'me',
 }
 
 -- Sets difficulty value
@@ -211,7 +214,7 @@ function Settings:OnPlayerChat(event)
 	-- if Settings have been chosen then monitor for commands to change them
 	if Flags.isSettingsFinalized then
 		-- Some commands are available for everyone
-		Settings:DoUserChatCommandParse(text)
+		Settings:DoUserChatCommandParse(text, playerID)
 		if playerID == hostID or Debug:IsPlayerIDFret(playerID) then
 			-- check for 'light' commands
 			local isSuccess = Settings:DoSuperUserChatCommandParse(text)
@@ -222,7 +225,7 @@ function Settings:OnPlayerChat(event)
 end
 
 -- Parse for commands anyone can use
-function Settings:DoUserChatCommandParse(text)
+function Settings:DoUserChatCommandParse(text, id)
 	local tokens = Utilities:Tokenize(text)
 	local command = Settings:GetCommand(tokens)
 	-- No command, return false
@@ -267,6 +270,16 @@ function Settings:DoUserChatCommandParse(text)
 	-- dump bot roles
 	if command == 'getroles' then
 		RoleDetermination:AnnounceRoles()
+	end
+	-- Return my hero name
+	if command == 'me' then
+		local player = DataTables:GetPlayerById(id)
+		local hero = player.stats.internalName
+		--local msg = PlayerResource:GetPlayerName(id)..' is playing '..hero..'.'
+		--Utilities:Print(msg, Utilities:GetPlayerColor(id))
+		if (tokens[2] ~= nil) then
+			HeroSounds:PlaySoundByName(hero, tokens[2])
+		end
 	end
 	return true
 end

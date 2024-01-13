@@ -14,9 +14,9 @@ require 'FretBots.Utilities'
 -- Neutral items
 require 'FretBots.NeutralItems'
 
-local role 	= require('FretBots.RoleUtility')
+local role 			= require('FretBots.RoleUtility')
 local radiantTowers	= dofile('FretBots.RadiantTowers')
-local direTowers		= dofile('FretBots.DireTowers')
+local direTowers	= dofile('FretBots.DireTowers')
 
 -- local debug flags
 local thisDebug = false
@@ -29,7 +29,7 @@ local isSoloDebug = false
 local isBuff = false
 -- Warn Fret if he left this on
 if isBuff then
-  Utilities:Print('Hey Fret, isBuff is True!', MSG_BAD)
+	Utilities:Print('Hey Fret, isBuff is True!', MSG_BAD)
 end
 
 -- Globals
@@ -64,15 +64,16 @@ function DataTables:Initialize()
 	-- Don't do this more than once.
 	--if Flags.isStatsInitialized then return end;
 	-- Lifted From Anarchy - Props
-	Units = FindUnitsInRadius(2,
-							  Vector(0, 0, 0),
-							  nil,
-							  FIND_UNITS_EVERYWHERE,
-							  3,
-							  DOTA_UNIT_TARGET_HERO,
-							  88,
-							  FIND_ANY_ORDER,
-							  false)
+	Units = FindUnitsInRadius(
+		2,
+		Vector(0, 0, 0),
+		nil,
+		FIND_UNITS_EVERYWHERE,
+		3,
+		DOTA_UNIT_TARGET_HERO,
+		88,
+		FIND_ANY_ORDER,
+		false)
 
 	Bots = nil
 	Bots={}
@@ -85,9 +86,9 @@ function DataTables:Initialize()
 		if isFret and not Flags.isDebugBuffed and isBuff then
 		BuffUnit:Hero(unit)
 		Flags.isDebugBuffed = true
-		  end
-		  -- Initialize data tables for this unit
-		  DataTables:GenerateStatsTables(unit)
+			end
+			-- Initialize data tables for this unit
+			DataTables:GenerateStatsTables(unit)
 	end
 	Debug:Print('There are '..#Bots..' bots!')
 
@@ -125,15 +126,15 @@ end
 -- Gets tower entities
 function DataTables:GetTowers()
 	buildings = FindUnitsInRadius(2,
-								  Vector(0, 0, 0),
-								  nil,
-								  FIND_UNITS_EVERYWHERE,
-								  3,
-								  DOTA_UNIT_TARGET_BUILDING,
-								  88,
-								  FIND_ANY_ORDER,
-								  false);
-  for _,building in pairs (buildings) do
+									Vector(0, 0, 0),
+									nil,
+									FIND_UNITS_EVERYWHERE,
+									3,
+									DOTA_UNIT_TARGET_BUILDING,
+									88,
+									FIND_ANY_ORDER,
+									false);
+	for _,building in pairs (buildings) do
 		-- get team
 		local team = building:GetTeam()
 		local name = building:GetName()
@@ -189,16 +190,16 @@ function DataTables:GetTowers()
 				DireTowers.MidTier1 = building
 			end
 		end
-  end
+	end
 end
 
 
 -- Generates various data used to track bot stats
 function DataTables:GenerateStatsTables(unit)
 	-- Is this a bot?
- 	local thisIsBot = false
- 	local thisRole = 0
- 	local thisTeam = 0
+	local thisIsBot = false
+	local thisRole = 0
+	local thisTeam = 0
 	local thisId = 0
 	local steamId = PlayerResource:GetSteamID(unit:GetMainControllingPlayer())
 	-- Drop out for non-real hero units
@@ -206,15 +207,15 @@ function DataTables:GenerateStatsTables(unit)
 	-- name for debug purposes
 	local thisName = unit:GetName()
 	-- Is bot?
- 	if PlayerResource:GetSteamID(unit:GetMainControllingPlayer())==PlayerResource:GetSteamID(100) then
+	if PlayerResource:GetSteamID(unit:GetMainControllingPlayer())==PlayerResource:GetSteamID(100) then
 		thisIsBot = true
 		table.insert(Bots, unit)
-  	else
+		else
 		table.insert(Players, unit)
-  	end
-  	table.insert(AllUnits,unit)
+		end
+		table.insert(AllUnits,unit)
 	-- PlayerID, Team, Role
-  	if unit:GetPlayerID() ~= nil then
+		if unit:GetPlayerID() ~= nil then
 		thisId = unit:GetPlayerID()
 		thisTeam=PlayerResource:GetTeam(thisId)
 		thisRole = 0;
@@ -265,22 +266,22 @@ function DataTables:GenerateStatsTables(unit)
 		-- Current death bonus chances
 		chance =
 		{
-		  gold 			= 0,
-		  armor 		= 0,
-		  magicResist 	= 0,
-		  levels 		= 0,
-		  neutral 		= 0,
-		  stats 		= 0
+			gold 		= 0,
+			armor 		= 0,
+			magicResist = 0,
+			levels 		= 0,
+			neutral 	= 0,
+			stats 		= 0
 		},
 		-- Death bonus awards
 		awards =
 		{
-				gold 		= 0,
-				armor 		= 0,
-				magicResist = 0,
-				levels 		= 0,
-				neutral	    = 0,
-				stats 		= 0
+			gold 		= 0,
+			armor 		= 0,
+			magicResist = 0,
+			levels 		= 0,
+			neutral	    = 0,
+			stats 		= 0
 		},
 		-- Lane weights (lower values indicate bot is probably in that lane)
 		laneWeights =
@@ -381,7 +382,7 @@ function DataTables:GetRoleNetWorth(bot)
 	end
 	Utilities:SortHighToLow(worths)
 	if worths[bot.stats.role] ~= nil then
-	  return worths[bot.stats.role]
+		return worths[bot.stats.role]
 	else
 		return 0
 	end
@@ -403,7 +404,7 @@ function DataTables:GetRoleGPM(bot)
 		DeepPrintTable(data)
 	end
 	if data[bot.stats.role] ~= nil then
-	  return data[bot.stats.role], names[bot.stats.role]
+		return data[bot.stats.role], names[bot.stats.role]
 	-- specific debug case, pretend we have more players than we do
 	elseif isDebug and #Players == 1 then
 		return data[1] / bot.stats.role, names[1]
@@ -436,7 +437,7 @@ function DataTables:GetRoleXPM(bot)
 		role = 2
 	end
 	if data[role] ~= nil then
-	  return data[role], names[role]
+		return data[role], names[role]
 	-- specific debug case, pretend we have more players than we do
 	elseif isDebug and #Players == 1 then
 		return data[1] / role, names[1]
@@ -511,7 +512,7 @@ function DataTables:PurgeHumanSideBots()
 		HumanTeam = DIRE
 		BotTeam = RADIANT
 		countToRemove = 5 - dire
-  	end
+		end
 	if isDebug then
 		print('Removing '..countToRemove..' bots from the human side.')
 	end
@@ -636,7 +637,7 @@ function DataTables:SortBotsByRole()
 	end
 	-- ensure all slots are bots
 	for i=5,1,-1 do
-  		if type(sortedData[i]) ~= 'table' then
+			if type(sortedData[i]) ~= 'table' then
 			table.remove(sortedData, i)
 		end
 	end
