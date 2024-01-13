@@ -27,10 +27,11 @@ local voTypes =
 	SELECT					=	24,
 	RESPONSE				=	25,
 	WIN						=	26,
-	LOSS					=	27,
+	LOSE					=	27,
 	LAUGH					=	28,
 	THANK					=	29,
 	COSMETIC				=	30,
 	FAILURE					=	31,
+	INTHEBAG				=	32,
 }
 return voTypes

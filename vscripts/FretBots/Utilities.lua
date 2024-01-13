@@ -233,7 +233,7 @@ end
 
 -- Plays a specific sound
 function Utilities:PlaySound(sound)
-	s = string.upper(sound)
+	local s = string.upper(sound)
 	if Sounds[s] ~= nil then
 		EmitGlobalSound(Sounds[s])
 	else
@@ -425,6 +425,13 @@ end
 -- Returns a table from the string version thereof
 function Utilities:TableFromString(text)
 	return (loadstring or load)("return "..text)()
+end
+
+-- Returns the size of a table
+function Utilities:GetTableSize(T)
+  local count = 0
+  for _ in pairs(T) do count = count + 1 end
+  return count
 end
 
 -- Applies an offset to a table

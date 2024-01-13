@@ -271,14 +271,17 @@ function Settings:DoUserChatCommandParse(text, id)
 	if command == 'getroles' then
 		RoleDetermination:AnnounceRoles()
 	end
-	-- Return my hero name
+	-- Play sounds from the player's hero
 	if command == 'me' then
 		local player = DataTables:GetPlayerById(id)
 		local hero = player.stats.internalName
-		--local msg = PlayerResource:GetPlayerName(id)..' is playing '..hero..'.'
-		--Utilities:Print(msg, Utilities:GetPlayerColor(id))
 		if (tokens[2] ~= nil) then
-			HeroSounds:PlaySoundByName(hero, tokens[2])
+			-- Only one of these will work
+			local success = HeroSounds:PlaySoundByName(hero, tokens[2])
+			-- Try an attribute token if the hero didn't work
+			if (success == false) then
+				HeroSounds:PlaySoundByAttribute(hero, tokens[2])
+			end
 		end
 	end
 	return true
