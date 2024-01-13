@@ -75,6 +75,7 @@ local chatCommands =
 	'networth',
 	'getroles',
 	'me',
+	'vo',
 }
 
 -- Sets difficulty value
@@ -233,45 +234,56 @@ function Settings:DoUserChatCommandParse(text, id)
 	-- Random good sound
 	if command == 'goodsound' then
 		Utilities:RandomSound(GOOD_LIST)
+		return true
 	end
 	-- Random bad sound
 	if command == 'badsound' then
 		Utilities:RandomSound(BAD_LIST)
+		return true
 	end
 	-- Random Asian soundboard
 	if command == 'asound' then
 		Utilities:RandomSound(ASIAN_LIST)
+		return true
 	end
 	-- Random CIS soundboard
 	if command == 'csound' then
 		Utilities:RandomSound(CIS_LIST)
+		return true
 	end
 	-- Random English soundboard
 	if command == 'esound' then
 		Utilities:RandomSound(ENGLISH_LIST)
+		return true
 	end
 	-- Play Specific Sound
 	if command == 'playsound' then
 		Utilities:PlaySound(tokens[2])
+		return true
 	end
 	-- Display team net worths
 	if command == 'networth' then
 		Debug:Print('Net Worth!')
 		Settings:DoDisplayNetWorth()
+		return true
 	end
 	-- get prints a setting to chat
 	if command == 'get' then
 		Settings:DoGetCommand(tokens)
+		return true
 	end
 	-- print stats
 	if command == 'stats' then
 		Settings:DoGetStats(tokens)
+		return true
 	end
 	-- dump bot roles
 	if command == 'getroles' then
 		RoleDetermination:AnnounceRoles()
+		return true
 	end
 	-- Play sounds from the player's hero
+	-- one expected argument here, either a name of a sound or an attribute
 	if command == 'me' then
 		local player = DataTables:GetPlayerById(id)
 		local hero = player.stats.internalName
@@ -283,8 +295,25 @@ function Settings:DoUserChatCommandParse(text, id)
 				HeroSounds:PlaySoundByAttribute(hero, tokens[2])
 			end
 		end
+		return true
 	end
-	return true
+	-- Play sounds from the player's hero
+	-- one expected argument here, either a name of a sound or an attribute
+	if command == 'vo' then
+		if (tokens[2] ~= nil) then
+			local hero = HeroSounds:ParseHero(tokens[2])
+			if (hero ~= nil) then
+				-- Only one of these will work
+				local success = HeroSounds:PlaySoundByName(hero, tokens[3])
+				-- Try an attribute token if the hero didn't work
+				if (success == false) then
+					HeroSounds:PlaySoundByAttribute(hero, tokens[3])
+				end
+			end
+		end
+		return true
+	end
+	return false
 end
 
 
