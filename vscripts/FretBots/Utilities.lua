@@ -454,6 +454,13 @@ function Utilities:CloneTable(obj, seen)
 	return setmetatable(res, getmetatable(obj))
 end
 
+-- Returns a random table entry
+function Utilities:RandomTableEntry(tableData)
+    local keys = {}
+    for k in pairs(tableData) do table.insert(keys, k) end
+    return tableData[keys[math.random(#keys)]]
+end
+
 -- Attempts to pcall arbitray text
 function Utilities:PCallText(text)
 	local command = loadstring(text)

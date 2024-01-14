@@ -10,6 +10,12 @@ local heroSounds =
 	npc_dota_hero_antimage =
 	{
 		ABOMINATION				= 'antimage_anti_magicuser_01',
+		LOL =
+		{
+			sound 		=	'antimage_anti_laugh_05',
+			type 		=	VoTypes.LAUGH,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
 	},
 	-- Axe Announcer
 	announcer_axe =
@@ -164,7 +170,9 @@ function HeroSounds:PlaySoundByAttribute(hero, attributeValue)
 		local sounds = heroSounds[hero]
 		for _, sound in pairs(sounds) do
 			if (HeroSounds:MatchesAttribute(sound, attribute)) then
-				table.insert(soundList, sound.sound)
+				if (sound.sound ~= nil) then
+					table.insert(soundList, sound.sound)
+				end
 			end
 		end
 		local size = Utilities:GetTableSize(soundList)
@@ -174,30 +182,55 @@ function HeroSounds:PlaySoundByAttribute(hero, attributeValue)
 	end
 end
 
+-- Attempts to play a random sound that matches the attribute passed
+function HeroSounds:PlayRandomSound(hero)
+	if (hero == nil) then
+		return
+	end
+	if (heroSounds[hero] ~= nil) then
+		local sounds = heroSounds[hero]
+		local size = Utilities:GetTableSize(sounds)
+		local sound = Utilities:RandomTableEntry(sounds)
+		if (sound ~= nil) then
+			HeroSounds:TryPlaySound(sound)
+		end
+	end
+end
+
+
 -- Determines if a sound matches an attribute
 function HeroSounds:MatchesAttribute(sound, attribute)
+	-- Sanity checks: Ensure sound is a table with the proper entries
+	if (type(sound) ~= 'table') then
+		return false
+	end
 	if (VoAttitudes[attribute] ~= nil) then
-		if (type(sound.attitude ) ~= 'table') then
-			return sound.attitude == VoAttitudes[attribute]
-		else
-			for _, item in pairs(sound.attitude) do
-				if (item == VoAttitudes[attribute]) then
-					return true
+		if (sound.attitude ~= nil) then
+			if (type(sound.attitude ) ~= 'table') then
+				return sound.attitude == VoAttitudes[attribute]
+			else
+				for _, item in pairs(sound.attitude) do
+					if (item == VoAttitudes[attribute]) then
+						return true
+					end
 				end
 			end
 		end
 	end
 	if (VoTypes[attribute] ~= nil) then
-		if (type(sound.type ) ~= 'table') then
-			return sound.type == VoTypes[attribute]
-		else
-			for _, item in pairs(sound.type) do
-				if (item == VoTypes[attribute]) then
-					return true
+		if (sound.type ~= nil) then
+			if (type(sound.type ) ~= 'table') then
+				return sound.type == VoTypes[attribute]
+			else
+				for _, item in pairs(sound.type) do
+					if (item == VoTypes[attribute]) then
+						return true
+					end
 				end
 			end
 		end
 	end
+	return false
 end
 
 -- Attempts to translate an argument into a hero name
@@ -232,3 +265,4 @@ function HeroSounds:TryPlaySound(sound)
 	end
 	return false
 end
+

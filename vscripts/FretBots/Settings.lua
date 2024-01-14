@@ -294,6 +294,8 @@ function Settings:DoUserChatCommandParse(text, id)
 			if (success == false) then
 				HeroSounds:PlaySoundByAttribute(hero, tokens[2])
 			end
+		else
+			HeroSounds:PlayRandomSound(hero)
 		end
 		return true
 	end
@@ -303,11 +305,16 @@ function Settings:DoUserChatCommandParse(text, id)
 		if (tokens[2] ~= nil) then
 			local hero = HeroSounds:ParseHero(tokens[2])
 			if (hero ~= nil) then
-				-- Only one of these will work
-				local success = HeroSounds:PlaySoundByName(hero, tokens[3])
-				-- Try an attribute token if the hero didn't work
-				if (success == false) then
-					HeroSounds:PlaySoundByAttribute(hero, tokens[3])
+				if (tokens[3] ~= nil) then
+					-- Only one of these will work
+					local success = HeroSounds:PlaySoundByName(hero, tokens[3])
+					-- Try an attribute token if the hero didn't work
+					if (success == false) then
+						HeroSounds:PlaySoundByAttribute(hero, tokens[3])
+					end
+				else
+					Utilities:Print(hero)
+					HeroSounds:PlayRandomSound(hero)
 				end
 			end
 		end

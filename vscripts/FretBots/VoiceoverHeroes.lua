@@ -5,6 +5,8 @@ local voHeroes =
 	antimage 								=	'npc_dota_hero_antimage',
 	-- Axe (announcer)
 	axea									=	'announcer_axe',
+	-- Bane
+	bane 									=	'npc_dota_hero_bane',
 	-- Cave Johnson
 	cj 										= 	'announcer_cave_johnson',
 	cavejohnson 							=	'announcer_cave_johnson',
