@@ -73,20 +73,21 @@ function NeutralItems:CreateAndInsert(bot, itemName, tier)
 		item:SetPurchaseTime(0)
 		bot:AddItem(item)
 		bot.stats.neutralTier = tier
+		-- The following has been obviated due to royal jelly rework.
 		-- Special handling if it's royal jelly
-		if itemName == "item_royal_jelly" then
-			Say(bot:GetPlayerOwner(), "Spending royal jelly charge on self.", false)
-			bot:CastAbilityOnTarget(bot, item, bot:GetPlayerOwnerID())
-			for _, unit in pairs(Bots) do
-				if unit.stats.isBot and unit.stats.team == bot.stats.team and unit.stats.name ~= bot.stats.name then
-					Say(bot:GetPlayerOwner(), "Spending royal jelly charge on "..unit.stats.name..'.', false)
-					bot:CastAbilityOnTarget(unit, item, bot:GetPlayerOwnerID())
-					break
-				end
-			end
+		--if itemName == "item_royal_jelly" then
+		--	Say(bot:GetPlayerOwner(), "Spending royal jelly charge on self.", false)
+		--	bot:CastAbilityOnTarget(bot, item, bot:GetPlayerOwnerID())
+		--	for _, unit in pairs(Bots) do
+		--		if unit.stats.isBot and unit.stats.team == bot.stats.team and unit.stats.name ~= bot.stats.name then
+		--			Say(bot:GetPlayerOwner(), "Spending royal jelly charge on "..unit.stats.name..'.', false)
+		--			bot:CastAbilityOnTarget(unit, item, bot:GetPlayerOwnerID())
+		--			break
+		--		end
+		--	end
 		-- Since jelly was consumed, set hero to not have an item
-		NeutralItems:ClearBotItem(bot)
-		end
+		--NeutralItems:ClearBotItem(bot)
+		--end
 		return true
 	end
 	return false
