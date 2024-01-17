@@ -1,3 +1,5 @@
+-- Contains acceptable aliases for use with the 'vo' chat command.
+
 local voHeroes =
 {
 	-- Abaddon

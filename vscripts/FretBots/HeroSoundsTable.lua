@@ -374,6 +374,50 @@ local heroSounds =
 	-- Enigma
 
 	-- Faceless Void
+	npc_dota_hero_faceless_void =
+	{
+		ANETERNITY =
+		{
+			sound 		=	'faceless_void_face_ability_chronos_failure_07',
+			type 		=	VoTypes.FAILURE,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		DEARGODS =
+		{
+			sound 		=	'faceless_void_face_ability_chronos_failure_05',
+			type 		=	VoTypes.FAILURE,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		EMBARRASSING =
+		{
+			sound 		=	'faceless_void_face_ability_chronos_failure_02',
+			type 		=	VoTypes.FAILURE,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		FORGIVEME =
+		{
+			sound 		=	'faceless_void_face_ability_chronos_failure_06',
+			type 		=	VoTypes.FAILURE,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		MIXEDBAG =
+		{
+			sound 		=	'faceless_void_face_ability_chronos_failure_10',
+			type 		=	VoTypes.FAILURE,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		YES =
+		{
+			sound 		=	'faceless_void_face_win_01',
+			type 		=	VoTypes.WIN,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
 
 	-- Grimstroke
 
@@ -1310,6 +1354,15 @@ local heroSounds =
 	},
 
 	-- Lion
+	npc_dota_hero_lion =
+	{
+		HELLANDBACK =
+		{
+			sound 		=	'lion_lion_respawn_01',
+			type 		=	VoTypes.FAILURE,
+			attitude 	=	VoAttitudes.SAD,
+		},
+	},
 
 	-- Lone Druid
 
@@ -2738,6 +2791,84 @@ local heroSounds =
 		TSUNAMI 			= { sound = 'teamfandom.ti2021.Tsunami', 		attitude =	VoAttitudes.NEUTRAL,	},
 		WEPPAS 				= { sound = 'teamfandom.ti2021.Weppas', 		attitude =	VoAttitudes.TAUNT, 		},
 		YUNO  				= { sound = 'teamfandom.ti2021.Yuno', 			attitude =	VoAttitudes.NEUTRAL,	},
+
+		-- Supporter / Fan Club content
+		-- ##TODO: Add attitudes - I just haven't heard most of these
+		KACHING					= 'teamfandom.9.8255888.142504',
+		DIEDIE					= 'teamfandom.8.8261882.142156',
+		HOWDAREU				= 'teamfandom.8.1838315.142114',
+		MMM						= 'teamfandom.7.8172181.141854',
+		NO3						= 'teamfandom.9.1061269.142638',
+		DUB						= 'teamfandom.9.8894818.142443',
+		MID						= 'teamfandom.9.8597391.142395',
+		DEST					= 'teamfandom.9.8376426.142327',
+		ESCAPE					= 'teamfandom.9.2586976.142488',
+		DINGDONG				= 'teamfandom.9.7584152.142462',
+		YABOI					= 'teamfandom.9.7554697.142388',
+		CANTPAUSE				= 'teamfandom.5.8376426.141031',
+		BKB						= 'teamfandom.5.2163.140930',
+		IDC						= 'teamfandom.5.2586976.140998',
+		WRONG					= 'teamfandom.5.2586976.140999',
+		XD						= 'teamfandom.5.7390454.141104',
+		JENKINS2				= 'teamfandom.5.8180753.140947',
+		LOVE					= 'teamfandom.5.8180753.140949',
+		FORME					= 'teamfandom.5.8261648.141161',
+		TALENTED				= 'teamfandom.5.8261648.141162',
+		HOTSKILLS				= 'teamfandom.5.8261648.141163',
+		CALM					= 'teamfandom.5.8272699.141025',
+		SMOKERINOS				= 'teamfandom.5.8272699.141026',
+		HECK					= 'teamfandom.5.8272699.141027',
+		WATCHTHIS				= 'teamfandom.5.8318683.141143',
+		CHILL					= 'teamfandom.5.8597391.141014',
+		BREATHS					= 'teamfandom.5.8597391.141015',
+		HELLO					= 'teamfandom.5.8605863.140936',
+		PANIC					= 'teamfandom.5.8605863.140935',
+		LOLGIRL					= 'teamfandom.5.8721219.141078',
+		BUTTONS					= 'teamfandom.5.46.141045',
+		WHATHAPPEN				= 'teamfandom.5.8740972.141296',
+		AIYO					= 'teamfandom.5.4.141156',
+		DISGUY					= 'teamfandom.5.8169775.141197',
+		WAOWAMAZING				= 'teamfandom.5.7356881.141262',
+		STOPFIGHTING			= 'teamfandom.5.7356881.141263',
+		WHYMUTE					= 'teamfandom.5.7356881.141264',
+		GOODBYE					= 'teamfandom.5.726228.141230',
+		PLEASESIR				= 'teamfandom.5.111474.140943',
+		ALLIGATOR				= 'teamfandom.5.8261554.141216',
+		AYAYA					= 'teamfandom.5.8390848.141280',
+		GOBLIN					= 'teamfandom.5.8260983.140968',
+		VIOLENCE				= 'teamfandom.6.8728920.141396',
+		NOTBSJ					= 'teamfandom.6.2586976.141340',
+
+		--TI11
+		OMG						= 'soundboard.oh_my_god_woo',
+		CUTE					= 'soundboard.oh_very_cute',
+		RAMPAGE					= 'soundboard.rrrrrampage',
+		WAOW					= 'soundboard.wow_cn',
+		SOBIG					= 'soundboard.his_brain_is_so_big',
+		BOOM					= 'soundboard.chick_chick_boom',
+		RULOL					= 'soundboard.casperrr_laugh_ru',
+		LOVEDOTA				= 'soundboard.i_love_dota_so_much',
+		PERFECTO				= 'soundboard.wombo_combo_perfecto',
+		BUCKET					= 'soundboard.agh_bucketentrance02',
+		FIGHT					= 'soundboard.fight_fight_fight',
+
+		--TI 11 TALENT
+		SHEEP					= 'stickers.season6.97577101',
+		KEKW					= 'stickers.season6.54535035',
+		GODGAMER				= 'stickers.season6.68186278',
+		WHATUP					= 'stickers.season6.136780564',
+		KIDDOS					= 'stickers.season6.152618977',
+		SORRY					= 'stickers.season6.196628643',
+		UPSETY					= 'stickers.season6.41475731',
+		OHNO					= 'stickers.season6.58380135',
+		HABITAT					= 'stickers.season6.68243195',
+		HERALD					= 'stickers.season6.87264171',
+		JENKINS3				= 'stickers.season6.95145869',
+		WEDGIEGOOSE				= 'stickers.season6.179308177',
+		HELPING					= 'stickers.season6.256125365',
+		HUAHUA					= 'stickers.season6.34438121',
+		SUNS					= 'stickers.season6.690740',
+		OIHEHE					= 'stickers.season6.104196230',
 	},
 }
 

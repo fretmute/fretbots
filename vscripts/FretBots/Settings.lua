@@ -77,6 +77,7 @@ local chatCommands =
 	'getroles',
 	'me',				-- play a sound from your hero
 	'vo',				-- 'voiceover': play a sound from another hero
+	'voc',				-- does the same thing as 'vo c': plays caster voiceovers
 }
 
 -- Sets difficulty value
@@ -300,8 +301,9 @@ function Settings:DoUserChatCommandParse(text, id)
 		end
 		return true
 	end
-	-- Play sounds from the player's hero
-	-- one expected argument here, either a name of a sound or an attribute
+	-- Play sounds from other players' heroes, or casters
+	-- two expected arguments here, hero, and either a name of a sound or an attribute
+	-- if only hero is passed it plays a random one from that table
 	if command == 'vo' then
 		if (tokens[2] ~= nil) then
 			local hero = HeroSounds:ParseHero(tokens[2])
@@ -314,9 +316,25 @@ function Settings:DoUserChatCommandParse(text, id)
 						HeroSounds:PlaySoundByAttribute(hero, tokens[3])
 					end
 				else
-					Utilities:Print(hero)
 					HeroSounds:PlayRandomSound(hero)
 				end
+			end
+		end
+		return true
+	end
+	-- 'voc' is handled the same way as 'vo c' would be
+	if command == 'voc' then
+		local hero = HeroSounds:ParseHero('c')
+		if (hero ~= nil) then
+			if (tokens[2] ~= nil) then
+				-- Only one of these will work
+				local success = HeroSounds:PlaySoundByName(hero, tokens[2])
+				-- Try an attribute token if the hero didn't work
+				if (success == false) then
+					HeroSounds:PlaySoundByAttribute(hero, tokens[2])
+				end
+			else
+				HeroSounds:PlayRandomSound(hero)
 			end
 		end
 		return true
