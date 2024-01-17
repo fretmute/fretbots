@@ -2674,62 +2674,70 @@ local heroSounds =
 		-- casters
 		AUI 				= { sound = 'teamfandom.ti2021.Aui_2000', 		attitude =	VoAttitudes.HAPPY, 		},
 		AVO 				= { sound = 'teamfandom.ti2021.Avo', 			attitude =	VoAttitudes.TAUNT, 		},
+
 		CAP =
 		{
 			sound ='teamfandom.ti2021.Cap',
 			attitude =	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT, VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
 		},
+
 		DAKOTA 				= { sound = 'teamfandom.ti2021.Dakota', 		attitude =	VoAttitudes.NEUTRAL, 	},
 		EPHEY 				= { sound = 'teamfandom.ti2021.Ephey', 			attitude =	VoAttitudes.HAPPY, 		},
 		FOGGED 				= { sound = 'teamfandom.ti2021.Fogged', 		attitude =	VoAttitudes.HAPPY, 		},
 		GARETH 				= { sound = 'teamfandom.ti2021.Gareth', 		attitude =	VoAttitudes.TAUNT, 		},
+
 		HOTBID =
 		{
 			sound 			= 'teamfandom.ti2021.Hotbid',
 			attitude 		= { VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
+
 		JENKINS =
 		{
 			sound 			= 'teamfandom.ti2021.Jenkins',
 			attitude 		= { VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
+
 		LACOSTE 			= { sound = 'teamfandom.ti2021.Lacoste', 		attitude =	VoAttitudes.HAPPY, 		},
+
 		LYRICAL =
 		{
 			sound 			= 'teamfandom.ti2021.Lyrical',
 			attitude 		= { VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
 		},
+
 		ODPIXEL 			= { sound = 'teamfandom.ti2021.ODPixel', 		attitude =	VoAttitudes.TAUNT, 		},
 		PIMPMUCKL 			= { sound = 'teamfandom.ti2021.Pimpmuckl', 		attitude =	VoAttitudes.HAPPY, 		},
+
 		PPD =
 		{
 			sound 			= 'teamfandom.ti2021.PPD',
 			attitude 		= { VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
 		},
+
 		PURGE =
 		{
 			sound 			= 'teamfandom.ti2021.Purge',
 			attitude 		= { VoAttitudes.HAPPY, VoAttitudes.COMPLIMENT, },
 		},
+
 		PYRIONFLAX 			= { sound = 'teamfandom.ti2021.Pyrionflax', 	attitude =	VoAttitudes.ANGRY, 		},
+
 		SLACKS =
 		{
 			sound 			= 'teamfandom.ti2021.Siractionslacks',
 			attitude 		= { VoAttitudes.ANGRY, VoAttitudes.SAD, VoAttitudes.TAUNT, },
 		},
+
 		TEAGUVNOR =
 		{
 			sound 			= 'teamfandom.ti2021.Teaguvnor',
 			attitude 		= { VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
+
 		TSUNAMI 			= { sound = 'teamfandom.ti2021.Tsunami', 		attitude =	VoAttitudes.NEUTRAL,	},
 		WEPPAS 				= { sound = 'teamfandom.ti2021.Weppas', 		attitude =	VoAttitudes.TAUNT, 		},
 		YUNO  				= { sound = 'teamfandom.ti2021.Yuno', 			attitude =	VoAttitudes.NEUTRAL,	},
-
-		-- supporter's club
-
-
-
 	},
 }
 
