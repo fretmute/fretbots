@@ -1,38 +1,38 @@
 -- Dependencies
  -- global debug flag
-require 'Debug'
+require 'FretBots.Debug'
  -- Other Flags
-require 'Flags'
+require 'FretBots.Flags'
  -- DataTables has helper functions for generating data structures we consume, and querying/acting on that data
-require 'DataTables'
+require 'FretBots.DataTables'
  -- Entity Killed monitors kills and provides bonuses (if settings dictate)
-require 'OnEntityKilled'
+require 'FretBots.OnEntityKilled'
  -- Entity hurt monitors damage and updates stat tables accordingly
-require 'OnEntityHurt'
+require 'FretBots.OnEntityHurt'
 -- Version information
-require 'Version'
+require 'FretBots.Version'
 -- Timers for periodic bonuses
-require 'BonusTimers'
+require 'FretBots.BonusTimers'
 -- Utilities
-require 'Utilities'
+require 'FretBots.Utilities'
 -- Dynamic Difficulty Adjustor
-require 'DynamicDifficulty'
+require 'FretBots.DynamicDifficulty'
 -- Settings
-require 'Settings'
+require 'FretBots.Settings'
 -- Timers
-require 'Timers'
+require 'FretBots.Timers'
 -- Hero Specifc Extensions
-require 'HeroLoneDruid'
+require 'FretBots.HeroLoneDruid'
 -- Role Determination
-require 'RoleDetermination'
+require 'FretBots.RoleDetermination'
 
 -- Instantiate ourself
 if FretBots == nil then
-  FretBots = {}
+	FretBots = {}
 end
 
 -- local debug flag
-local thisDebug = false; 
+local thisDebug = false;
 -- set true to prevent initialize from returning when it realizes
 -- that it has already been run once
 local isAllowMultipleStarts = false;
@@ -51,7 +51,7 @@ local BotRoleDeterminationTime = 60
 
 -- Starting this script is largely handled by the requires, as separate pieces start
 -- themselves. DataTables cannot be initialized until all players have loaded, so
--- this function (which gets called at the beginning of pre game) in turn starts a 
+-- this function (which gets called at the beginning of pre game) in turn starts a
 -- timer method to monitor for all players being loaded, which will in turn
 -- initialize the data tables
 function FretBots:Initialize()
@@ -66,10 +66,10 @@ end
 -- Runs until all players are loaded in and then initializes the DataTables
 function FretBots:PlayersLoadedTimer()
 	-- if all players are loaded, initialize datatables and stop timer
-	if isAllPlayersSpawned then	
+	if isAllPlayersSpawned then
 		-- I'm Bad made DataTables:Initialize() depend on difficultyScale existing,
-		-- so idle until that happens or it's been more than 30s		
-		if not Flags.isSettingsFinalized then  
+		-- so idle until that happens or it's been more than 30s
+		if not Flags.isSettingsFinalized then
 			Debug:Print('DataTables are not initialized! Waiting.')
 			return 1
 		end
@@ -80,18 +80,18 @@ function FretBots:PlayersLoadedTimer()
 		-- Start bonus timers (they require DataTables to exist)
 		BonusTimers:Initialize()
 		-- Start bot role determination timer
-		RoleDetermination:Initialize()		
+		RoleDetermination:Initialize()
 		-- Register EntityHurt Listener
 		EntityHurt:RegisterEvents()
 		-- Register EntityKilled Listener
 		EntityKilled:RegisterEvents()
-		-- Hero Specific extensions - these will stop themselves if they 
+		-- Hero Specific extensions - these will stop themselves if they
 		-- determine that they are not enabled
 		-- Disabled until this works
 		-- HeroLoneDruid:Initialize()
 		-- Remove this timer
 		Timers:RemoveTimer(playersLoadedTimerName)
-	  return nil
+		return nil
 	end
 	-- Check once per second until all players have loaded
 	local count = Utilities:GetPlayerCount()
@@ -119,7 +119,7 @@ function FretBots:SetRandomSeed()
 	timeString = string.gsub(timeString,':','')
 	local serverTime = Time()
 	serverTime = serverTime - math.floor(serverTime)
-	local seed = tonumber(timeString) + serverTime 
+	local seed = tonumber(timeString) + serverTime
 	seed = math.floor(seed * 100000)
 	math.randomseed(seed)
 	local temp = math.random()
@@ -127,11 +127,11 @@ end
 
 -- Start things up (only once)
 if not Flags.isFretBotsInitialized then
-	-- Print version to console 
+	-- Print version to console
 	print('Version: ' .. version)
 	print(versionString)
 	-- Welcome Message
-	Utilities:Print('Fret Bots! Version: ' .. version, MSG_GOOD, MATCH_READY)	
+	Utilities:Print('Fret Bots! Version: ' .. version, MSG_GOOD, MATCH_READY)
 	-- Register the listener that will run Initialize() once the game starts
 	Utilities:RegsiterGameStateListener(FretBots, 'Initialize', DOTA_GAMERULES_STATE_PRE_GAME )
 	Flags.isFretBotsInitialized = true

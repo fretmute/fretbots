@@ -40,4 +40,7 @@ luac.out
 *.hex
 
 
-vscripts/Test.lua
+vscripts/Fretbots/Test.lua
+vscripts/Fretbots.sublime-project
+vscripts/Fretbots.sublime-workspace
+vscripts/Tracker.txt
