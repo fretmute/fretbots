@@ -624,7 +624,7 @@ local voHeroes =
 
 	-- Zeus
 	npc_dota_hero_zuus						= 	'npc_dota_hero_zuus',
-	wd										=	'npc_dota_hero_zuus',
+	zeus									=	'npc_dota_hero_zuus',
 
 	-- Casters, for the caster lines in the table
 	dota_casters 							=	'dota_casters',
