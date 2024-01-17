@@ -1,9 +1,10 @@
 local voAttitudes =
 {
-	SAD 					= 	0,
-	ANGRY 					=	1,
-	TAUNT 					=	2,
-	HAPPY					=	3,
-	NEUTRAL					=	4,
+	ANGRY 					=	'ANGRY',
+	COMPLIMENT				=	'COMPLIMENT',
+	HAPPY					=	'HAPPY',
+	NEUTRAL					=	'NEUTRAL',
+	SAD 					= 	'SAD',
+	TAUNT 					=	'TAUNT',
 }
 return voAttitudes

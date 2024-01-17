@@ -71,11 +71,12 @@ local chatCommands =
 	'csound',
 	'esound',
 	'playsound',
-	'kb',
+	'ps',				-- playsound alias
+	'kb',				-- 'kill bot'
 	'networth',
 	'getroles',
-	'me',
-	'vo',
+	'me',				-- play a sound from your hero
+	'vo',				-- 'voiceover': play a sound from another hero
 }
 
 -- Sets difficulty value
@@ -257,7 +258,7 @@ function Settings:DoUserChatCommandParse(text, id)
 		return true
 	end
 	-- Play Specific Sound
-	if command == 'playsound' then
+	if command == 'playsound' or command == 'ps' then
 		Utilities:PlaySound(tokens[2])
 		return true
 	end

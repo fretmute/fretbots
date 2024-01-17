@@ -82,9 +82,9 @@ local sounds =
 	ETO_TAKAYA				= 'soundboard.eto_takaya_dushka',
 	AKAYA					= 'soundboard.takaya_haliava',
 	-- DOTA PLUS / DRAGON'S BLOOD / MISC
-	ETMEIN					= 'soundboard.ddb_let_me_in',
-	UNMOUSE					= 'soundboard.ddb_run_little_mouse',
-	RAVE					= 'soundboard.ddb_stupid_brave',
+	LETMEIN					= 'soundboard.ddb_let_me_in',
+	RUNMOUSE				= 'soundboard.ddb_run_little_mouse',
+	BRAVE					= 'soundboard.ddb_stupid_brave',
 	DYLM					= 'soundboard.ddb_do_you_love_me',
 	DYLM2					= 'soundboard.ddb_do_you_love_me_2',
 	FORM					= 'soundboard.ddb_form_up',
