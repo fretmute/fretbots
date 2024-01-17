@@ -1,13 +1,13 @@
 -- Dependencies
- -- global debug flag
+-- global debug flag
 require 'FretBots.Debug'
- -- Other Flags
+-- Other Flags
 require 'FretBots.Flags'
- -- DataTables has helper functions for generating data structures we consume, and querying/acting on that data
+-- DataTables has helper functions for generating data structures we consume, and querying/acting on that data
 require 'FretBots.DataTables'
- -- Entity Killed monitors kills and provides bonuses (if settings dictate)
+-- Entity Killed monitors kills and provides bonuses (if settings dictate)
 require 'FretBots.OnEntityKilled'
- -- Entity hurt monitors damage and updates stat tables accordingly
+-- Entity hurt monitors damage and updates stat tables accordingly
 require 'FretBots.OnEntityHurt'
 -- Version information
 require 'FretBots.Version'
