@@ -1,4 +1,4 @@
-version = '0.7.0.1'
+version = '0.7.0.2'
 versionString = [[Changelog: 
   Moved dependencies to /Fretbots subfolder. This means that all lua files from this project, with the exception of
   fretbots.lua, can be deleted from the /vscripts folder.
@@ -30,5 +30,7 @@ versionString = [[Changelog:
   TODO: Add attribute details for all of the caster / fan pack lines. I haven't yet done so because I haven't heard
   most of them, and have no idea what their attitude is.
 
-  The first of probably many typo fixes related to the new sound system. Fixed an incorrect alias for Zeus.
+  0.7.0.1 - The first of probably many typo fixes related to the new sound system. Fixed an incorrect alias for Zeus.
+
+  0.7.0.2 - More typo fixes. Added some new heroes to the VO table.
 ]]

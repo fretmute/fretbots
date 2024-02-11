@@ -40,6 +40,7 @@ local voTypes =
 	SELECT					=	'SELECT',
 	TAUNT					=	'TAUNT',
 	THANK					=	'THANK',
+	THANKS					=	'THANK',
 	WIN						=	'WIN',
 }
 return voTypes

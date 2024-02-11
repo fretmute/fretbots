@@ -61,10 +61,10 @@ local voHeroes =
 	bloodseeker 							=	'npc_dota_hero_bloodseeker',
 
 	-- Bounty Hunter
-	npc_dota_hero_bloodseeker				= 	'npc_dota_hero_bloodseeker',
-	bh 										=	'npc_dota_hero_bloodseeker',
-	bounty 									=	'npc_dota_hero_bloodseeker',
-	bountyhunter 							=	'npc_dota_hero_bloodseeker',
+	npc_dota_hero_bloodseeker				= 	'npc_dota_hero_bounty_hunter',
+	bh 										=	'npc_dota_hero_bounty_hunter',
+	bounty 									=	'npc_dota_hero_bounty_hunter',
+	bountyhunter 							=	'npc_dota_hero_bounty_hunter',
 
 	-- Brewmaster
 	npc_dota_hero_brewmaster				= 	'npc_dota_hero_brewmaster',
@@ -190,6 +190,7 @@ local voHeroes =
 
 	-- Faceless Void
 	npc_dota_hero_faceless_void				= 	'npc_dota_hero_faceless_void',
+	fv										= 	'npc_dota_hero_faceless_void',
 	faceless 								=	'npc_dota_hero_faceless_void',
 	facelessvoid							=	'npc_dota_hero_faceless_void',
 
@@ -197,7 +198,6 @@ local voHeroes =
 	npc_dota_hero_furion					= 	'npc_dota_hero_furion',
 	np 										=	'npc_dota_hero_furion',
 	furion 									=	'npc_dota_hero_furion',
-	naturesprophet							=	'npc_dota_hero_furion',
 	naturesprophet							=	'npc_dota_hero_furion',
 
 	-- Grimstroke
@@ -423,7 +423,7 @@ local voHeroes =
 
 	-- Riki
 	npc_dota_hero_riki						= 	'npc_dota_hero_riki',
-	razor 									=	'npc_dota_hero_riki',
+	riki 									=	'npc_dota_hero_riki',
 
 	-- Rubick
 	npc_dota_hero_rubick					= 	'npc_dota_hero_rubick',
@@ -453,7 +453,7 @@ local voHeroes =
 
 	-- Silencer
 	npc_dota_hero_silencer					= 	'npc_dota_hero_silencer',
-	shredder								=	'npc_dota_hero_silencer',
+	silencer								=	'npc_dota_hero_silencer',
 
 	-- Wraith King
 	npc_dota_hero_skeleton_king				= 	'npc_dota_hero_skeleton_king',

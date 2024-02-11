@@ -26,7 +26,7 @@ local heroSounds =
 		EASYMODE =
 		{
 			sound 		=	'announcer_dlc_axe_announcer_type_easy_mode',
-			type 		=	{ VoTypes.MISC, VoTypes.KILL, VoTypes.WIN },
+			type 		=	{ VoTypes.MISC, VoTypes.KILL, VoTypes.WIN, },
 			attitude 	=	VoAttitudes.TAUNT,
 		},
 	},
@@ -37,6 +37,129 @@ local heroSounds =
 		OGRE =
 		{
 			sound 		=	'announcer_dlc_cavej_cavej_ann_alchemist_03',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
+
+	-- Axe
+	npc_dota_hero_axe =
+	{
+		BAGLIST =
+		{
+			sound 		=	'axe_jung_axe_inthebag_03',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		FANCYMAN =
+		{
+			sound 		=	'axe_axe_rival_17',
+			type 		=	{ VoTypes.RIVAL, VoTypes.KILL, },
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		HAHAGRUNT =
+		{
+			sound 		=	'axe_jung_axe_angry_madness_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.SAD, },
+		},
+
+		HAHAGRUNTTWO =
+		{
+			sound 		=	'axe_jung_axe_angry_madness_03',
+			type 		=	VoTypes.RARE,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.SAD, },
+		},
+
+		HAHAGRUNTTHREE =
+		{
+			sound 		=	'axe_jung_axe_angry_madness_04',
+			type 		=	VoTypes.RARE,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.SAD, },
+		},
+
+		HAHAGRUNTFOUR =
+		{
+			sound 		=	'axe_jung_axe_happy_madness_05',
+			type 		=	VoTypes.RARE,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.SAD, },
+		},
+
+		HAHAGRUNTFIVE =
+		{
+			sound 		=	'axe_jung_axe_happy_madness_08',
+			type 		=	VoTypes.RARE,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.SAD, },
+		},
+
+		HANDSOME =
+		{
+			sound 		=	'axe_axe_rival_08',
+			type 		=	{ VoTypes.RIVAL, VoTypes.KILL, },
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		JIBBER =
+		{
+			sound 		=	'axe_axe_rival_01',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		JUNGLELAW =
+		{
+			sound 		=	'axe_jung_axe_rare_06_02',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		NINE =
+		{
+			sound 		=	'axe_axe_rival_33',
+			type 		=	VoTypes.KILL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		NONSENSE =
+		{
+			sound 		=	'axe_axe_rival_19',
+			type 		=	{ VoTypes.RIVAL, VoTypes.KILL, },
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		NOTAXE =
+		{
+			sound 		=	'axe_axe_sheepstick_05',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		RELUCTANTLY =
+		{
+			sound 		=	'axe_axe_rival_18',
+			type 		=	{ VoTypes.RIVAL, VoTypes.KILL, },
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		TASTETHEAXE =
+		{
+			sound 		=	'axe_axe_rival_14',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		WEAREBLOOD =
+		{
+			sound 		=	'axe_axe_rival_07',
+			type 		=	{ VoTypes.RIVAL, VoTypes.KILL, },
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		WORDSFAIL =
+		{
+			sound 		=	'axe_axe_drop_rare_01',
 			type 		=	VoTypes.MISC,
 			attitude 	=	VoAttitudes.HAPPY,
 		},
@@ -117,6 +240,36 @@ local heroSounds =
 	},
 
 	-- Batrider
+	npc_dota_hero_batrider =
+	{
+		BACON =
+		{
+			sound 		=	'batrider_bat_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		CHICKSRULE =
+		{
+			sound 		=	'batrider_bat_rival_05',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		FRUIT =
+		{
+			sound 		=	'batrider_bat_rival_17',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		QUEENIE =
+		{
+			sound 		=	'batrider_bat_rival_02',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
+		},
+	},
 
 	-- Beastmaster
 
@@ -136,7 +289,7 @@ local heroSounds =
 		{
 			sound 		=	'bounty_hunter_bount_ability_failure_07',
 			type 		=	VoTypes.ABILITY,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 
 		FIIR =
@@ -190,7 +343,7 @@ local heroSounds =
 		{
 			sound 		=	'chaos_knight_chaknight_rare_05',
 			type 		=	VoTypes.RARE,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		LOL =
@@ -213,6 +366,36 @@ local heroSounds =
 	-- Clinkz
 
 	-- Clockwerk
+	npc_dota_hero_rattletrap =
+	{
+		CENTER =
+		{
+			sound 		=	'rattletrap_ratt_rare_01',
+			type 		=	VoTypes.RARE,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
+		},
+
+		DEGREE =
+		{
+			sound 		=	'rattletrap_ratt_respawn_10',
+			type 		=	VoTypes.RESPAWN,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		GOODARMOR =
+		{
+			sound 		=	'rattletrap_ratt_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
+		},
+
+		YOURPLACE =
+		{
+			sound 		=	'rattletrap_ratt_ability_hook_09',
+			type 		=	VoTypes.ABILITY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Crystal Maiden
 	npc_dota_hero_crystal_maiden =
@@ -263,6 +446,64 @@ local heroSounds =
 	-- Dark Seer
 
 	-- Dark Willow
+	npc_dota_hero_dark_willow =
+	{
+		DONTTOUCH =
+		{
+			sound 		=	'dark_willow_sylph_rival_119',
+			type 		=	{ VoTypes.RIVAL, VoTypes.KILL, },
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		HOOGIDY =
+		{
+			sound 		=	'dark_willow_sylph_rival_43',
+			type 		=	{ VoTypes.RIVAL, VoTypes.KILL, },
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		LOADED =
+		{
+			sound 		=	'dark_willow_sylph_ally_24',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		MONEY =
+		{
+			sound 		=	'dark_willow_sylph_ally_03',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		OLD =
+		{
+			sound 		=	'dark_willow_sylph_rival_60',
+			type 		=	{ VoTypes.RIVAL, VoTypes.KILL, },
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SHENANIGANS =
+		{
+			sound 		=	'dark_willow_sylph_spawn_02',
+			type 		=	VoTypes.SPAWN,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		SORRYDOC =
+		{
+			sound 		=	'dark_willow_sylph_rival_224',
+			type 		=	{ VoTypes.RIVAL, VoTypes.KILL, },
+			attitude 	=	{ VoAttitudes.TAUNT, VoAttitudes.SAD, },
+		},
+
+		STUPIDHAT =
+		{
+			sound 		=	'dark_willow_sylph_rival_133',
+			type 		=	{ VoTypes.RIVAL, VoTypes.KILL, },
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Dawnbreaker
 	npc_dota_hero_dawnbreaker =
@@ -271,14 +512,14 @@ local heroSounds =
 		{
 			sound 		=	'dawnbreaker_valora_ally_076',
 			type 		=	VoTypes.ALLY,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		SILLY =
 		{
 			sound 		=	'dawnbreaker_valora_ally_143',
 			type 		=	VoTypes.ALLY,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		WHO =
@@ -290,6 +531,29 @@ local heroSounds =
 	},
 
 	-- Dazzle
+	npc_dota_hero_dazzle =
+	{
+		HAHA =
+		{
+			sound 		=	'dazzle_dazz_ability_weave_06',
+			type 		=	VoTypes.ABILITY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		NOTRIGHT =
+		{
+			sound 		=	'dazzle_dazz_deny_08',
+			type 		=	VoTypes.DENY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		ZIZZAP =
+		{
+			sound 		=	'dazzle_dazz_ability_weave_04',
+			type 		=	VoTypes.ABILITY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Death Prophet
 
@@ -307,7 +571,7 @@ local heroSounds =
 		{
 			sound 		=	'disruptor_dis_underattack_02',
 			type 		=	VoTypes.DAMAGE,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 	},
 
@@ -316,6 +580,29 @@ local heroSounds =
 	-- Dragon Knight
 
 	-- Drow Ranger
+	npc_dota_hero_drow_ranger =
+	{
+		JIB =
+		{
+			sound 		=	'drowranger_drow_arc_rival_091',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		NOTQUITEENOUGH =
+		{
+			sound 		=	'drowranger_drow_arc_rival_039',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		YES =
+		{
+			sound 		=	'drowranger_drow_arc_yes_05_02',
+			type 		=	VoTypes.LAUGH,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
 
 	-- Earth Spirit
 
@@ -449,14 +736,14 @@ local heroSounds =
 		{
 			sound 		=	'gyrocopter_gyro_failure_01',
 			type 		=	VoTypes.FAILURE,
-			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD },
+			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD, },
 		},
 
 		DAMNKIDS =
 		{
 			sound 		=	'gyrocopter_gyro_death_10',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD },
+			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD, },
 		},
 
 		DK =
@@ -547,28 +834,28 @@ local heroSounds =
 		{
 			sound 		=	'gyrocopter_gyro_death_17',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD },
+			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD, },
 		},
 
 		SWALLOW =
 		{
 			sound 		=	'gyrocopter_gyro_death_11',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD },
+			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD, },
 		},
 
 		UHMSHIT =
 		{
 			sound 		=	'gyrocopter_gyro_death_14',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD },
+			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD, },
 		},
 
 		UHMSHITTWO =
 		{
 			sound 		=	'gyrocopter_gyro_death_16',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD },
+			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD, },
 		},
 
 		VIPER =
@@ -593,7 +880,7 @@ local heroSounds =
 		{
 			sound 		=	'hoodwink_hoodwink_arb_miss_04',
 			type 		=	VoTypes.MISS,
-			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD },
+			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD, },
 		},
 
 		BINGO =
@@ -621,7 +908,7 @@ local heroSounds =
 		{
 			sound 		=	'hoodwink_hoodwink_cityfolk_01_02',
 			type 		=	VoTypes.MISC,
-			attitude 	=	{ VoAttitudes.NEUTRAL, VoAttitudes.TAUNT },
+			attitude 	=	{ VoAttitudes.NEUTRAL, VoAttitudes.TAUNT, },
 		},
 
 		COMPARTMENTALIZE =
@@ -649,7 +936,7 @@ local heroSounds =
 		{
 			sound 		=	'hoodwink_hoodwink_death_02',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD },
+			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.SAD, },
 		},
 
 		GETSTUFFED =
@@ -789,7 +1076,7 @@ local heroSounds =
 		{
 			sound 		=	'hoodwink_hoodwink_lasthit_09',
 			type 		=	VoTypes.LASTHIT,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
 		},
 
 		TELLYOU =
@@ -810,7 +1097,7 @@ local heroSounds =
 		{
 			sound 		=	'hoodwink_hoodwink_acorn_en_15',
 			type 		=	VoTypes.ABILITY,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
 		},
 
 		YEAHNAH =
@@ -915,7 +1202,7 @@ local heroSounds =
 		{
 			sound 		=	'jakiro_jak_brother_05',
 			type 		=	VoTypes.MISC,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 	},
 
@@ -1099,7 +1386,7 @@ local heroSounds =
 		},
 	},
 
--- Legion Commander
+	-- Legion Commander
 	npc_dota_hero_legion_commander =
 	{
 		BLEED =
@@ -1249,7 +1536,7 @@ local heroSounds =
 		},
 	},
 
-	-- Lifestealler
+	-- Lifestealer
 
 	-- Lina
 	npc_dota_hero_lina =
@@ -1400,6 +1687,15 @@ local heroSounds =
 	},
 
 	-- Medusa
+	npc_dota_hero_medusa =
+	{
+		SNAKESONAPLANE =
+		{
+			sound 		=	'medusa_medus_rival_10',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Meepo
 
@@ -1410,12 +1706,114 @@ local heroSounds =
 	-- Morphling
 
 	-- Muerta
+	npc_dota_hero_muerta =
+	{
+		DEADDRUNK =
+		{
+			sound 		=	'muerta_muerta_rival_024',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		FEELS =
+		{
+			sound 		=	'muerta_muerta_item_006',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		GODBLEED =
+		{
+			sound 		=	'muerta_muerta_item_024',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		GOODLUCK =
+		{
+			sound 		=	'muerta_muerta_game_kill_target_is_muerta_04',
+			type 		=	VoTypes.KILL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		IDIOT =
+		{
+			sound 		=	'muerta_muerta_wheel_all_13',
+			type 		=	VoTypes.KILL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		METHODS =
+		{
+			sound 		=	'muerta_muerta_ally_205',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		UNCONVENTIONAL =
+		{
+			sound 		=	'muerta_muerta_item_007',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		WHEREWEREGOING =
+		{
+			sound 		=	'muerta_muerta_item_062',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
 
 	-- Naga Siren
 
 	-- Nature's Prophet
 
 	-- Necrophos
+	npc_dota_hero_necrolyte =
+	{
+		CLAP =
+		{
+			sound 		=	'necrolyte_necr_respawn_09',
+			type 		=	VoTypes.RESPAWN,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		DIRTYBITCH =
+		{
+			sound 		=	'necrolyte_necr_omni_07',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		DIRTYKNIGHT =
+		{
+			sound 		=	'necrolyte_necr_omni_08',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		IFEELILL =
+		{
+			sound 		=	'necrolyte_necr_purch_03',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		SHOPPING =
+		{
+			sound 		=	'necrolyte_necr_purch_01',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		THISISSICK =
+		{
+			sound 		=	'necrolyte_necr_purch_02',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
 
 	-- Night Stalker
 
@@ -1491,7 +1889,7 @@ local heroSounds =
 		{
 			sound 		=	'ogre_magi_ogmag_move_20',
 			type 		=	VoTypes.MOVE,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		SMARTER =
@@ -1505,7 +1903,7 @@ local heroSounds =
 		{
 			sound 		=	'ogre_magi_ogmag_move_22',
 			type 		=	VoTypes.MOVE,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		THINKIN =
@@ -1595,6 +1993,92 @@ local heroSounds =
 	-- Puck
 
 	-- Pudge
+	npc_dota_hero_pudge =
+	{
+		BIGGERPANTS =
+		{
+			sound 		=	'pudge_pud_level_05',
+			type 		=	VoTypes.LEVEL,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		BLOODYHELL =
+		{
+			sound 		=	'pudge_pud_lose_04',
+			type 		=	VoTypes.LOSE,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		CANNEDHAM =
+		{
+			sound 		=	'pudge_pud_arc_rival_11',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		DENIED =
+		{
+			sound 		=	'pudge_pud_arc_deny_05',
+			type 		=	VoTypes.DENY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		FRESHMONKEY =
+		{
+			sound 		=	'pudge_pud_arc_fresh_20_01',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		KIDNEYS =
+		{
+			sound 		=	'pudge_pud_rare_06',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		NEWPANTS =
+		{
+			sound 		=	'pudge_pud_level_06',
+			type 		=	VoTypes.LEVEL,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		NOTMEAT =
+		{
+			sound 		=	'pudge_pud_arc_fresh_17',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SILENCE =
+		{
+			sound 		=	'pudge_pud_rival_12',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SWEETBREADS =
+		{
+			sound 		=	'pudge_pud_rare_01',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		THANKSMEAT =
+		{
+			sound 		=	'pudge_pud_thanks_03',
+			type 		=	VoTypes.THANK,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		YOURCAT =
+		{
+			sound 		=	'pudge_pud_arc_ally_33',
+			type 		=	VoTypes.SORRY,
+			attitude 	=	VoAttitudes.SAD,
+		},
+	},
 
 	-- Pugna
 
@@ -1604,7 +2088,7 @@ local heroSounds =
 		BLINK =
 		{
 			sound 		=	'queenofpain_pain_blink_01',
-			type 		=	{ VoTypes.ITEM, VoTypes.ABILITY },
+			type 		=	{ VoTypes.ITEM, VoTypes.ABILITY, },
 			attitude 	=	VoAttitudes.HAPPY,
 		},
 
@@ -1640,7 +2124,7 @@ local heroSounds =
 		{
 			sound 		=	'queenofpain_pain_rare_06',
 			type 		=	VoTypes.RARE,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		PERF =
@@ -1654,7 +2138,7 @@ local heroSounds =
 		{
 			sound 		=	'queenofpain_pain_rare_01',
 			type 		=	VoTypes.RARE,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		SAFE =
@@ -1779,7 +2263,7 @@ local heroSounds =
 		{
 			sound 		=	'shadowshaman_shad_level_03',
 			type 		=	VoTypes.LEVEL,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
 		},
 	},
 
@@ -1825,7 +2309,7 @@ local heroSounds =
 		{
 			sound 		=	'silencer_silen_attack_07',
 			type 		=	VoTypes.ATTACK,
-			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.TAUNT },
+			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.TAUNT, },
 		},
 	},
 
@@ -1871,8 +2355,201 @@ local heroSounds =
 	},
 
 	-- Slark
+	npc_dota_hero_slark =
+	{
+		CAGE =
+		{
+			sound 		=	'slark_slark_kill_05',
+			type 		=	VoTypes.KILL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		HEHYEAH =
+		{
+			sound 		=	'slark_slark_pounce_04',
+			type 		=	VoTypes.ABILITY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		INTHEBAG =
+		{
+			sound 		=	'slark_slark_inthebag_01',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		NO =
+		{
+			sound 		=	'slark_slark_death_01',
+			type 		=	VoTypes.DEATH,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		SATANIC =
+		{
+			sound 		=	'slark_slark_items_10',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		SHIVED =
+		{
+			sound 		=	'slark_slark_death_03',
+			type 		=	VoTypes.DEATH,
+			attitude 	=	VoAttitudes.SAD,
+		},
+	},
 
 	-- Snapfire
+	npc_dota_hero_snapfire =
+	{
+		BLEEP =
+		{
+			sound 		=	'snapfire_snapfire_rival_81',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		COOKINGTIPS =
+		{
+			sound 		=	'snapfire_snapfire_spawn_24',
+			type 		=	VoTypes.SPAWN,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
+		},
+
+		DEADFOGEY =
+		{
+			sound 		=	'snapfire_snapfire_rival_75',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		DUMB =
+		{
+			sound 		=	'snapfire_snapfire_spawn_16',
+			type 		=	VoTypes.SPAWN,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
+		},
+
+		ENJOY =
+		{
+			sound 		=	'snapfire_snapfire_rival_49',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		HELLABALOO =
+		{
+			sound 		=	'snapfire_snapfire_rival_125',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		HOCUSPOCUS =
+		{
+			sound 		=	'snapfire_snapfire_rival_162',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		HUCKLEBERRY =
+		{
+			sound 		=	'snapfire_snapfire_cast_pain_01',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		INSUFFERABLE =
+		{
+			sound 		=	'snapfire_snapfire_rival_43',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		INTHEBAG =
+		{
+			sound 		=	'snapfire_snapfire_inthebag_03',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		KITTY =
+		{
+			sound 		=	'snapfire_snapfire_ally_106',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		LOSER =
+		{
+			sound 		=	'snapfire_snapfire_rival_183',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		MANNERS =
+		{
+			sound 		=	'snapfire_snapfire_rival_57',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		OLDBONES =
+		{
+			sound 		=	'snapfire_snapfire_spawn_19',
+			type 		=	VoTypes.SPAWN,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
+		},
+
+		ORNERY =
+		{
+			sound 		=	'snapfire_snapfire_hero_intro_11',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.ANGRY,
+		},
+
+		QUEENIE =
+		{
+			sound 		=	'snapfire_snapfire_rival_156',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SHTICK =
+		{
+			sound 		=	'snapfire_snapfire_rival_54',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SMUGASS =
+		{
+			sound 		=	'snapfire_snapfire_rival_159',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		TUBBY =
+		{
+			sound 		=	'snapfire_snapfire_ally_214',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.ANGRY,
+		},
+
+		WOOEE =
+		{
+			sound 		=	'snapfire_snapfire_spawn_26',
+			type 		=	VoTypes.SPAWN,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		YEEHAW =
+		{
+			sound 		=	'snapfire_snapfire_spawn_25',
+			type 		=	VoTypes.SPAWN,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
 
 	-- Sniper
 	npc_dota_hero_sniper =
@@ -1902,7 +2579,7 @@ local heroSounds =
 		{
 			sound 		=	'sniper_snip_ability_shrapnel_03',
 			type 		=	VoTypes.ABILITY,
-			attitude 	=	{ VoAttitudes.TAUNT, VoAttitudes.Happy },
+			attitude 	=	{ VoAttitudes.TAUNT, VoAttitudes.HAPPY, },
 		},
 
 		PEEPED =
@@ -1916,7 +2593,7 @@ local heroSounds =
 		{
 			sound 		=	'sniper_snip_tf2_02',
 			type 		=	VoTypes.MISC,
-			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.TAUNT },
+			attitude 	=	{ VoAttitudes.ANGRY, VoAttitudes.TAUNT, },
 		},
 	},
 
@@ -1966,7 +2643,7 @@ local heroSounds =
 		{
 			sound 		=	'stormspirit_ss_shitwiz_01',
 			type 		=	VoTypes.MISC,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 	},
 
@@ -2001,7 +2678,7 @@ local heroSounds =
 		{
 			sound 		=	'tidehunter_tide_level_04',
 			type 		=	VoTypes.LEVEL,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		AXE =
@@ -2078,7 +2755,7 @@ local heroSounds =
 		{
 			sound 		=	'tidehunter_tide_level_24',
 			type 		=	VoTypes.LEVEL,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		TIDINGS =
@@ -2092,7 +2769,7 @@ local heroSounds =
 		{
 			sound 		=	'tidehunter_tide_level_18',
 			type 		=	VoTypes.LEVEL,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		WOMEN =
@@ -2104,14 +2781,214 @@ local heroSounds =
 	},
 
 	-- Timbersaw
+	npc_dota_hero_shredder =
+	{
+		AXE =
+		{
+			sound 		=	'shredder_timb_ally_03',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		COOKIES =
+		{
+			sound 		=	'shredder_timb_rival_17',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		CUTTHINGS =
+		{
+			sound 		=	'shredder_timb_spawn_03',
+			type 		=	VoTypes.SPAWN,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		DEALWITHIT =
+		{
+			sound 		=	'shredder_timb_ally_16',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.ANGRY,
+		},
+
+		DELISH =
+		{
+			sound 		=	'shredder_timb_tango_05',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		DYINGTHING =
+		{
+			sound 		=	'shredder_timb_respawn_04',
+			type 		=	VoTypes.RESPAWN,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		EVERYWHERE =
+		{
+			sound 		=	'shredder_timb_begin_01',
+			type 		=	VoTypes.SPAWN,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		FAE =
+		{
+			sound 		=	'shredder_timb_rival_27',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		FEAR =
+		{
+			sound 		=	'shredder_timb_rare_01',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		GETME =
+		{
+			sound 		=	'shredder_timb_failure_01',
+			type 		=	VoTypes.FAILURE,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		HATETREES =
+		{
+			sound 		=	'shredder_timb_tango_01',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.ANGRY,
+		},
+
+		LIFEANDDEATH =
+		{
+			sound 		=	'shredder_timb_ally_18',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.ANGRY,
+		},
+
+		LIZARD =
+		{
+			sound 		=	'shredder_timb_rival_18',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		LUMBERJACK =
+		{
+			sound 		=	'shredder_timb_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.ANGRY,
+		},
+
+		NEVER =
+		{
+			sound 		=	'shredder_timb_rival_16',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		NOWWHAT =
+		{
+			sound 		=	'shredder_timb_failure_02',
+			type 		=	VoTypes.FAILURE,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		PREVENGE =
+		{
+			sound 		=	'shredder_timb_rival_25',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SOHAPPY =
+		{
+			sound 		=	'shredder_timb_drop_rare_02',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		THATWASFUN =
+		{
+			sound 		=	'shredder_timb_chakramreturn_01',
+			type 		=	VoTypes.ABILITY,
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.SAD, },
+		},
+
+		THERAPY =
+		{
+			sound 		=	'shredder_timb_rival_24',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		TREEPEOPLE =
+		{
+			sound 		=	'shredder_timb_ally_02',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		TREEPERSON =
+		{
+			sound 		=	'shredder_timb_ally_01',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		TREES =
+		{
+			sound 		=	'shredder_timb_spawn_04',
+			type 		=	VoTypes.SPAWN,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		TREESTUFF =
+		{
+			sound 		=	'shredder_timb_rival_31',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Tinker
 
 	-- Tiny
 
-	-- Treat Protector
+	-- Treant Protector
 
 	-- Troll Warlord
+	npc_dota_hero_troll_warlord =
+	{
+		KILLYOUAGAIN =
+		{
+			sound 		=	'troll_warlord_troll_rival_06',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		MEOFME =
+		{
+			sound 		=	'troll_warlord_troll_rival_24',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		NOT =
+		{
+			sound 		=	'troll_warlord_troll_deny_06',
+			type 		=	VoTypes.DENY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SWINGIT =
+		{
+			sound 		=	'troll_warlord_troll_rival_26',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Tusk
 	npc_dota_hero_tusk =
@@ -2120,7 +2997,7 @@ local heroSounds =
 		{
 			sound 		=	'tusk_tusk_kill_26',
 			type 		=	VoTypes.KILL,
-			attitude 	=	{ VoAttitudes.TAUNT, VoAttitudes.HAPPY },
+			attitude 	=	{ VoAttitudes.TAUNT, VoAttitudes.HAPPY, },
 		},
 
 		LOL =
@@ -2141,18 +3018,55 @@ local heroSounds =
 		{
 			sound 		=	'tusk_tusk_move_25',
 			type 		=	VoTypes.MOVE,
-			attitude 	=	{ VoAttitudes.TAUNT, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.TAUNT, VoAttitudes.NEUTRAL, },
 		},
 
 		TUSKIE =
 		{
 			sound 		=	'tusk_tusk_move_26',
 			type 		=	VoTypes.MOVE,
-			attitude 	=	{ VoAttitudes.TAUNT, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.TAUNT, VoAttitudes.NEUTRAL, },
 		},
 	},
 
 	-- Underlord
+	npc_dota_hero_abyssal_underlord =
+	{
+		BEENBAD =
+		{
+			sound 		=	'abyssal_underlord_abys_rival_28',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		BUTTS =
+		{
+			sound 		=	'abyssal_underlord_abys_darkrift_03',
+			type 		=	VoTypes.ABILITY,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		DONOTTHANK =
+		{
+			sound 		=	'abyssal_underlord_abys_thanks_03',
+			type 		=	VoTypes.THANK,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		PERMISSION =
+		{
+			sound 		=	'abyssal_underlord_abys_rival_20',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SKULLS =
+		{
+			sound 		=	'abyssal_underlord_abys_rare_04',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Undying
 
@@ -2176,7 +3090,7 @@ local heroSounds =
 		{
 			sound 		=	'viper_vipe_death_16',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 
 		HAHABLR =
@@ -2190,7 +3104,7 @@ local heroSounds =
 		{
 			sound 		=	'viper_vipe_spawn_05',
 			type 		=	VoTypes.RESPAWN,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		ORB =
@@ -2231,7 +3145,7 @@ local heroSounds =
 		{
 			sound 		=	'warlock_warl_death_11',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 	},
 
@@ -2244,14 +3158,14 @@ local heroSounds =
 		{
 			sound 		=	'windrunner_wind_attack_04',
 			type 		=	VoTypes.ATTACK,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
 		},
 
 		BORING =
 		{
 			sound 		=	'windrunner_wind_fastres_02',
 			type 		=	VoTypes.RESPAWN,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		BUHBYE =
@@ -2266,21 +3180,21 @@ local heroSounds =
 		{
 			sound 		=	'windrunner_wind_lasthit_04',
 			type 		=	VoTypes.LASTHIT,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
 		},
 
 		FANTASTIC =
 		{
 			sound 		=	'windrunner_wind_ability_focusfire_04',
 			type 		=	VoTypes.ABILITY,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
 		},
 
 		GINGER =
 		{
 			sound 		=	'windrunner_wind_death_05',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 
 		HOPE =
@@ -2381,7 +3295,7 @@ local heroSounds =
 		{
 			sound 		=	'winter_wyvern_winwyv_death_10',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 
 		HAPPYFIVE =
@@ -2424,14 +3338,14 @@ local heroSounds =
 		{
 			sound 		=	'winter_wyvern_winwyv_death_08',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 
 		WHYOWHY =
 		{
 			sound 		=	'winter_wyvern_winwyv_death_02',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 	},
 
@@ -2449,7 +3363,7 @@ local heroSounds =
 		{
 			sound 		=	'witchdoctor_wdoc_level_06',
 			type 		=	VoTypes.LEVEL,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		BONE =
@@ -2471,7 +3385,7 @@ local heroSounds =
 		{
 			sound 		=	'witchdoctor_wdoc_rare_03',
 			type 		=	VoTypes.RARE,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		LOOK =
@@ -2552,7 +3466,7 @@ local heroSounds =
 		{
 			sound 		=	'skeleton_king_wraith_death_long_17',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.ANGRY, VoTypes.SAD },
+			attitude 	=	{ VoAttitudes.ANGRY, VoTypes.SAD, },
 		},
 
 		COUP =
@@ -2580,14 +3494,14 @@ local heroSounds =
 		{
 			sound 		=	'skeleton_king_wraith_ability_incarn2_01',
 			type 		=	VoTypes.ABILITY,
-			attitude 	=	{ VoAttitudes.ANGRY, VoTypes.SAD },
+			attitude 	=	{ VoAttitudes.ANGRY, VoTypes.SAD, },
 		},
 
 		HEIRS =
 		{
 			sound 		=	'skeleton_king_wraith_death_05',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 
 		HUAGH =
@@ -2650,7 +3564,7 @@ local heroSounds =
 		{
 			sound 		=	'skeleton_king_wraith_death_06',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 
 		RAGEKING =
@@ -2664,7 +3578,7 @@ local heroSounds =
 		{
 			sound 		=	'skeleton_king_wraith_death_long_07',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 
 		SWAGGER =
@@ -2692,7 +3606,7 @@ local heroSounds =
 		{
 			sound 		=	'skeleton_king_wraith_death_20',
 			type 		=	VoTypes.DEATH,
-			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY },
+			attitude 	=	{ VoAttitudes.SAD, VoAttitudes.ANGRY, },
 		},
 	},
 
@@ -2703,7 +3617,7 @@ local heroSounds =
 		{
 			sound 		=	'zuus_zuus_rare_04',
 			type 		=	VoTypes.RARE,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 
 		HEAVEN =
@@ -2717,7 +3631,7 @@ local heroSounds =
 		{
 			sound 		=	'zuus_zuus_rare_05',
 			type 		=	VoTypes.RARE,
-			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL },
+			attitude 	=	{ VoAttitudes.HAPPY, VoAttitudes.NEUTRAL, },
 		},
 	},
 
