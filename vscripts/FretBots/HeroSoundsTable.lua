@@ -3645,7 +3645,7 @@ local heroSounds =
 		CAP =
 		{
 			sound ='teamfandom.ti2021.Cap',
-			attitude =	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT, VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
+			attitude =	{ VoAttitudes.HAPPY, VoAttitudes.TAUNT, },
 		},
 
 		DAKOTA 				= { sound = 'teamfandom.ti2021.Dakota', 		attitude =	VoAttitudes.NEUTRAL, 	},

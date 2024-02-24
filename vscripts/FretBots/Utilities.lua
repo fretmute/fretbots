@@ -1,4 +1,5 @@
 -- Provides for common Utilities
+
 -- Sound constants
 if Sounds == nil then
 	Sounds = dofile('FretBots.Soundboard')
@@ -15,16 +16,16 @@ if Utilities == nil then
 		{
 			names = {},
 			objects = {}
-		}
+		},
 	}
 end
 
 -- constants for use in these methods
-MSG_GOOD 			  = 1
-MSG_WARNING 		  = 2
-MSG_BAD 			  = 3
-MSG_AWARD			  = 4
-MSG_CONSOLE_GOOD	  = 5
+MSG_GOOD 							= 1
+MSG_WARNING 					= 2
+MSG_BAD 							= 3
+MSG_AWARD 						= 4
+MSG_CONSOLE_GOOD 			= 5
 MSG_CONSOLE_BAD       = 6
 MSG_NEUTRAL_FIND      = 7
 MSG_NEUTRAL_TAKE      = 8
@@ -33,33 +34,33 @@ MSG_NEUTRAL_RETURN    = 9
 -- Max neutral item message to print
 local maxNeutralMessage = MSG_NEUTRAL_FIND
 
-BAD_LIST			= Sounds.BadSounds
-GOOD_LIST			= Sounds.GoodSounds
+BAD_LIST						= Sounds.BadSounds
+GOOD_LIST						= Sounds.GoodSounds
 PLAYER_DEATH_LIST   = Sounds.BadSounds
-ASIAN_LIST 			= Sounds.AsianCasters
-CIS_LIST 			= Sounds.CisCasters
-ENGLISH_LIST 	    = Sounds.EnglishCasters
+ASIAN_LIST 					= Sounds.AsianCasters
+CIS_LIST 						= Sounds.CisCasters
+ENGLISH_LIST 	    	= Sounds.EnglishCasters
 
 -- duh
 TEAM_RADIANT		= 2
-TEAM_DIRE			= 3
+TEAM_DIRE				= 3
 
 -- Globalize certain sounds to be lazy and avoid a refactor of some other files
 MATCH_READY 		= Sounds.MATCH_READY
 ATTENTION 			= Sounds.ATTENTION
-LAKAD				= Sounds.LAKAD
+LAKAD						= Sounds.LAKAD
 KRASAVCHIK			= Sounds.KRASAVCHIK
-EHTO_GG				= Sounds.EHTO_GG
-BEEP				= Sounds.BEEP
-ROSHAN				= Sounds.ROSHAN
+EHTO_GG					= Sounds.EHTO_GG
+BEEP						= Sounds.BEEP
+ROSHAN					= Sounds.ROSHAN
 SAD_TROMBONE		= Sounds.SAD_TROMBONE
 
 -- message colors
 local colors =
 {
-	good		= '#00ff00',
-	warning		= '#fbff00',
-	bad			= '#ff0000',
+	good				= '#00ff00',
+	warning			= '#fbff00',
+	bad					= '#ff0000',
 	consoleGood = '#1ce8b5',
 	consoleBad  = '#e68d39',
 }
@@ -84,12 +85,12 @@ local playerColors =
 }
 local awardColors =
 {
-	gold 			= '#DAA520',
-	armor 			= '#B911FC',
+	gold 					= '#DAA520',
+	armor 				= '#B911FC',
 	magicResist 	= '#1A88FC',
-	levels 			= '#eb4b4b',
-	neutral 		= '#5B388F',
-	stats 			= '#CF6A32',
+	levels 				= '#eb4b4b',
+	neutral 			= '#5B388F',
+	stats 				= '#CF6A32',
 }
 local neutralColors =
 {
@@ -149,9 +150,9 @@ function Utilities:Print(msg, msgType, sound)
 	if sound == nil then return end
 	-- play sound
 	if type(sound) == 'string' then
-		EmitGlobalSound(sound)
+		Utilities:TestSound(sound)
 	else
-		EmitGlobalSound(sound[math.random(#sound)])
+		Utilities:TestSound(sound[math.random(#sound)])
 	end
 end
 
@@ -228,14 +229,20 @@ end
 
 -- Emits a random sound from a table
 function Utilities:RandomSound(sound)
-	EmitGlobalSound(sound[math.random(#sound)])
+	if (Utilities.CanPlaySound()) then
+		EmitGlobalSound(sound[math.random(#sound)])
+	end
 end
 
 -- Plays a specific sound
+-- Note that this method is intended for use by players via chat, and 'sound'
+-- will be an index from the SoundBoard table, not the actual in-game sound name
 function Utilities:PlaySound(sound)
 	local s = string.upper(sound)
 	if Sounds[s] ~= nil then
-		EmitGlobalSound(Sounds[s])
+		if (Utilities.CanPlaySound()) then
+			EmitGlobalSound(Sounds[s])
+		end
 	else
 		Utilities:Print('Sound not found: '..s)
 	end
@@ -244,13 +251,28 @@ end
 -- Plays an arbitrary sound. Note that if you pass a sound that doesn't exist dota
 -- will crash to desktop.  Use carefully.
 function Utilities:TestSound(sound)
-	EmitGlobalSound(sound)
+	if (Utilities.CanPlaySound()) then
+		EmitGlobalSound(sound)
+	end
+end
+
+function Utilities:CanPlaySound()
+	-- Sounds attempted to play before Settings are initialized can go through
+	if Settings == nil then
+		return true
+	end
+	if Settings.isPlaySounds == nil then
+		return false
+	end
+	return Settings.isPlaySounds
 end
 
 -- Plays a cheat detected sound
 function Utilities:CheatWarning()
 	if Sounds['CHEAT'] ~= nil then
-		EmitGlobalSound(Sounds['CHEAT'])
+		if (Utilities.CanPlaySound()) then
+			EmitGlobalSound(Sounds['CHEAT'])
+		end
 	end
 end
 -- clamps a number
@@ -429,9 +451,9 @@ end
 
 -- Returns the size of a table
 function Utilities:GetTableSize(T)
-  local count = 0
-  for _ in pairs(T) do count = count + 1 end
-  return count
+	local count = 0
+	for _ in pairs(T) do count = count + 1 end
+	return count
 end
 
 -- Applies an offset to a table
@@ -456,9 +478,9 @@ end
 
 -- Returns a random table entry
 function Utilities:RandomTableEntry(tableData)
-    local keys = {}
-    for k in pairs(tableData) do table.insert(keys, k) end
-    return tableData[keys[math.random(#keys)]]
+		local keys = {}
+		for k in pairs(tableData) do table.insert(keys, k) end
+		return tableData[keys[math.random(#keys)]]
 end
 
 -- Attempts to pcall arbitray text

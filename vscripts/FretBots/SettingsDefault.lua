@@ -23,6 +23,8 @@
 		voteWarnTimes = {10,5},
 		-- are multipliers multiplicative, or additive
 		isMultiplicative = true,
+		-- isPlaySounds set to false disables all sounds
+		isPlaySounds = true,
 		-- Taunt humans when they die with chatwheel sounds?
 		isPlayerDeathSound = true,
 		-- Set to true to enable dynamic role assignment (experimental)
