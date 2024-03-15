@@ -1,10 +1,93 @@
 local heroSounds =
 {
 	-- Abaddon
+	npc_dota_hero_abaddon =
+	{
+		BAG =
+		{
+			sound 		=	'abaddon_abad_inthebag_01',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		COFFERS =
+		{
+			sound 		=	'abaddon_abad_ally_06',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		TERROR =
+		{
+			sound 		=	'abaddon_abad_ally_02',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
 
 	-- Alchemist
+	npc_dota_hero_alchemist =
+	{
+		ADMIRE =
+		{
+			sound 		=	'alchemist_alch_respawn_06',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		BETTERLIVING =
+		{
+			sound 		=	'alchemist_alch_level_05',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		LITTLEBUDDY =
+		{
+			sound 		=	'alchemist_alch_ability_rage_09',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
 
 	-- Ancient Apparition
+	npc_dota_hero_ancient_apparition =
+	{
+		AGE =
+		{
+			sound 		=	'ancient_apparition_appa_lasthit_02',
+			type 		=	VoTypes.LASTHIT,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		OLDER =
+		{
+			sound 		=	'ancient_apparition_appa_deny_08',
+			type 		=	VoTypes.DENY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SENIOR =
+		{
+			sound 		=	'ancient_apparition_appa_lasthit_03',
+			type 		=	VoTypes.LASTHIT,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		SHEEPSTICK =
+		{
+			sound 		=	'ancient_apparition_appa_item_01',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		YOUTH =
+		{
+			sound 		=	'ancient_apparition_appa_deny_07',
+			type 		=	VoTypes.DENY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Anti-Mage
 	npc_dota_hero_antimage =
@@ -19,6 +102,35 @@ local heroSounds =
 	},
 
 	-- Arc Warden
+	npc_dota_hero_arc_warden =
+	{
+		BETTERMOOD =
+		{
+			sound 		=	'arc_warden_arcwar_rival_04',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+		FOOL =
+		{
+			sound 		=	'arc_warden_arcwar_rival_19',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		MAD =
+		{
+			sound 		=	'arc_warden_arcwar_rival_05',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SCEPTER =
+		{
+			sound 		=	'arc_warden_arcwar_scepter_02',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
 
 	-- Announcer Axe
 	announcer_axe =
@@ -272,8 +384,82 @@ local heroSounds =
 	},
 
 	-- Beastmaster
+	npc_dota_hero_beastmaster =
+	{
+		BEARD =
+		{
+			sound 		=	'beastmaster_beas_killspecial_Zuus_01',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		CALM =
+		{
+			sound 		=	'beastmaster_beas_killspecial_Zuus_02',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		CREEPING =
+		{
+			sound 		=	'beastmaster_beas_rare_01',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		READ =
+		{
+			sound 		=	'beastmaster_beas_buysnecro_07',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		SCREE =
+		{
+			sound 		=	'beastmaster_beas_ability_hawk_move_01',
+			type 		=	VoTypes.MISC,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		SIZE =
+		{
+			sound 		=	'beastmaster_beas_rare_03',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Bloodseeker
+	npc_dota_hero_bloodseeker =
+	{
+		ALCOHOL =
+		{
+			sound 		=	'bloodseeker_blod_rival_17',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		BEPOSITIVE =
+		{
+			sound 		=	'bloodseeker_blod_respawn_10',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		BLOODINIT =
+		{
+			sound 		=	'bloodseeker_blod_purch_04',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		SPATTER =
+		{
+			sound 		=	'bloodseeker_blod_ally_05',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
 
 	-- Bounty Hunter
 	npc_dota_hero_bounty_hunter =
@@ -329,12 +515,151 @@ local heroSounds =
 	},
 
 	-- Brewmaster
+	npc_dota_hero_brewmaster =
+	{
+		FOAMY =
+		{
+			sound 		=	'brewmaster_brew_rival_02',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		HAMMERED =
+		{
+			sound 		=	'brewmaster_brew_rival_10',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		LIVER =
+		{
+			sound 		=	'brewmaster_brew_death_05',
+			type 		=	VoTypes.DEATH,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		NECRO =
+		{
+			sound 		=	'brewmaster_brew_item_08',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		SISSIES =
+		{
+			sound 		=	'brewmaster_brew_rival_15',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Bristleback
+	npc_dota_hero_bristleback =
+	{
+		BAT =
+		{
+			sound 		=	'bristleback_bristle_rival_26',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		BIGFELLAS =
+		{
+			sound 		=	'bristleback_bristle_ally_05',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		CHIMEY =
+		{
+			sound 		=	'bristleback_bristle_rival_38',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		GEEZER =
+		{
+			sound 		=	'bristleback_bristle_rival_12',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		HANDSOME =
+		{
+			sound 		=	'bristleback_bristle_rival_43',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		HATECATS =
+		{
+			sound 		=	'bristleback_bristle_rival_23',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		KING =
+		{
+			sound 		=	'bristleback_bristle_rival_02',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		PRETTYFACE =
+		{
+			sound 		=	'bristleback_bristle_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		SMALLANDWEAK =
+		{
+			sound 		=	'bristleback_bristle_ally_18',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SOLITTLE =
+		{
+			sound 		=	'bristleback_bristle_rival_46',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		UNDERSTAND =
+		{
+			sound 		=	'bristleback_bristle_rival_53',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Broodmother
 
 	-- Centaur Warrunner
+	npc_dota_hero_centaur =
+	{
+		COBBLE =
+		{
+			sound 		=	'centaur_cent_rival_38',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		WEAKER =
+		{
+			sound 		=	'centaur_cent_rival_20',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		WEALTH =
+		{
+			sound 		=	'centaur_cent_rival_29',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Chaos Knight
 	npc_dota_hero_chaos_knight =
@@ -362,8 +687,54 @@ local heroSounds =
 	},
 
 	-- Chen
+	npc_dota_hero_chen =
+	{
+		SUCCUBUS =
+		{
+			sound 		=	'chen_chen_rival_02',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Clinkz
+	npc_dota_hero_clinkz =
+	{
+		BONES =
+		{
+			sound 		=	'clinkz_clinkz_rival_18',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		BONEY =
+		{
+			sound 		=	'clinkz_clinkz_rival_19',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		FLESHY =
+		{
+			sound 		=	'clinkz_clinkz_rival_09',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		PINCUSHION =
+		{
+			sound 		=	'clinkz_clinkz_ability_strafe_04',
+			type 		=	VoTypes.ABILITY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		RAPIER =
+		{
+			sound 		=	'clinkz_clinkz_item_08',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
 
 	-- Clockwerk
 	npc_dota_hero_rattletrap =
@@ -444,6 +815,57 @@ local heroSounds =
 	},
 
 	-- Dark Seer
+	npc_dota_hero_dark_seer =
+	{
+		BEARD =
+		{
+			sound 		=	'dark_seer_dkseer_level_06',
+			type 		=	VoTypes.LEVEL,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		BESTTHEYCOULD =
+		{
+			sound 		=	'dark_seer_dkseer_rare_03',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		CALM =
+		{
+			sound 		=	'dark_seer_dkseer_rare_04',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.ANGRY,
+		},
+
+		LACKED =
+		{
+			sound 		=	'dark_seer_dkseer_kill_01',
+			type 		=	VoTypes.KILL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		LARGER =
+		{
+			sound 		=	'dark_seer_dkseer_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		POINTIER =
+		{
+			sound 		=	'dark_seer_dkseer_level_07',
+			type 		=	VoTypes.LEVEL,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		ROUNDNESS =
+		{
+			sound 		=	'dark_seer_dkseer_attack_10',
+			type 		=	VoTypes.ATTACK,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Dark Willow
 	npc_dota_hero_dark_willow =
@@ -556,6 +978,22 @@ local heroSounds =
 	},
 
 	-- Death Prophet
+	npc_dota_hero_death_prophet =
+	{
+		COMMIT =
+		{
+			sound 		=	'death_prophet_dpro_respawn_04',
+			type 		=	VoTypes.RESPAWN,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		MASTER =
+		{
+			sound 		=	'death_prophet_dpro_respawn_13',
+			type 		=	VoTypes.RESPAWN,
+			attitude 	=	VoAttitudes.SAD,
+		},
+	},
 
 	-- Disruptor
 	npc_dota_hero_disruptor =
@@ -576,8 +1014,33 @@ local heroSounds =
 	},
 
 	-- Doom
+	npc_dota_hero_doom_bringer =
+	{
+		FACEME =
+		{
+			sound 		=	'doom_bringer_doom_rare_01',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		PRETENTIOUS =
+		{
+			sound 		=	'doom_bringer_doom_rival_04',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Dragon Knight
+	npc_dota_hero_dragon_knight =
+	{
+		ONLYHURT =
+		{
+			sound 		=	'dragon_knight_drag_attack_10',
+			type 		=	VoTypes.ATTACK,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Drow Ranger
 	npc_dota_hero_drow_ranger =
@@ -605,6 +1068,22 @@ local heroSounds =
 	},
 
 	-- Earth Spirit
+	npc_dota_hero_earth_spirit =
+	{
+		SPACECOW =
+		{
+			sound 		=	'earth_spirit_earthspi_ally_07',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		WEAK =
+		{
+			sound 		=	'earth_spirit_earthspi_death_11',
+			type 		=	VoTypes.DEATH,
+			attitude 	=	VoAttitudes.SAD,
+		},
+	},
 
 	-- Earthshaker
 	npc_dota_hero_earthshaker =
