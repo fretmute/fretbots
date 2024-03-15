@@ -117,7 +117,7 @@
 			{
 				gold 			= true,
 				armor 			= true,
-				magicResist 	= true,
+				magicResist 	= false,
 				levels 			= true,
 				neutral 		= true,
 				stats 			= true

@@ -84,11 +84,11 @@ function DataTables:Initialize()
 		local isFret = Debug:IsFret(id);
 		-- Buff Fret for Debug purposes
 		if isFret and not Flags.isDebugBuffed and isBuff then
-		BuffUnit:Hero(unit)
-		Flags.isDebugBuffed = true
+			BuffUnit:Hero(unit)
+			Flags.isDebugBuffed = true
 			end
-			-- Initialize data tables for this unit
-			DataTables:GenerateStatsTables(unit)
+		-- Initialize data tables for this unit
+		DataTables:GenerateStatsTables(unit)
 	end
 	Debug:Print('There are '..#Bots..' bots!')
 
@@ -225,6 +225,22 @@ function DataTables:GenerateStatsTables(unit)
 	-- create a stats table for the bot
 	local stats =
 	{
+		-- base strength
+		baseStrength = unit:GetBaseStrength(),
+		-- base agility
+		baseAgility = unit:GetBaseAgility(),
+		-- base intellect
+		baseIntellect = unit:GetBaseIntellect(),
+		-- base Armor
+		baseArmor = unit:GetPhysicalArmorBaseValue(),
+		-- base Magic Resist
+		baseMagicResist = unit:GetBaseMagicalResistanceValue(),
+		-- str gain
+		strengthGain = unit:GetStrengthGain(),
+		-- agi gain
+		agilityGain = unit:GetAgilityGain(),
+		-- int gain
+		intellectGain = unit:GetIntellectGain(),
 		-- Number of punishments given to this player so far
 		repurcussionCount =	0,
 		-- Amount of repurcussions earned

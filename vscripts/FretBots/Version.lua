@@ -1,6 +1,8 @@
-version = '0.7.1.0'
+version = '0.7.1.1'
 versionString = [[Changelog: 
-  Added Settings.isPlaySounds field. This boolean determines if sounds are played by the script.
+  Disabled magic resist bonuses for bots due to inconsistency of applied values in SetBaseMagicalResistanceValue.
 
-  Modified all instances of EmitGlobalSound to first check is Settings.isPlaySounds is true.
+  Updated methodology used to issue stat bonuses.
+
+  Fixed some typos in HeroSoundsTable.
 ]]

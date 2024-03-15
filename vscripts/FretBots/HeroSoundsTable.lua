@@ -2092,7 +2092,7 @@ local heroSounds =
 			attitude 	=	VoAttitudes.HAPPY,
 		},
 
-		DIDYOUUSAY =
+		DIDYOUSAY =
 		{
 			sound 		=	'queenofpain_pain_kill_13',
 			type 		=	VoTypes.KILL,

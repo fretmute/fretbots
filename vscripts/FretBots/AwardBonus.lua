@@ -6,6 +6,7 @@ require 'FretBots.DataTables'
 require 'FretBots.Debug'
 require 'FretBots.Flags'
 require 'FretBots.GameState'
+require 'Fretbots.Utilities'
 
 -- local debug flag
 local thisDebug = true;
@@ -66,14 +67,12 @@ end
 -- All stats
 function AwardBonus:stats(bot, bonus)
 	if bot.stats.awards.stats < Settings.awardCap.stats and bonus > 0 then
-		local stat
-		stat = bot:GetBaseStrength()
-		bot:SetBaseStrength(stat + bonus)
-		stat = bot:GetBaseAgility()
-		bot:SetBaseAgility(stat + bonus)
-		stat = bot:GetBaseIntellect()
-		bot:SetBaseIntellect(stat + bonus)
-		bot.stats.awards.stats = bot.stats.awards.stats + bonus
+		-- clamp bonus
+		local clamped = AwardBonus:Clamp(bonus, bot.stats.awards.stats, Settings.awardCap.stats)
+		bot:ModifyStrength(clamped)
+		bot:ModifyAgility(clamped)
+		bot:ModifyIntellect(clamped)
+		bot.stats.awards.stats = bot.stats.awards.stats + clamped
 		--Debug:Print('Awarding stats to '..bot.stats.name..'.')
 		return true
 	end
@@ -83,12 +82,12 @@ end
 --Armor
 function AwardBonus:armor(bot, bonus)
 	if bot.stats.awards.armor < Settings.awardCap.armor and bonus > 0 then
-		local armor
-		local base
-		armor = bot:GetPhysicalArmorBaseValue()
-		base = bot:GetAgility() * (1/6)
-		bot:SetPhysicalArmorBaseValue(armor - base + bonus)
-		bot.stats.awards.armor = bot.stats.awards.armor + bonus
+		-- clamp bonus
+		local clamped = AwardBonus:Clamp(bonus, bot.stats.awards.armor, Settings.awardCap.armor)
+		local armor = bot:GetPhysicalArmorBaseValue()
+		local base = bot:GetAgility() * (1/6)
+		bot:SetPhysicalArmorBaseValue(armor - base + clamped)
+		bot.stats.awards.armor = bot.stats.awards.armor + clamped
 		--Debug:Print('Awarding armor to '..bot.stats.name..'.')
 		return true
 	end
@@ -98,10 +97,11 @@ end
 -- Magic Resist
 function AwardBonus:magicResist(bot, bonus)
 	if bot.stats.awards.magicResist < Settings.awardCap.magicResist and bonus > 0 then
+		local clamped = AwardBonus:Clamp(bonus, bot.stats.awards.magicResist, Settings.awardCap.magicResist)
 		local resistance
 		resistance = bot:GetBaseMagicalResistanceValue()
-		bot:SetBaseMagicalResistanceValue(resistance + bonus)
-		bot.stats.awards.magicResist = bot.stats.awards.magicResist + bonus
+		bot:SetBaseMagicalResistanceValue(resistance + clamped)
+		bot.stats.awards.magicResist = bot.stats.awards.magicResist + clamped
 		--Debug:Print('Awarding magic resist to '..bot.stats.name..'.')
 		return true
 	end
@@ -469,4 +469,78 @@ end
 -- returns true if the award is at or past the award cap for a given bot
 function AwardBonus:IsAwardCapped(bot, award)
 	return Settings.deathBonus.awardCap[award]
+end
+
+-- returns the base armor value for this hero at their current level
+function AwardBonus:GetBaseArmor(bot)
+	-- obviously they aren't gaining the bonus from level 1
+	local levelsGained = bot:GetLevel() - 1
+	local agilityGain = bot.stats.agilityGain
+	local gainedAgility = levelsGained * agilityGain
+	local baseAgility = bot.stats.BaseAgility
+   	local baseArmor = bot.stats.baseArmor
+   	local armor = baseArmor + ((baseAgility + gainedAgility) / 6)
+   	return armor
+end
+
+-- Clamps a number to a max level
+function AwardBonus:Clamp(bonus, awarded, max)
+	local maxBonus = max - awarded
+	if bonus > maxBonus then
+		return maxBonus
+	end
+	return bonus
+end
+
+-- Returns the base strength, gained strength of this unit at their current level, and strength awarded
+function AwardBonus:GetStrength(unit)
+	local levelsGained = unit:GetLevel() - 1
+	local statGained = levelsGained * unit.stats.strengthGain
+	local baseStrength = unit.stats.baseStrength
+	local awards =  unit.stats.awards.stats
+   	return baseStrength, statGained, awards
+end
+
+-- Returns the base agility, gained agility of this unit at their current level, and agility awarded
+function AwardBonus:GetAgility(unit)
+	local levelsGained = unit:GetLevel() - 1
+	local statGained = levelsGained * unit.stats.AgilityGain
+	local baseAgility = unit.stats.baseAgility
+	local awards =  unit.stats.awards.stats
+   	return baseAgility, statGained, awards
+end
+
+-- Returns the base intellect, gained intellect of this unit at their current level, and intellect awarded
+function AwardBonus:GetIntellect(unit)
+	local levelsGained = unit:GetLevel() - 1
+	local statGained = levelsGained * unit.stats.intellectGain
+   	local baseIntellect = unit.stats.baseIntellect
+   	local awards =  unit.stats.awards.stats
+   	return baseIntellect, statGained, awards
+end
+
+-- returns the base armor value for this unit at their current level
+function AwardBonus:GetBaseArmor(unit)
+	-- unit.stats.baseArmor had the gain from the base already, so only calculate from statGained and awards
+	local strengthGained
+	local strengthAwards
+	_, strengthGained, strengthAwards = AwardBonus:GetStrength(unit)
+   	local armor = unit.stats.baseArmor + ((strengthGained + strengthAwards) / 6)
+   	return armor
+end
+
+-- returns the base armor value for this unit at their current level
+function AwardBonus:GetBaseMagicResist(unit)
+	-- unit.stats.baseMagicResist had the gain from the base already, so only calculate from statGained and awards
+	local intGained
+	local intAwards
+	_, intGained, intAwards = AwardBonus:GetIntellect(unit)
+   	local magicResist = unit.stats.baseMagicResist + ((intGained + intAwards) * 0.1) + unit.stats.awards.magicResist
+    local msg = ''
+    msg = msg..'Base MR: '..tostring(Utilities:Round(unit.stats.baseMagicResist))..'  '
+    msg = msg..'MR from Int: '..tostring(Utilities:Round(((intGained + intAwards) * 0.1)))..'  '
+    msg = msg..'MR from Awards: '..tostring(Utilities:Round(unit.stats.awards.magicResist))..'  '
+    msg = msg..'Adjusted MR: '..tostring(Utilities:Round(magicResist))..'  '
+    Utilities:Print(msg, MSG_GOOD)
+   	return magicResist
 end
