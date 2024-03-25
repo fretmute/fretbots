@@ -5,4 +5,6 @@ versionString = [[Changelog:
   Updated methodology used to issue stat bonuses.
 
   Fixed some typos in HeroSoundsTable.
+
+  Added some sounds for heroes that had none.
 ]]

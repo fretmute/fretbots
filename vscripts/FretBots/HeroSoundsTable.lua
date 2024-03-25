@@ -1186,6 +1186,50 @@ local heroSounds =
 	},
 
 	-- Grimstroke
+	npc_dota_hero_grimstroke =
+	{
+		BRILLIANCE =
+		{
+			sound 		=	'grimstroke_grimstroke_ally_77',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		BUFFOONS =
+		{
+			sound 		=	'grimstroke_grimstroke_rival_67',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		GROWAPAIR =
+		{
+			sound 		=	'grimstroke_grimstroke_rival_121',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		LUCKYME =
+		{
+			sound 		=	'grimstroke_grimstroke_ally_52',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		PARTIES =
+		{
+			sound 		=	'grimstroke_grimstroke_item_20',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		SENTIENT =
+		{
+			sound 		=	'grimstroke_grimstroke_ally_85',
+			type 		=	VoTypes.ALLY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Gyrocopter
 	npc_dota_hero_gyrocopter =
@@ -1633,6 +1677,20 @@ local heroSounds =
 		{
 			sound 		=	'invoker_invo_attack_05',
 			type 		=	VoTypes.ATTACK,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		MEATBALL =
+		{
+			sound 		=	'invoker_invo_ability_chaosmeteor_07',
+			type 		=	VoTypes.ABILITY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SONICBOOM =
+		{
+			sound 		=	'invoker_invo_ability_deafeningblast_06',
+			type 		=	VoTypes.ABILITY,
 			attitude 	=	VoAttitudes.TAUNT,
 		},
 	},
@@ -2177,10 +2235,114 @@ local heroSounds =
 	},
 
 	-- Meepo
+	npc_dota_hero_meepo =
+	{
+		AINTDEAD =
+		{
+			sound 		=	'meepo_meepo_ally_dark_willow_01',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		BOSS =
+		{
+			sound 		=	'meepo_meepo_rival_09',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		MEEPO =
+		{
+			sound 		=	'meepo_meepo_divided_22',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		PUNCHED =
+		{
+			sound 		=	'meepo_meepo_death_14',
+			type 		=	VoTypes.DEATH,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		SIZE =
+		{
+			sound 		=	'meepo_meepo_kill_08',
+			type 		=	VoTypes.KILL,
+			attitude 	=	VoAttitudes.SAD,
+		},
+	},
 
 	-- Mirana
+	npc_dota_hero_mirana =
+	{
+		KITTYLITTER =
+		{
+			sound 		=	'mirana_mir_rival_14',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		HEREKITTY =
+		{
+			sound 		=	'mirana_mir_rare_04',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		MEOW =
+		{
+			sound 		=	'mirana_mir_rare_01',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		NICEKITTY =
+		{
+			sound 		=	'mirana_mir_rare_05',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+	},
 
 	-- Monkey King
+	npc_dota_hero_monkey_king =
+	{
+		DISGUST =
+		{
+			sound 		=	'monkey_king_monkey_rival_135',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		ENUNCIATE =
+		{
+			sound 		=	'monkey_king_monkey_rival_165',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		GOODKIND =
+		{
+			sound 		=	'monkey_king_monkey_rival_12',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		OLDMAN =
+		{
+			sound 		=	'monkey_king_monkey_rival_59',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		TELEPORTING =
+		{
+			sound 		=	'monkey_king_monkey_rival_07',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Morphling
 
