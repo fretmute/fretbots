@@ -146,11 +146,201 @@ local heroSounds =
 	-- Announcer Cave Johnson
 	announcer_cave_johnson =
 	{
+		AA =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_ancient_apparition_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		ACTUALSATAN =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_zeus_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		DRINKINGCONTEST =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_brewmaster_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		FACELESS =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_faceless_void_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		HAPPIESTGHOST =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_storm_spirit_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+
+		HESCARL =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_leshrac_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		HIDEYOURBLOOD =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_bloodseeker_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		JUSTBEAMAGE =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_skywrath_mage_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		LINA =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_lina_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		LION =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_lion_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		LONEDRUID =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_lone_druid_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		MAGICIANS =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_antimage_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		MEGACREEP =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_mega_now_you_follow_up_03',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		MONKEY =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_monkey_king_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		MORONS =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_techies_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		NIGHTSTALKER =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_night_stalker_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		NOMRS =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_shadow_demon_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		NOPANTS =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_huskar_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		NOSENSE =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_twr_fall_yr_followup_05',
+			type 		=	VoTypes.FAILURE,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
 		OGRE =
 		{
 			sound 		=	'announcer_dlc_cavej_cavej_ann_alchemist_03',
-			type 		=	VoTypes.MISC,
-			attitude 	=	VoAttitudes.HAPPY,
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		PARTLADY =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_enchantress_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		PHANTOMASSASIN =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_phantom_assassin_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		POINTYHAT =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_rubick_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		TEMPLAR =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_templar_assassin_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		TOPLESSMERMAID =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_naga_siren_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		UNPACK =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_pudge_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		YEAHWELL =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_puck_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		YOUNGERTITANS =
+		{
+			sound 		=	'announcer_dlc_cavej_cavej_ann_elder_titan_02',
+			type 		=	VoTypes.HEROSELECT,
+			attitude 	=	VoAttitudes.NEUTRAL,
 		},
 	},
 
