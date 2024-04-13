@@ -1132,12 +1132,153 @@ local heroSounds =
 	},
 
 	-- Elder Titan
+	npc_dota_hero_elder_titan =
+	{
+		ACHINGBONES =
+		{
+			sound 		=	'elder_titan_elder_pain_07',
+			type 		=	VoTypes.DAMAGE,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		ASYMMETRIC =
+		{
+			sound 		=	'elder_titan_elder_kill_13',
+			type 		=	VoTypes.KILL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		GETOFFMYLAWN =
+		{
+			sound 		=	'elder_titan_elder_lose_05',
+			type 		=	VoTypes.FAILURE,
+			attitude 	=	VoAttitudes.ANGRY,
+		},
+
+		RESPECT =
+		{
+			sound 		=	'elder_titan_elder_kill_04',
+			type 		=	VoTypes.KILL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Ember Spirit
+	npc_dota_hero_ember_spirit =
+	{
+		ALLHASBEENSAID =
+		{
+			sound 		=	'ember_spirit_embr_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		ANTIDOTES =
+		{
+			sound 		=	'ember_spirit_embr_rival_05',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		PILOTLIGHT =
+		{
+			sound 		=	'ember_spirit_embr_rival_10',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		PLENTY =
+		{
+			sound 		=	'ember_spirit_embr_rare_03',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		SUBSTANTIAL =
+		{
+			sound 		=	'ember_spirit_embr_items_06',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		WIZARD =
+		{
+			sound 		=	'ember_spirit_embr_shiwiz_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.ANGRY,
+		},
+	},
 
 	-- Enchantress
+	npc_dota_hero_enchantress =
+	{
+		BAAAA =
+		{
+			sound 		=	'enchantress_ench_item_02',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		DOUGH =
+		{
+			sound 		=	'enchantress_ench_lasthit_04',
+			type 		=	VoTypes.LASTHIT,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		GOODIE =
+		{
+			sound 		=	'enchantress_ench_blink_02',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+
+		NICERACK =
+		{
+			sound 		=	'enchantress_ench_killspecial_02',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		PREDATOR =
+		{
+			sound 		=	'enchantress_ench_lasthit_02',
+			type 		=	VoTypes.LASTHIT,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SPROINK =
+		{
+			sound 		=	'enchantress_ench_move_19',
+			type 		=	VoTypes.MOVE,
+			attitude 	=	VoAttitudes.HAPPY,
+		},
+	},
 
 	-- Enigma
+	npc_dota_hero_enigma =
+	{
+		EXISTENCE =
+		{
+			sound 		=	'enigma_enig_blink_02',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		FLUXYOU =
+		{
+			sound 		=	'enigma_enig_rival_08',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.ANGRY,
+		},
+
+		STITCH =
+		{
+			sound 		=	'enigma_enig_rare_04',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Faceless Void
 	npc_dota_hero_faceless_void =
@@ -1984,6 +2125,43 @@ local heroSounds =
 	},
 
 	-- Leshrac
+	npc_dota_hero_leshrac =
+	{
+		ANEND =
+		{
+			sound 		=	'leshrac_lesh_rare_01',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		DISGRACE =
+		{
+			sound 		=	'leshrac_lesh_rival_01',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		FREAK =
+		{
+			sound 		=	'leshrac_lesh_lasthit_09',
+			type 		=	VoTypes.KILL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		TORMENT =
+		{
+			sound 		=	'leshrac_lesh_rare_03',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		WISEST =
+		{
+			sound 		=	'leshrac_lesh_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Lich
 	npc_dota_hero_lich =
@@ -2074,6 +2252,36 @@ local heroSounds =
 	},
 
 	-- Lifestealer
+	npc_dota_hero_life_stealer =
+	{
+		FACE =
+		{
+			sound 		=	'life_stealer_lifest_rival_22',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		GOLD =
+		{
+			sound 		=	'life_stealer_lifest_purch_03',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		THIEF =
+		{
+			sound 		=	'life_stealer_lifest_purch_01',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		VIPER =
+		{
+			sound 		=	'life_stealer_lifest_rival_21',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Lina
 	npc_dota_hero_lina =
@@ -2189,6 +2397,36 @@ local heroSounds =
 	},
 
 	-- Lone Druid
+	npc_dota_hero_lone_druid =
+	{
+		BURDEN =
+		{
+			sound 		=	'lone_druid_lone_druid_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.NEUTRAL,
+		},
+
+		FLEAS =
+		{
+			sound 		=	'lone_druid_lone_druid_rival_24',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		MOREWOLVES =
+		{
+			sound 		=	'lone_druid_lone_druid_rival_22',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SHAPESHIFT =
+		{
+			sound 		=	'lone_druid_lone_druid_rival_26',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Luna
 	npc_dota_hero_luna =
@@ -2209,8 +2447,131 @@ local heroSounds =
 	},
 
 	-- Lycan
+	npc_dota_hero_lycan =
+	{
+		AIRWOLF =
+		{
+			sound 		=	'lycan_lycan_rival_26',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		FREAK =
+		{
+			sound 		=	'lycan_lycan_rival_27',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		PAINSME =
+		{
+			sound 		=	'lycan_lycan_rival_22',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		PEACE =
+		{
+			sound 		=	'lycan_lycan_rare_01',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SHIFTY =
+		{
+			sound 		=	'lycan_lycan_rival_08',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SKELETON =
+		{
+			sound 		=	'lycan_lycan_rival_19',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SNOW =
+		{
+			sound 		=	'lycan_lycan_rival_18',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		TAKENALYCAN =
+		{
+			sound 		=	'lycan_lycan_cast_02',
+			type 		=	VoTypes.SPELL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		TRYTOKILLME =
+		{
+			sound 		=	'lycan_lycan_immort_02',
+			type 		=	VoTypes.ITEM,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Magnus
+	npc_dota_hero_magnataur =
+	{
+		BREAK =
+		{
+			sound 		=	'magnataur_magn_rare_05',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		DELIGHT =
+		{
+			sound 		=	'magnataur_magn_rare_03',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		ENTERTAINING =
+		{
+			sound 		=	'magnataur_magn_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		FISHSTICK =
+		{
+			sound 		=	'magnataur_magn_rival_21',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		NOTYOURTYPE =
+		{
+			sound 		=	'magnataur_magn_rival_01',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.SAD,
+		},
+
+		SLOWLY =
+		{
+			sound 		=	'magnataur_magn_rare_01',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		WENCH =
+		{
+			sound 		=	'magnataur_magn_rival_06',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		WINDRUNNER =
+		{
+			sound 		=	'magnataur_magn_rival_12',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Marci
 	npc_dota_hero_marci =
@@ -2407,6 +2768,57 @@ local heroSounds =
 	},
 
 	-- Naga Siren
+	npc_dota_hero_naga_siren =
+	{
+		ALCOHOL =
+		{
+			sound 		=	'naga_siren_naga_rival_22',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		CHALICE =
+		{
+			sound 		=	'naga_siren_naga_rival_20',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		DIVA =
+		{
+			sound 		=	'naga_siren_naga_rival_26',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		LAMPREYS =
+		{
+			sound 		=	'naga_siren_naga_rival_01',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		MAELWRAN =
+		{
+			sound 		=	'naga_siren_naga_rare_05',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SINCERELY =
+		{
+			sound 		=	'naga_siren_naga_rival_27',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		WEEP =
+		{
+			sound 		=	'naga_siren_naga_rare_03',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Nature's Prophet
 
@@ -2556,10 +2968,87 @@ local heroSounds =
 	},
 
 	-- Omniknight
+	npc_dota_hero_omniknight =
+	{
+	 	CONGREGATION =
+		{
+			sound 		=	'omniknight_omni_rival_01',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Oracle
+	npc_dota_hero_oracle =
+	{
+		DOOM =
+		{
+			sound 		=	'oracle_orac_prophecies_026',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		EVENRIFT =
+		{
+			sound 		=	'oracle_orac_prophecies_017',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		FULLOFIT =
+		{
+			sound 		=	'oracle_orac_prophecies_011',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+	 	MUCUS =
+		{
+			sound 		=	'oracle_orac_prophecies_015',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		PONIES =
+		{
+			sound 		=	'oracle_orac_prophecies_043',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SPOONS =
+		{
+			sound 		=	'oracle_orac_randomprophecies_03',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		YEEHAW =
+		{
+			sound 		=	'oracle_orac_prophecies_009',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Outworld Devourer
+	npc_dota_hero_obsidian_destroyer =
+	{
+	 	HARDCARRY =
+		{
+			sound 		=	'outworld_destroyer_odest_rival_15',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		NOTSO =
+		{
+			sound 		=	'outworld_destroyer_odest_rival_10',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
+
 
 	-- Pangolier
 	npc_dota_hero_pangolier =
@@ -2722,6 +3211,29 @@ local heroSounds =
 	},
 
 	-- Pugna
+	npc_dota_hero_pugna =
+	{
+		NETHERREACHES =
+		{
+			sound 		=	'pugna_pugna_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		OBLIVION =
+		{
+			sound 		=	'pugna_pugna_rare_04',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		WORSE =
+		{
+			sound 		=	'pugna_pugna_rare_03',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Queen of Pain
 	npc_dota_hero_queenofpain =
@@ -2830,8 +3342,68 @@ local heroSounds =
 	},
 
 	-- Riki
+	npc_dota_hero_riki =
+	{
+	 	FORFUN =
+		{
+			sound 		=	'riki_riki_rare_04',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		NOREFUNDS =
+		{
+			sound 		=	'riki_riki_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		PEEKABOO =
+		{
+			sound 		=	'riki_riki_ability_blink_05',
+			type 		=	VoTypes.ABILITY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		STABBED =
+		{
+			sound 		=	'riki_riki_rare_03',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Rubick
+	npc_dota_hero_rubick =
+	{
+		FUNULTIMATE =
+		{
+			sound 		=	'rubick_rubick_spellsteal_15',
+			type 		=	VoTypes.ABILITY,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		GRIMOIRE =
+		{
+			sound 		=	'rubick_rubick_rival_08',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+	 	PITY =
+		{
+			sound 		=	'rubick_rub_arc_kill_12',
+			type 		=	VoTypes.KILL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		RARESORCERY =
+		{
+			sound 		=	'rubick_rubick_rival_11',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Sand King
 	npc_dota_hero_sand_king =
@@ -2859,8 +3431,40 @@ local heroSounds =
 	},
 
 	-- Shadow Demon
+	npc_dota_hero_shadow_demon =
+	{
+		TOYS =
+		{
+			sound 		=	'shadow_demon_shadow_demon_respawn_08',
+			type 		=	VoTypes.RESPAWN,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		WHATEVERHELL =
+		{
+			sound 		=	'shadow_demon_shadow_demon_rival_02',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Shadow Fiend
+	npc_dota_hero_nevermore =
+	{
+		GINGERS =
+		{
+			sound 		=	'nevermore_nev_rival_13',
+			type 		=	VoTypes.RIVAL,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+
+		SOULOFAPOET =
+		{
+			sound 		=	'nevermore_nev_rare_02',
+			type 		=	VoTypes.RARE,
+			attitude 	=	VoAttitudes.TAUNT,
+		},
+	},
 
 	-- Shadow Shaman
 	npc_dota_hero_shadow_shaman =
