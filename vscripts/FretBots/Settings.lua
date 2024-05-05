@@ -139,6 +139,7 @@ function Settings:DifficultySelectTimer()
 		local msg = 'Fret Bots! Now with more branding! Version: '..version..'\n'
 		Utilities:Print(msg, MSG_GOOD)
 		msg = 'Difficulty voting is now open!'..' Default difficulty is currently: '..tostring(noVoteDifficulty)
+		Utilities:Print(msg, MSG_GOOD)
 		msg = 'Enter a number (0 through 10) in chat to vote.'
 		Utilities:Print(msg, MSG_GOOD)
 		isVotingOpen = true
