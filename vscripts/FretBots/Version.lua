@@ -1,12 +1,10 @@
-version = '0.7.1.2'
+version = '0.7.2.0'
 versionString = [[Changelog: 
-  Disabled magic resist bonuses for bots due to inconsistency of applied values in SetBaseMagicalResistanceValue.
+  Updated neutral items for 7.37.
 
-  Updated methodology used to issue stat bonuses.
+  Added Primal Beast to HeroNames.lua.
 
-  Fixed some typos in HeroSoundsTable.
+  Changed 'Skeleton King' to 'Wraith King' in HeroNames.lua.
 
-  Added some sounds for heroes that had none.
-
-  Additonal hero sounds added.
+  Fixed typo in Phantom Assassin's name in HeroSoundsTable.lua.
 ]]
