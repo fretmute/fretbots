@@ -1,5 +1,7 @@
-version = '0.7.2.0'
-versionString = [[Changelog: 
+version = '0.7.2.1'
+versionString = [[Changelog:
+  Added Ringmaster and Kez to HeroNames.lua.
+
   Updated neutral items for 7.37.
 
   Added Primal Beast to HeroNames.lua.
