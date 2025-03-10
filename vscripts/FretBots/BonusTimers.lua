@@ -82,6 +82,12 @@ function BonusTimers:NeutralItemFindTimer()
 	local gameTime = Utilities:GetAbsoluteTime()
 	-- Don't do anything if time is negative
 	if gameTime < 0 then return math.ceil(gameTime * -1) end
+	-- Stop if neutral items are not enabled
+    if Settings.neutralItems.enabled ~= true then
+    	Timers:RemoveTimer(names.neutralItemFindTimer)
+		Utilities:Print('Neutral item awards disabled.  Unregistering.', MSG_CONSOLE_GOOD)
+    	return nil
+    end
 	-- Stop if we've given all bots tier 5 items
 	if BonusTimers:IsFindingDone() then
 		Timers:RemoveTimer(names.neutralItemFindTimer)

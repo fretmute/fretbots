@@ -53,7 +53,7 @@
 		neutralItems =
 		{
 			-- duh
-			enabled = true,
+			enabled = false,
 			-- Set to false to reroll on the entier table every time.  True makes the awards more like real
 			-- jungle drops)
 			isRemoveUsedItems = true,

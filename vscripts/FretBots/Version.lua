@@ -1,12 +1,8 @@
-version = '0.7.2.1'
+version = '0.7.3.0'
 versionString = [[Changelog:
-  Added Ringmaster and Kez to HeroNames.lua.
+  Initial update for 7.38.
 
-  Updated neutral items for 7.37.
+  Disabled neutral item awards by default.
 
-  Added Primal Beast to HeroNames.lua.
-
-  Changed 'Skeleton King' to 'Wraith King' in HeroNames.lua.
-
-  Fixed typo in Phantom Assassin's name in HeroSoundsTable.lua.
+  Moving bots to the new neutral system is a major task for the future.
 ]]
